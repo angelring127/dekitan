@@ -1,7 +1,6 @@
 import { cva } from 'class-variance-authority'
 
 export const buttonVariants = cva(
-  // 기본 스타일
   [
     'inline-flex',
     'items-center',

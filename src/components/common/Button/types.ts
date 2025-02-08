@@ -5,27 +5,27 @@ export type ButtonStyle = 'solid' | 'outline'
 
 export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'style'> {
   /**
-   * 버튼의 종류를 지정합니다.
+   * ボタンの種類を指定します。
    * @default 'primary'
    */
   variant?: ButtonVariant
   /**
-   * 버튼의 스타일을 지정합니다.
+   * ボタンのスタイルを指定します。
    * @default 'solid'
    */
   style?: ButtonStyle
   /**
-   * 버튼의 너비를 100%로 설정합니다.
+   * ボタンの幅を100%に設定します。
    * @default false
    */
   fullWidth?: boolean
   /**
-   * 버튼의 비활성화 상태를 설정합니다.
+   * ボタンの無効状態を設定します。
    * @default false
    */
   disabled?: boolean
   /**
-   * 버튼의 로딩 상태를 설정합니다.
+   * ボタンのローディング状態を設定します。
    * @default false
    */
   loading?: boolean

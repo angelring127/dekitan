@@ -29,6 +29,12 @@ const demoPages = [
     href: '/demo/message-cloud',
     status: '완료',
   },
+  {
+    title: '메시지 화면 데모',
+    description: '배경 이미지와 캐릭터 아바타가 포함된 메시지 화면 컴포넌트',
+    href: '/demo/messages',
+    status: '완료',
+  },
 ] as const
 
 const DemoCard = memo(({ demo }: { demo: (typeof demoPages)[number] }) => {

@@ -12,20 +12,20 @@ export default function MessagesDemo() {
   const messages = [
     {
       type: 'intro',
-      message: '안녕하세요! 메시지 화면 체험을 시작해볼까요?',
+      message: 'こんにちは！メッセージ画面の体験を始めましょうか？',
       showCharacter: true,
     },
     {
       type: 'selection',
-      message: '시작하시겠습니까?',
+      message: '始めますか？',
       options: [
         {
-          label: '네, 시작할게요!',
+          label: 'はい、始めましょう！',
           value: 'start',
           onClick: () => setStep((step) => step + 1),
         },
         {
-          label: '아니요, 나중에 할게요',
+          label: 'いいえ、後でします',
           value: 'later',
           onClick: () => setStep(0),
         },
@@ -33,19 +33,19 @@ export default function MessagesDemo() {
     },
     {
       type: 'left',
-      message: '메시지 화면은 다양한 형태의 메시지를 표시할 수 있어요.',
+      message: 'メッセージ画面では様々な形式のメッセージを表示できます。',
     },
     {
       type: 'left',
-      message: '이모지도 사용할 수 있고 👋, 링크도 자동으로 감지돼요!',
+      message: '絵文字も使えて 👋、リンクも自動的に検出されます！',
     },
     {
       type: 'right',
-      message: '사용자의 응답도 이렇게 표시됩니다.',
+      message: 'ユーザーの返信はこのように表示されます。',
     },
     {
       type: 'input',
-      placeholder: '메시지를 입력해보세요...',
+      placeholder: 'メッセージを入力してください...',
     },
   ] as const
 
@@ -80,11 +80,7 @@ export default function MessagesDemo() {
 
         {/* 뒤로가기 버튼 - 고정 위치 */}
         <div className="absolute top-0 right-0 z-30 px-4 py-3">
-          <Link
-            href="/"
-            className="w-16 h-16 flex items-center justify-center"
-            aria-label="뒤로 가기"
-          >
+          <Link href="/" className="w-16 h-16 flex items-center justify-center" aria-label="戻る">
             <Image src="/images/ic_back.png" alt="" width={48} height={48} className="text-white" />
           </Link>
         </div>
@@ -122,7 +118,7 @@ export default function MessagesDemo() {
                           type="default"
                           backgroundColor="#4B5563"
                           textColor="#FFFFFF"
-                          ariaLabel="시작 메시지"
+                          ariaLabel="開始メッセージ"
                           animation={{ fadeIn: true }}
                         />
                       </div>
@@ -145,7 +141,7 @@ export default function MessagesDemo() {
                         }
                         backgroundColor="#1F2937"
                         textColor="#FFFFFF"
-                        ariaLabel="선택 메시지"
+                        ariaLabel="選択メッセージ"
                         animation={{ fadeIn: true }}
                       />
                     </div>
@@ -165,7 +161,7 @@ export default function MessagesDemo() {
                       }}
                       backgroundColor="#1F2937"
                       textColor="#FFFFFF"
-                      ariaLabel="메시지 입력"
+                      ariaLabel="メッセージ入力"
                       animation={{ fadeIn: true }}
                     />
                   )
@@ -178,7 +174,7 @@ export default function MessagesDemo() {
                     direction={msg.type as 'left' | 'right'}
                     backgroundColor={msg.type === 'right' ? '#3B82F6' : '#4B5563'}
                     textColor="#FFFFFF"
-                    ariaLabel={`메시지 ${index + 1}`}
+                    ariaLabel={`メッセージ ${index + 1}`}
                     animation={{ fadeIn: true }}
                   />
                 )

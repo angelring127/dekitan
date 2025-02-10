@@ -11,104 +11,104 @@ export default function MessageCloudDemo() {
   }
 
   const selectionOptions = [
-    { label: '옵션 1', value: '1', onClick: () => console.log('옵션 1 선택') },
-    { label: '옵션 2', value: '2', onClick: () => console.log('옵션 2 선택') },
-    { label: '옵션 3', value: '3', onClick: () => console.log('옵션 3 선택') },
+    { label: 'オプション 1', value: '1', onClick: () => console.log('オプション 1 選択') },
+    { label: 'オプション 2', value: '2', onClick: () => console.log('オプション 2 選択') },
+    { label: 'オプション 3', value: '3', onClick: () => console.log('オプション 3 選択') },
   ]
 
   return (
     <div className="min-h-screen bg-black p-4 md:p-8">
       <div className="max-w-[375px] mx-auto bg-gray-900 min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-4rem)] shadow-2xl rounded-2xl overflow-hidden">
         <div className="sticky top-0 z-10 bg-gray-800 border-b border-gray-700 p-4">
-          <h1 className="text-2xl font-bold text-white">메시지 구름 데모</h1>
+          <h1 className="text-2xl font-bold text-white">メッセージクラウドデモ</h1>
         </div>
 
         <div className="p-4 space-y-8 pb-8">
-          {/* 기본 기능 데모 */}
+          {/* 基本機能デモ */}
           <section className="space-y-4">
-            <h2 className="text-xl font-semibold text-white">기본 기능</h2>
+            <h2 className="text-xl font-semibold text-white">基本機能</h2>
 
             <div className="space-y-2">
               <MessageCloud
-                message="안녕하세요! 👋"
+                message="こんにちは！👋"
                 direction="left"
                 animation={{ fadeIn: true }}
-                ariaLabel="인사 메시지"
+                ariaLabel="挨拶メッセージ"
                 backgroundColor="#4B5563"
                 textColor="#FFFFFF"
               />
               <MessageCloud
-                message="이것은 기본 메시지입니다."
+                message="これは基本メッセージです。"
                 direction="right"
                 backgroundColor="#3B82F6"
                 textColor="#FFFFFF"
-                ariaLabel="기본 메시지"
+                ariaLabel="基本メッセージ"
               />
               <MessageCloud
-                message="이모지도 지원됩니다! 🎉 🎨 🚀"
+                message="絵文字もサポートされています！🎉 🎨 🚀"
                 direction="left"
-                ariaLabel="이모지 메시지"
+                ariaLabel="絵文字メッセージ"
                 backgroundColor="#4B5563"
                 textColor="#FFFFFF"
               />
               <MessageCloud
-                message="https://example.com 링크도 자동으로 감지됩니다."
+                message="https://example.com リンクも自動的に検出されます。"
                 direction="right"
                 backgroundColor="#3B82F6"
                 textColor="#FFFFFF"
-                ariaLabel="링크 메시지"
+                ariaLabel="リンクメッセージ"
               />
             </div>
           </section>
 
-          {/* 스타일 변형 데모 */}
+          {/* スタイルバリエーションデモ */}
           <section className="space-y-4">
-            <h2 className="text-xl font-semibold text-white">스타일 변형</h2>
+            <h2 className="text-xl font-semibold text-white">スタイルバリエーション</h2>
 
             <div className="space-y-2">
               <MessageCloud
-                message="커스텀 배경색"
+                message="カスタム背景色"
                 backgroundColor="#6D28D9"
                 textColor="#FFFFFF"
-                ariaLabel="커스텀 배경색 메시지"
+                ariaLabel="カスタム背景色メッセージ"
               />
               <MessageCloud
-                message="둥근 모서리 조절"
+                message="角丸の調整"
                 borderRadius="24px"
                 backgroundColor="#065F46"
                 textColor="#FFFFFF"
-                ariaLabel="둥근 모서리 메시지"
+                ariaLabel="角丸メッセージ"
               />
               <MessageCloud
-                message="테두리 스타일"
+                message="ボーダースタイル"
                 borderStyle="2px dashed #60A5FA"
                 backgroundColor="transparent"
                 textColor="#FFFFFF"
-                ariaLabel="테두리 스타일 메시지"
+                ariaLabel="ボーダースタイルメッセージ"
               />
             </div>
           </section>
 
-          {/* 메시지 유형 데모 */}
+          {/* メッセージタイプデモ */}
           <section className="space-y-4">
-            <h2 className="text-xl font-semibold text-white">메시지 유형</h2>
+            <h2 className="text-xl font-semibold text-white">メッセージタイプ</h2>
 
             <div className="space-y-2">
               <MessageCloud
-                message="시스템 메시지입니다."
+                message="システムメッセージです。"
                 type="system"
                 backgroundColor="#374151"
                 textColor="#FFFFFF"
-                ariaLabel="시스템 메시지"
+                ariaLabel="システムメッセージ"
               />
               <MessageCloud
                 message=""
                 type="input"
-                inputPlaceholder="메시지를 입력하세요..."
+                inputPlaceholder="メッセージを入力してください..."
                 onInputSubmit={handleInputSubmit}
                 backgroundColor="#1F2937"
                 textColor="#FFFFFF"
-                ariaLabel="입력 메시지"
+                ariaLabel="入力メッセージ"
               />
               {messages.map((msg, index) => (
                 <MessageCloud
@@ -117,38 +117,38 @@ export default function MessageCloudDemo() {
                   direction="right"
                   backgroundColor="#3B82F6"
                   textColor="#FFFFFF"
-                  ariaLabel={`사용자 메시지 ${index + 1}`}
+                  ariaLabel={`ユーザーメッセージ ${index + 1}`}
                 />
               ))}
               <MessageCloud
-                message="옵션을 선택해주세요"
+                message="オプションを選択してください"
                 type="selection"
                 selectionOptions={selectionOptions}
                 backgroundColor="#1F2937"
                 textColor="#FFFFFF"
-                ariaLabel="선택형 메시지"
+                ariaLabel="選択メッセージ"
               />
             </div>
           </section>
 
-          {/* 애니메이션 데모 */}
+          {/* アニメーションデモ */}
           <section className="space-y-4">
-            <h2 className="text-xl font-semibold text-white">애니메이션</h2>
+            <h2 className="text-xl font-semibold text-white">アニメーション</h2>
 
             <div className="space-y-2">
               <MessageCloud
-                message="페이드인 효과"
+                message="フェードイン効果"
                 animation={{ fadeIn: true }}
                 backgroundColor="#4B5563"
                 textColor="#FFFFFF"
-                ariaLabel="페이드인 메시지"
+                ariaLabel="フェードインメッセージ"
               />
               <MessageCloud
-                message="타이핑 효과"
+                message="タイピング効果"
                 animation={{ typing: true }}
                 backgroundColor="#4B5563"
                 textColor="#FFFFFF"
-                ariaLabel="타이핑 메시지"
+                ariaLabel="タイピングメッセージ"
               />
             </div>
           </section>

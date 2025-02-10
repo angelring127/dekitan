@@ -5,6 +5,22 @@ export interface InformationItem {
   id: string
   icon?: ReactNode
   text: string | JSX.Element
+  image?: {
+    src: string
+    alt: string
+    width?: number
+    height?: number
+    isApng?: boolean
+    apngControls?: {
+      autoPlay?: boolean
+      loop?: boolean
+      speed?: number
+    }
+  }
+  spacing?: {
+    top?: number
+    bottom?: number
+  }
 }
 
 export interface ButtonConfig {
@@ -90,4 +106,9 @@ export interface InformationPanelProps extends HTMLAttributes<HTMLDivElement> {
    * @deprecated 単一入力フィールドサポート用（下位互換性）
    */
   onInputChange?: (value: string) => void
+  /**
+   * 아이템 간 기본 여백 크기 (px)
+   * @default 16
+   */
+  itemSpacing?: number
 }

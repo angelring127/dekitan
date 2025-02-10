@@ -2,13 +2,24 @@
 
 import { useState } from 'react'
 import { InformationPanel } from '@/components/common/InformationPanel'
-import { Star, Heart, Trophy, Sparkles, Crown, Award, Zap, Target, Search, MessageSquare, User } from 'lucide-react'
+import {
+  Star,
+  Heart,
+  Trophy,
+  Sparkles,
+  Crown,
+  Award,
+  Zap,
+  Target,
+  Search,
+  MessageSquare,
+  User,
+} from 'lucide-react'
 
 const basicItems = [
   {
     id: '1',
-    icon: <Star className="w-5 h-5 text-yellow-500" />,
-    text: '基本的な情報パネルです。',
+    text: <span className="text-xl font-medium">こんにちは、こうきくん！。\n\n\n テスト</span>,
   },
   {
     id: '2',
@@ -127,7 +138,9 @@ const textOnlyItems = [
   },
   {
     id: 'text2',
-    text: <span className="text-xl font-medium">アイコンなしでテキストを中央揃えで表示します。</span>,
+    text: (
+      <span className="text-xl font-medium">アイコンなしでテキストを中央揃えで表示します。</span>
+    ),
   },
   {
     id: 'text3',
@@ -154,6 +167,102 @@ const iconListItems = [
   },
 ]
 
+// キャラクター紹介シナリオアイテム
+const characterItems = [
+  {
+    id: 'char1',
+    icon: <Crown className="w-6 h-6 text-yellow-500" />,
+    text: '新しいキャラクターを紹介します！\nこのキャラクターは特別な能力を持っています。このキャラクターは特別な能力を持っています。\nこのキャラクターは特別な能力を持っています。\nこのキャラクターは特別な能力を持っています。\nこのキャラクターは特別な能力を持っています。\nこのキャラクターは特別な能力を持っています。\nこのキャラクターは特別な能力を持っています。\nこのキャラクターは特別な能力を持っています。\nこのキャラクターは特別な能力を持っています。\nこのキャラクターは特別な能力を持っています。',
+    image: {
+      src: '/images/ic_color_avarta.png',
+      alt: 'キャラクターアバター',
+      width: 200,
+      height: 200,
+    },
+  },
+  {
+    id: 'char2',
+    icon: <Star className="w-6 h-6 text-blue-500" />,
+    text: 'このキャラクターは特別な能力を持っています。',
+  },
+  {
+    id: 'char3',
+    icon: <Sparkles className="w-6 h-6 text-purple-500" />,
+    text: '一緒に冒険に出かけましょう？',
+  },
+]
+
+// APNGキャラクターアイテム
+const apngCharacterItems = [
+  {
+    id: 'apng1',
+    icon: <Crown className="w-6 h-6 text-yellow-500" />,
+    text: 'アニメーション付きのキャラクターです！',
+    image: {
+      src: '/images/elephant.png',
+      alt: 'アニメーションキャラクター',
+      width: 200,
+      height: 200,
+      isApng: true,
+      apngControls: {
+        autoPlay: true,
+        loop: true,
+        speed: 1,
+      },
+    },
+  },
+  {
+    id: 'apng2',
+    icon: <Star className="w-6 h-6 text-blue-500" />,
+    text: '自動的に動くアニメーションが適用されています。',
+  },
+  {
+    id: 'apng3',
+    icon: <Sparkles className="w-6 h-6 text-purple-500" />,
+    text: 'APNGフォーマットをサポートし、滑らかなアニメーションを提供します。',
+  },
+]
+
+// 여백 설정 예제 아이템
+const spacingItems = [
+  {
+    id: 'spacing1',
+    icon: <Star className="w-5 h-5 text-yellow-500" />,
+    text: '첫 번째 아이템 (기본 여백)',
+  },
+  {
+    id: 'spacing2',
+    icon: <Heart className="w-5 h-5 text-red-500" />,
+    text: '두 번째 아이템 (큰 상단 여백)',
+    spacing: {
+      top: 32,
+    },
+  },
+  {
+    id: 'spacing3',
+    icon: <Trophy className="w-5 h-5 text-blue-500" />,
+    text: '세 번째 아이템 (상하단 여백)',
+    spacing: {
+      top: 24,
+      bottom: 24,
+    },
+  },
+  {
+    id: 'spacing4',
+    text: '네 번째 아이템 (이미지 포함, 커스텀 여백)',
+    image: {
+      src: '/images/elephant.png',
+      alt: '캐릭터 이미지',
+      width: 200,
+      height: 200,
+    },
+    spacing: {
+      top: 16,
+      bottom: 32,
+    },
+  },
+]
+
 export default function InformationPanelDemo() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [achievementIndex, setAchievementIndex] = useState(0)
@@ -166,6 +275,8 @@ export default function InformationPanelDemo() {
   const [searchValue, setSearchValue] = useState('')
   const [commentValue, setCommentValue] = useState('')
   const [passwordValue, setPasswordValue] = useState('')
+  const [characterIndex, setCharacterIndex] = useState(0)
+  const [apngIndex, setApngIndex] = useState(0)
 
   const handleNext = () => {
     setCurrentIndex((prev) => (prev < tutorialItems.length - 1 ? prev + 1 : 0))
@@ -183,6 +294,14 @@ export default function InformationPanelDemo() {
     setMissionIndex((prev) => (prev < missionItems.length - 1 ? prev + 1 : 0))
   }
 
+  const handleCharacterNext = () => {
+    setCharacterIndex((prev) => (prev < characterItems.length - 1 ? prev + 1 : 0))
+  }
+
+  const handleApngNext = () => {
+    setApngIndex((prev) => (prev < apngCharacterItems.length - 1 ? prev + 1 : 0))
+  }
+
   return (
     <div className="p-4 space-y-8">
       <section>
@@ -198,11 +317,13 @@ export default function InformationPanelDemo() {
       <section>
         <h2 className="text-2xl font-bold mb-4">ボタンを含む形式</h2>
         <InformationPanel
-          items={[{
-            id: 'button1',
-            icon: <Crown className="w-5 h-5 text-yellow-500" />,
-            text: 'ボタンが含まれた情報パネルです.'
-          }]}
+          items={[
+            {
+              id: 'button1',
+              icon: <Crown className="w-5 h-5 text-yellow-500" />,
+              text: 'ボタンが含まれた情報パネルです.',
+            },
+          ]}
           buttonText="確認"
           onButtonClick={() => alert('ボタンがクリックされました!')}
         />
@@ -211,11 +332,13 @@ export default function InformationPanelDemo() {
       <section>
         <h2 className="text-2xl font-bold mb-4">入力フィールドを含む形式</h2>
         <InformationPanel
-          items={[{
-            id: 'input1',
-            icon: <Star className="w-5 h-5 text-purple-500" />,
-            text: '入力フィールドが含まれた情報パネルです.'
-          }]}
+          items={[
+            {
+              id: 'input1',
+              icon: <Star className="w-5 h-5 text-purple-500" />,
+              text: '入力フィールドが含まれた情報パネルです.',
+            },
+          ]}
           inputPlaceholder="ここに入力してください"
           inputValue={inputValue}
           onInputChange={setInputValue}
@@ -254,28 +377,36 @@ export default function InformationPanelDemo() {
           currentIndex={currentIndex}
           onNext={handleNext}
           useTypingEffect
-          inputs={currentIndex === tutorialItems.length - 1 ? [
-            {
-              placeholder: 'ニックネームを入力してください',
-              value: nameValue,
-              onChange: setNameValue
-            }
-          ] : undefined}
-          buttons={currentIndex === tutorialItems.length - 1 ? [
-            {
-              text: 'ゲームを開始',
-              variant: 'primary',
-              onClick: () => {
-                if (nameValue.trim()) {
-                  alert(`${nameValue}さん, ゲームを開始します!`)
-                  setNameValue('')
-                  setCurrentIndex(0)
-                } else {
-                  alert('ニックネームを入力してください!')
-                }
-              }
-            }
-          ] : undefined}
+          inputs={
+            currentIndex === tutorialItems.length - 1
+              ? [
+                  {
+                    placeholder: 'ニックネームを入力してください',
+                    value: nameValue,
+                    onChange: setNameValue,
+                  },
+                ]
+              : undefined
+          }
+          buttons={
+            currentIndex === tutorialItems.length - 1
+              ? [
+                  {
+                    text: 'ゲームを開始',
+                    variant: 'primary',
+                    onClick: () => {
+                      if (nameValue.trim()) {
+                        alert(`${nameValue}さん, ゲームを開始します!`)
+                        setNameValue('')
+                        setCurrentIndex(0)
+                      } else {
+                        alert('ニックネームを入力してください!')
+                      }
+                    },
+                  },
+                ]
+              : undefined
+          }
         />
         <p className="text-sm text-gray-500 mt-2 text-center">
           パネルをクリックして次のメッセージに移動
@@ -290,24 +421,28 @@ export default function InformationPanelDemo() {
           currentIndex={achievementIndex}
           onNext={handleAchievementNext}
           useTypingEffect
-          buttons={achievementIndex === achievementItems.length - 1 ? [
-            {
-              text: 'ボックスを開ける',
-              variant: 'primary',
-              onClick: () => {
-                alert('おめでとうございます！伝説レベルアイテムを獲得しました！')
-                setAchievementIndex(0)
-              }
-            },
-            {
-              text: '後で開ける',
-              variant: 'tertiary',
-              onClick: () => {
-                alert('アイテムをインベントリに保管しました。')
-                setAchievementIndex(0)
-              }
-            }
-          ] : undefined}
+          buttons={
+            achievementIndex === achievementItems.length - 1
+              ? [
+                  {
+                    text: 'ボックスを開ける',
+                    variant: 'primary',
+                    onClick: () => {
+                      alert('おめでとうございます！伝説レベルアイテムを獲得しました！')
+                      setAchievementIndex(0)
+                    },
+                  },
+                  {
+                    text: '後で開ける',
+                    variant: 'tertiary',
+                    onClick: () => {
+                      alert('アイテムをインベントリに保管しました。')
+                      setAchievementIndex(0)
+                    },
+                  },
+                ]
+              : undefined
+          }
         />
         <p className="text-sm text-gray-500 mt-2 text-center">
           パネルをクリックして次のメッセージに移動
@@ -322,32 +457,36 @@ export default function InformationPanelDemo() {
           currentIndex={levelUpIndex}
           onNext={handleLevelUpNext}
           useTypingEffect
-          buttons={levelUpIndex === levelUpItems.length - 1 ? [
-            {
-              text: '炎のスキル',
-              variant: 'primary',
-              onClick: () => {
-                alert('炎のスキルを取得しました！')
-                setLevelUpIndex(0)
-              }
-            },
-            {
-              text: '氷の矢のスキル',
-              variant: 'secondary',
-              onClick: () => {
-                alert('氷の矢のスキルを取得しました！')
-                setLevelUpIndex(0)
-              }
-            },
-            {
-              text: 'ヒーリングスキル',
-              variant: 'tertiary',
-              onClick: () => {
-                alert('ヒーリングスキルを取得しました！')
-                setLevelUpIndex(0)
-              }
-            }
-          ] : undefined}
+          buttons={
+            levelUpIndex === levelUpItems.length - 1
+              ? [
+                  {
+                    text: '炎のスキル',
+                    variant: 'primary',
+                    onClick: () => {
+                      alert('炎のスキルを取得しました！')
+                      setLevelUpIndex(0)
+                    },
+                  },
+                  {
+                    text: '氷の矢のスキル',
+                    variant: 'secondary',
+                    onClick: () => {
+                      alert('氷の矢のスキルを取得しました！')
+                      setLevelUpIndex(0)
+                    },
+                  },
+                  {
+                    text: 'ヒーリングスキル',
+                    variant: 'tertiary',
+                    onClick: () => {
+                      alert('ヒーリングスキルを取得しました！')
+                      setLevelUpIndex(0)
+                    },
+                  },
+                ]
+              : undefined
+          }
         />
         <p className="text-sm text-gray-500 mt-2 text-center">
           パネルをクリックして次のメッセージに移動
@@ -362,36 +501,44 @@ export default function InformationPanelDemo() {
           currentIndex={missionIndex}
           onNext={handleMissionNext}
           useTypingEffect
-          inputs={missionIndex === missionItems.length - 1 ? [
-            {
-              placeholder: 'パーティーメンバーの名前を入力してください',
-              value: nameValue,
-              onChange: setNameValue
-            }
-          ] : undefined}
-          buttons={missionIndex === missionItems.length - 1 ? [
-            {
-              text: 'ミッションを受ける',
-              variant: 'primary',
-              onClick: () => {
-                if (nameValue.trim()) {
-                  alert(`${nameValue}さんと一緒にミッションを開始します！`)
-                  setNameValue('')
-                  setMissionIndex(0)
-                } else {
-                  alert('パーティーメンバーの名前を入力してください！')
-                }
-              }
-            },
-            {
-              text: 'ミッションを拒否',
-              variant: 'tertiary',
-              onClick: () => {
-                alert('ミッションを拒否しました。')
-                setMissionIndex(0)
-              }
-            }
-          ] : undefined}
+          inputs={
+            missionIndex === missionItems.length - 1
+              ? [
+                  {
+                    placeholder: 'パーティーメンバーの名前を入力してください',
+                    value: nameValue,
+                    onChange: setNameValue,
+                  },
+                ]
+              : undefined
+          }
+          buttons={
+            missionIndex === missionItems.length - 1
+              ? [
+                  {
+                    text: 'ミッションを受ける',
+                    variant: 'primary',
+                    onClick: () => {
+                      if (nameValue.trim()) {
+                        alert(`${nameValue}さんと一緒にミッションを開始します！`)
+                        setNameValue('')
+                        setMissionIndex(0)
+                      } else {
+                        alert('パーティーメンバーの名前を入力してください！')
+                      }
+                    },
+                  },
+                  {
+                    text: 'ミッションを拒否',
+                    variant: 'tertiary',
+                    onClick: () => {
+                      alert('ミッションを拒否しました。')
+                      setMissionIndex(0)
+                    },
+                  },
+                ]
+              : undefined
+          }
         />
         <p className="text-sm text-gray-500 mt-2 text-center">
           パネルをクリックして次のメッセージに移動
@@ -401,27 +548,29 @@ export default function InformationPanelDemo() {
       <section>
         <h2 className="text-2xl font-bold mb-4">複数ボタンを含む形式</h2>
         <InformationPanel
-          items={[{
-            id: 'multi-button1',
-            icon: <Crown className="w-5 h-5 text-yellow-500" />,
-            text: '複数のボタンが含まれた情報パネルです.'
-          }]}
+          items={[
+            {
+              id: 'multi-button1',
+              icon: <Crown className="w-5 h-5 text-yellow-500" />,
+              text: '複数のボタンが含まれた情報パネルです.',
+            },
+          ]}
           buttons={[
             {
               text: '確認',
               variant: 'primary',
-              onClick: () => alert('確認ボタンがクリックされました!')
+              onClick: () => alert('確認ボタンがクリックされました!'),
             },
             {
               text: 'キャンセル',
               variant: 'tertiary',
-              onClick: () => alert('キャンセルボタンがクリックされました!')
+              onClick: () => alert('キャンセルボタンがクリックされました!'),
             },
             {
               text: 'もっと見る',
               variant: 'secondary',
-              onClick: () => alert('もっと見るボタンがクリックされました!')
-            }
+              onClick: () => alert('もっと見るボタンがクリックされました!'),
+            },
           ]}
         />
       </section>
@@ -429,27 +578,29 @@ export default function InformationPanelDemo() {
       <section>
         <h2 className="text-2xl font-bold mb-4">複数入力フィールドを含む形式</h2>
         <InformationPanel
-          items={[{
-            id: 'multi-input1',
-            icon: <Star className="w-5 h-5 text-purple-500" />,
-            text: '複数の入力フィールドが含まれた情報パネルです.'
-          }]}
+          items={[
+            {
+              id: 'multi-input1',
+              icon: <Star className="w-5 h-5 text-purple-500" />,
+              text: '複数の入力フィールドが含まれた情報パネルです.',
+            },
+          ]}
           inputs={[
             {
               placeholder: '名前を入力してください',
               value: nameValue,
-              onChange: setNameValue
+              onChange: setNameValue,
             },
             {
               placeholder: 'メールを入力してください',
               value: emailValue,
-              onChange: setEmailValue
+              onChange: setEmailValue,
             },
             {
               placeholder: 'メッセージを入力してください',
               value: messageValue,
-              onChange: setMessageValue
-            }
+              onChange: setMessageValue,
+            },
           ]}
         />
       </section>
@@ -457,29 +608,31 @@ export default function InformationPanelDemo() {
       <section>
         <h2 className="text-2xl font-bold mb-4">ボタンと入力フィールドを両方含む形式</h2>
         <InformationPanel
-          items={[{
-            id: 'mixed1',
-            icon: <Trophy className="w-5 h-5 text-blue-500" />,
-            text: '入力フィールドとボタンが両方含まれた情報パネルです.'
-          }]}
+          items={[
+            {
+              id: 'mixed1',
+              icon: <Trophy className="w-5 h-5 text-blue-500" />,
+              text: '入力フィールドとボタンが両方含まれた情報パネルです.',
+            },
+          ]}
           inputs={[
             {
               placeholder: 'メッセージを入力してください',
               value: messageValue,
-              onChange: setMessageValue
-            }
+              onChange: setMessageValue,
+            },
           ]}
           buttons={[
             {
               text: '送信',
               variant: 'primary',
-              onClick: () => alert(`送信されたメッセージ: ${messageValue}`)
+              onClick: () => alert(`送信されたメッセージ: ${messageValue}`),
             },
             {
               text: '初期化',
               variant: 'tertiary',
-              onClick: () => setMessageValue('')
-            }
+              onClick: () => setMessageValue(''),
+            },
           ]}
         />
       </section>
@@ -487,29 +640,31 @@ export default function InformationPanelDemo() {
       <section>
         <h2 className="text-2xl font-bold mb-4">検索パネルの例</h2>
         <InformationPanel
-          items={[{
-            id: 'search1',
-            icon: <Search className="w-5 h-5 text-gray-500" />,
-            text: '検索キーワードを入力して検索ボタンをクリックしてください.'
-          }]}
+          items={[
+            {
+              id: 'search1',
+              icon: <Search className="w-5 h-5 text-gray-500" />,
+              text: '検索キーワードを入力して検索ボタンをクリックしてください.',
+            },
+          ]}
           inputs={[
             {
               placeholder: '検索キーワードを入力してください',
               value: searchValue,
-              onChange: setSearchValue
-            }
+              onChange: setSearchValue,
+            },
           ]}
           buttons={[
             {
               text: '検索',
               variant: 'primary',
-              onClick: () => alert(`検索キーワード: ${searchValue}`)
+              onClick: () => alert(`検索キーワード: ${searchValue}`),
             },
             {
               text: '初期化',
               variant: 'tertiary',
-              onClick: () => setSearchValue('')
-            }
+              onClick: () => setSearchValue(''),
+            },
           ]}
         />
       </section>
@@ -517,17 +672,19 @@ export default function InformationPanelDemo() {
       <section>
         <h2 className="text-2xl font-bold mb-4">コメント入力パネルの例</h2>
         <InformationPanel
-          items={[{
-            id: 'comment1',
-            icon: <MessageSquare className="w-5 h-5 text-blue-500" />,
-            text: 'コメントを入力して掲示ボタンをクリックしてください.'
-          }]}
+          items={[
+            {
+              id: 'comment1',
+              icon: <MessageSquare className="w-5 h-5 text-blue-500" />,
+              text: 'コメントを入力して掲示ボタンをクリックしてください.',
+            },
+          ]}
           inputs={[
             {
               placeholder: 'コメントを入力してください',
               value: commentValue,
-              onChange: setCommentValue
-            }
+              onChange: setCommentValue,
+            },
           ]}
           buttons={[
             {
@@ -536,8 +693,8 @@ export default function InformationPanelDemo() {
               onClick: () => {
                 alert(`掲示されたコメント: ${commentValue}`)
                 setCommentValue('')
-              }
-            }
+              },
+            },
           ]}
         />
       </section>
@@ -545,22 +702,24 @@ export default function InformationPanelDemo() {
       <section>
         <h2 className="text-2xl font-bold mb-4">ログインパネルの例</h2>
         <InformationPanel
-          items={[{
-            id: 'login1',
-            icon: <User className="w-5 h-5 text-green-500" />,
-            text: 'メールとパスワードを入力してください.'
-          }]}
+          items={[
+            {
+              id: 'login1',
+              icon: <User className="w-5 h-5 text-green-500" />,
+              text: 'メールとパスワードを入力してください.',
+            },
+          ]}
           inputs={[
             {
               placeholder: 'メールを入力してください',
               value: emailValue,
-              onChange: setEmailValue
+              onChange: setEmailValue,
             },
             {
               placeholder: 'パスワードを入力してください',
               value: passwordValue,
-              onChange: setPasswordValue
-            }
+              onChange: setPasswordValue,
+            },
           ]}
           buttons={[
             {
@@ -570,16 +729,108 @@ export default function InformationPanelDemo() {
                 alert(`ログイン試行: ${emailValue}`)
                 setEmailValue('')
                 setPasswordValue('')
-              }
+              },
             },
             {
               text: '新規登録',
               variant: 'secondary',
-              onClick: () => alert('新規登録ページに移動')
-            }
+              onClick: () => alert('新規登録ページに移動'),
+            },
           ]}
         />
       </section>
+
+      <section>
+        <h2 className="text-2xl font-bold mb-4">画像を含む形式</h2>
+        <InformationPanel
+          items={[
+            {
+              id: 'image1',
+              icon: <Star className="w-5 h-5 text-yellow-500" />,
+              text: '画像を含む情報パネルです。',
+              image: {
+                src: '/images/elephant.png',
+                alt: 'キャラクターアバター',
+                width: 200,
+                height: 200,
+              },
+            },
+          ]}
+        />
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-bold mb-4">キャラクター紹介シナリオ</h2>
+        <InformationPanel
+          items={characterItems}
+          sequential
+          currentIndex={characterIndex}
+          onNext={handleCharacterNext}
+          useTypingEffect
+          buttons={
+            characterIndex === characterItems.length - 1
+              ? [
+                  {
+                    text: '冒険を始める',
+                    variant: 'primary',
+                    onClick: () => {
+                      alert('冒険を開始します！')
+                      setCharacterIndex(0)
+                    },
+                  },
+                ]
+              : undefined
+          }
+        />
+        <p className="text-sm text-gray-500 mt-2 text-center">
+          パネルをクリックして次のメッセージに移動
+        </p>
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-bold mb-4">APNGアニメーションキャラクター</h2>
+        <InformationPanel
+          items={apngCharacterItems}
+          sequential
+          currentIndex={apngIndex}
+          onNext={handleApngNext}
+          useTypingEffect
+          buttons={
+            apngIndex === apngCharacterItems.length - 1
+              ? [
+                  {
+                    text: 'アニメーションを再生',
+                    variant: 'primary',
+                    onClick: () => {
+                      setApngIndex(0)
+                    },
+                  },
+                ]
+              : undefined
+          }
+        />
+        <p className="text-sm text-gray-500 mt-2 text-center">
+          パネルをクリックして次のメッセージに移動
+        </p>
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-bold mb-4">여백 설정 예제</h2>
+        <div className="space-y-4">
+          <div>
+            <h3 className="text-lg font-medium mb-2">기본 여백 (16px)</h3>
+            <InformationPanel items={[spacingItems[0], spacingItems[1]]} />
+          </div>
+          <div>
+            <h3 className="text-lg font-medium mb-2">커스텀 여백</h3>
+            <InformationPanel items={spacingItems} itemSpacing={24} />
+          </div>
+          <div>
+            <h3 className="text-lg font-medium mb-2">여백 없음</h3>
+            <InformationPanel items={[spacingItems[0], spacingItems[1]]} itemSpacing={0} />
+          </div>
+        </div>
+      </section>
     </div>
   )
-} 
+}

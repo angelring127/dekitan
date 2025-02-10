@@ -3,8 +3,39 @@
 import { useEffect, useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
 import { panelVariants, itemVariants, typingAnimation } from './styles'
-import type { InformationPanelProps } from './types'
+import type { InformationPanelProps, InformationItem } from './types'
 import { Button } from '../Button'
+import Image from 'next/image'
+import { parseAPNG } from 'apng-js'
+import React, { ReactElement } from 'react'
+
+const processNewlines = (text: string) => {
+  return text.split('\\n').map((line, i, arr) => (
+    <span key={i}>
+      {line}
+      {i < arr.length - 1 && <br />}
+    </span>
+  ))
+}
+
+const processText = (text: string | JSX.Element) => {
+  if (typeof text === 'string') {
+    return processNewlines(text)
+  }
+
+  if (React.isValidElement(text)) {
+    const element = text as ReactElement
+    if (typeof element.props.children === 'string') {
+      return React.cloneElement(
+        element,
+        { ...element.props },
+        processNewlines(element.props.children)
+      )
+    }
+  }
+
+  return text
+}
 
 export function InformationPanel({
   items,
@@ -16,6 +47,7 @@ export function InformationPanel({
   useTypingEffect = false,
   buttons,
   inputs,
+  itemSpacing = 16,
   // 下位互換性のためのprops
   buttonText,
   onButtonClick,
@@ -92,6 +124,45 @@ export function InformationPanel({
     }
   }
 
+  const renderImage = (item: InformationItem) => {
+    if (!item.image) return null
+
+    const imageSpacing = item.spacing || {}
+    const topSpacing = imageSpacing.top !== undefined ? imageSpacing.top : itemSpacing
+    const bottomSpacing = imageSpacing.bottom !== undefined ? imageSpacing.bottom : 0
+
+    if (item.image.isApng) {
+      return (
+        <div style={{ marginTop: topSpacing, marginBottom: bottomSpacing }}>
+          <img
+            src={item.image.src}
+            alt={item.image.alt}
+            width={item.image.width || 200}
+            height={item.image.height || 200}
+            className="rounded-lg"
+            style={{
+              width: item.image.width || 200,
+              height: item.image.height || 200,
+              objectFit: 'contain',
+            }}
+          />
+        </div>
+      )
+    }
+
+    return (
+      <div style={{ marginTop: topSpacing, marginBottom: bottomSpacing }}>
+        <Image
+          src={item.image.src}
+          alt={item.image.alt}
+          width={item.image.width || 200}
+          height={item.image.height || 200}
+          className="rounded-lg"
+        />
+      </div>
+    )
+  }
+
   return (
     <div
       ref={containerRef}
@@ -110,30 +181,53 @@ export function InformationPanel({
       {...props}
     >
       <div className="flex-1">
-        {items.map((item, index) => (
-          <div
-            key={item.id}
-            className={cn(
-              itemVariants({
-                visible: !sequential || index === currentIndex,
-                sequential,
-              })
-            )}
-          >
-            {item.icon && (
-              <div className="flex-shrink-0" aria-hidden="true">
-                {item.icon}
-              </div>
-            )}
-            <p className={cn('flex-1', !item.icon && 'text-center w-full')}>
-              {useTypingEffect && sequential ? (
-                <span className="typing-effect">{typedText}</span>
-              ) : (
-                item.text
+        {items.map((item, index) => {
+          const spacing = item.spacing || {}
+          const topSpacing = spacing.top !== undefined ? spacing.top : itemSpacing
+          const bottomSpacing = spacing.bottom !== undefined ? spacing.bottom : 0
+
+          return (
+            <div
+              key={item.id}
+              className={cn(
+                itemVariants({
+                  visible: !sequential || index === currentIndex,
+                  sequential,
+                })
               )}
-            </p>
-          </div>
-        ))}
+              style={{
+                marginTop: index === 0 ? 0 : topSpacing,
+                marginBottom: bottomSpacing,
+              }}
+            >
+              {item.icon && (
+                <div className="flex-shrink-0" aria-hidden="true">
+                  {item.icon}
+                </div>
+              )}
+              <div
+                className={cn(
+                  'flex-1 flex flex-col items-center',
+                  !item.icon && 'text-center w-full'
+                )}
+              >
+                <p className="w-full">
+                  {useTypingEffect && sequential ? (
+                    <>
+                      <span className="typing-effect">{processNewlines(typedText)}</span>
+                      <span className="invisible absolute" aria-hidden="true">
+                        {processNewlines(items[currentIndex].text as string)}
+                      </span>
+                    </>
+                  ) : (
+                    processText(item.text)
+                  )}
+                </p>
+                {renderImage(item)}
+              </div>
+            </div>
+          )
+        })}
       </div>
 
       {(allButtons.length > 0 || allInputs.length > 0) && (

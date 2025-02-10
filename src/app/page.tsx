@@ -9,7 +9,7 @@ const demoPages = [
     title: '画像ビューアデモ',
     description: '画像表示、アニメーション、ドラッグ&ドロップ機能を含む画像ビューアコンポーネント',
     href: '/demo/image-viewer',
-    status: '準備中',
+    status: '完了',
   },
   {
     title: 'ボタンデモ',

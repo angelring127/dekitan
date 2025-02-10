@@ -6,7 +6,6 @@ import { panelVariants, itemVariants, typingAnimation } from './styles'
 import type { InformationPanelProps, InformationItem } from './types'
 import { Button } from '../Button'
 import Image from 'next/image'
-import { parseAPNG } from 'apng-js'
 import React, { ReactElement } from 'react'
 
 const processNewlines = (text: string) => {
@@ -134,12 +133,13 @@ export function InformationPanel({
     if (item.image.isApng) {
       return (
         <div style={{ marginTop: topSpacing, marginBottom: bottomSpacing }}>
-          <img
+          <Image
             src={item.image.src}
             alt={item.image.alt}
             width={item.image.width || 200}
             height={item.image.height || 200}
             className="rounded-lg"
+            unoptimized
             style={{
               width: item.image.width || 200,
               height: item.image.height || 200,

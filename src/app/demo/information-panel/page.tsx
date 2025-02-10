@@ -223,17 +223,16 @@ const apngCharacterItems = [
   },
 ]
 
-// 여백 설정 예제 아이템
 const spacingItems = [
   {
     id: 'spacing1',
     icon: <Star className="w-5 h-5 text-yellow-500" />,
-    text: '첫 번째 아이템 (기본 여백)',
+    text: '最初のアイテム（デフォルトマージン）',
   },
   {
     id: 'spacing2',
     icon: <Heart className="w-5 h-5 text-red-500" />,
-    text: '두 번째 아이템 (큰 상단 여백)',
+    text: '2番目のアイテム（大きい上部マージン）',
     spacing: {
       top: 32,
     },
@@ -241,7 +240,7 @@ const spacingItems = [
   {
     id: 'spacing3',
     icon: <Trophy className="w-5 h-5 text-blue-500" />,
-    text: '세 번째 아이템 (상하단 여백)',
+    text: '3番目のアイテム（上下マージン）',
     spacing: {
       top: 24,
       bottom: 24,
@@ -249,10 +248,10 @@ const spacingItems = [
   },
   {
     id: 'spacing4',
-    text: '네 번째 아이템 (이미지 포함, 커스텀 여백)',
+    text: '4番目のアイテム（画像付き、カスタムマージン）',
     image: {
       src: '/images/elephant.png',
-      alt: '캐릭터 이미지',
+      alt: 'キャラクター画像',
       width: 200,
       height: 200,
     },
@@ -815,18 +814,18 @@ export default function InformationPanelDemo() {
       </section>
 
       <section>
-        <h2 className="text-2xl font-bold mb-4">여백 설정 예제</h2>
+        <h2 className="text-2xl font-bold mb-4">マージン設定例</h2>
         <div className="space-y-4">
           <div>
-            <h3 className="text-lg font-medium mb-2">기본 여백 (16px)</h3>
+            <h3 className="text-lg font-medium mb-2">デフォルトマージン (16px)</h3>
             <InformationPanel items={[spacingItems[0], spacingItems[1]]} />
           </div>
           <div>
-            <h3 className="text-lg font-medium mb-2">커스텀 여백</h3>
+            <h3 className="text-lg font-medium mb-2">カスタムマージン</h3>
             <InformationPanel items={spacingItems} itemSpacing={24} />
           </div>
           <div>
-            <h3 className="text-lg font-medium mb-2">여백 없음</h3>
+            <h3 className="text-lg font-medium mb-2">マージンなし</h3>
             <InformationPanel items={[spacingItems[0], spacingItems[1]]} itemSpacing={0} />
           </div>
         </div>

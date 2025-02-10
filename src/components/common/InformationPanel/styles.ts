@@ -6,13 +6,14 @@ export const panelVariants = cva(
     'max-w-[320px]',
     'min-h-[320px]',
     'mx-auto',
-    'overflow-hidden',
+    'overflow-y-auto',
     'transition-all',
     'duration-200',
     'text-black',
     'py-6',
     'px-6',
     'rounded-2xl',
+    'max-h-[80vh]',
   ],
   {
     variants: {
@@ -33,15 +34,7 @@ export const panelVariants = cva(
 )
 
 export const itemVariants = cva(
-  [
-    'flex',
-    'items-center',
-    'gap-3',
-    'text-center',
-    'transition-all',
-    'duration-300',
-    'py-3',
-  ],
+  ['flex', 'items-start', 'gap-3', 'text-center', 'transition-all', 'duration-300', 'py-3'],
   {
     variants: {
       visible: {
@@ -66,15 +59,15 @@ export const typingAnimation = `
     0% {
       width: 1ch;
       visibility: visible;
-      white-space: nowrap;
-      overflow: hidden;
+      white-space: pre-wrap;
+      overflow: visible;
     }
     1% {
       width: 2ch;
     }
     99% {
-      white-space: nowrap;
-      overflow: hidden;
+      white-space: pre-wrap;
+      overflow: visible;
     }
     100% {
       width: 100%;
@@ -86,13 +79,14 @@ export const typingAnimation = `
 
   .typing-effect {
     display: inline-block;
-    overflow: hidden;
-    white-space: nowrap;
+    overflow: visible;
+    white-space: pre-wrap;
     width: 1ch;
     visibility: visible;
     animation: typing 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     position: relative;
     min-height: 1.2em;
+    word-break: break-word;
   }
 
   @keyframes blink {

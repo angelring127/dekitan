@@ -4,7 +4,7 @@ import { ButtonVariant } from '../Button/types'
 export interface InformationItem {
   id: string
   icon?: ReactNode
-  text: string
+  text: string | JSX.Element
 }
 
 export interface ButtonConfig {
@@ -90,4 +90,4 @@ export interface InformationPanelProps extends HTMLAttributes<HTMLDivElement> {
    * @deprecated 単一入力フィールドサポート用（下位互換性）
    */
   onInputChange?: (value: string) => void
-} 
+}

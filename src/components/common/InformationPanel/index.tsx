@@ -31,8 +31,13 @@ export function InformationPanel({
   const [isTyping, setIsTyping] = useState(false)
 
   // 下位互換性のための変換
-  const allButtons = buttons || (buttonText && onButtonClick ? [{ text: buttonText, onClick: onButtonClick }] : [])
-  const allInputs = inputs || (inputPlaceholder && onInputChange ? [{ placeholder: inputPlaceholder, value: inputValue || '', onChange: onInputChange }] : [])
+  const allButtons =
+    buttons || (buttonText && onButtonClick ? [{ text: buttonText, onClick: onButtonClick }] : [])
+  const allInputs =
+    inputs ||
+    (inputPlaceholder && onInputChange
+      ? [{ placeholder: inputPlaceholder, value: inputValue || '', onChange: onInputChange }]
+      : [])
 
   // タイピングエフェクトのためのスタイル注入
   useEffect(() => {
@@ -51,12 +56,13 @@ export function InformationPanel({
     if (useTypingEffect && sequential && items[currentIndex]) {
       setIsTyping(true)
       const text = items[currentIndex].text
+      if (typeof text !== 'string') return
       setTypedText(text.charAt(0))
       let currentChar = 1
 
       const typingInterval = setInterval(() => {
         if (currentChar < text.length) {
-          setTypedText((prev) => text.substring(0, currentChar + 1))
+          setTypedText(() => text.substring(0, currentChar + 1))
           currentChar++
         } else {
           setIsTyping(false)
@@ -119,10 +125,7 @@ export function InformationPanel({
                 {item.icon}
               </div>
             )}
-            <p className={cn(
-              'flex-1',
-              !item.icon && 'text-center w-full'
-            )}>
+            <p className={cn('flex-1', !item.icon && 'text-center w-full')}>
               {useTypingEffect && sequential ? (
                 <span className="typing-effect">{typedText}</span>
               ) : (
@@ -168,4 +171,4 @@ export function InformationPanel({
   )
 }
 
-InformationPanel.displayName = 'InformationPanel' 
+InformationPanel.displayName = 'InformationPanel'

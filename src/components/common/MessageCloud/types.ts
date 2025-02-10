@@ -1,6 +1,19 @@
 export type MessageDirection = 'left' | 'right'
 
-export type MessageType = 'default' | 'system' | 'input' | 'selection'
+export type MessageType = 'default' | 'system' | 'selection' | 'input'
+
+// 메시지 데이터 타입
+export interface Message {
+  type: 'intro' | 'selection' | 'input' | 'left' | 'right'
+  message: string
+  showCharacter?: boolean
+  options?: Array<{
+    label: string
+    value: string
+    onClick: () => void
+  }>
+  placeholder?: string
+}
 
 export interface MessageCloudProps {
   /** 메시지 내용 */

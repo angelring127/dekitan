@@ -32,22 +32,24 @@ export default function MessagesDemo() {
       ],
     },
     {
-      type: 'left',
+      type: 'default',
       message: 'メッセージ画面では様々な形式のメッセージを表示できます。',
     },
     {
-      type: 'left',
+      type: 'default',
       message: '絵文字も使えて 👋、リンクも自動的に検出されます！',
     },
     {
-      type: 'right',
+      type: 'default',
+      direction: 'right',
       message: 'ユーザーの返信はこのように表示されます。',
     },
     {
       type: 'input',
+      direction: 'right',
       placeholder: 'メッセージを入力してください...',
     },
-  ] as const
+  ]
 
   const handleScreenClick = () => {
     if (
@@ -65,16 +67,17 @@ export default function MessagesDemo() {
 
   return (
     <div className="relative w-full h-screen flex justify-center bg-black">
-      <div className="w-[375px] h-[667px] relative">
+      <div className="w-full md:w-[375px] h-screen md:h-[667px] relative">
         {/* 배경 이미지 */}
         <div className="absolute inset-0">
           <Image
             src="/images/messages/bg_message.png"
-            alt="메시지 배경"
+            alt="メッセージ背景"
             width={375}
             height={667}
             className="w-full h-full object-cover"
             priority
+            sizes="100vw"
           />
         </div>
 
@@ -113,7 +116,7 @@ export default function MessagesDemo() {
                       )}
                       <div className="pt-8">
                         <MessageCloud
-                          message={msg.message}
+                          message={msg.message || ''}
                           direction="left"
                           type="default"
                           backgroundColor="#4B5563"
@@ -130,15 +133,9 @@ export default function MessagesDemo() {
                   return (
                     <div key={index} className="mt-4">
                       <MessageCloud
-                        message={msg.message}
+                        message={msg.message || ''}
                         type="selection"
-                        selectionOptions={
-                          msg.options as Array<{
-                            label: string
-                            value: string
-                            onClick: () => void
-                          }>
-                        }
+                        selectionOptions={msg.options || []}
                         backgroundColor="#1F2937"
                         textColor="#FFFFFF"
                         ariaLabel="選択メッセージ"
@@ -170,9 +167,10 @@ export default function MessagesDemo() {
                 return (
                   <MessageCloud
                     key={index}
-                    message={msg.message}
-                    direction={msg.type as 'left' | 'right'}
-                    backgroundColor={msg.type === 'right' ? '#3B82F6' : '#4B5563'}
+                    message={msg.message || ''}
+                    direction={msg.direction === 'right' ? 'right' : 'left'}
+                    type="default"
+                    backgroundColor={msg.direction === 'right' ? '#3B82F6' : '#4B5563'}
                     textColor="#FFFFFF"
                     ariaLabel={`メッセージ ${index + 1}`}
                     animation={{ fadeIn: true }}

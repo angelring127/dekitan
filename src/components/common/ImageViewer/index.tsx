@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import parseAPNG from 'apng-js'
 import { cn } from '@/lib/utils'
-import { ImageViewerProps } from './types'
+import { ImageViewerProps, APNGPlayer } from './types'
 
 const ImageViewer = ({
   src,
@@ -25,7 +25,7 @@ const ImageViewer = ({
   const [isLoading, setIsLoading] = useState(true)
   const [isPlaying, setIsPlaying] = useState(apngConfig?.autoPlay ?? true)
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const apngPlayerRef = useRef<any>(null)
+  const apngPlayerRef = useRef<APNGPlayer | null>(null)
   const imageRef = useRef<HTMLDivElement>(null)
   const [dragImage, setDragImage] = useState<HTMLImageElement | null>(null)
 
@@ -115,20 +115,16 @@ const ImageViewer = ({
         const buffer = await response.arrayBuffer()
         const apng = parseAPNG(buffer)
 
-        if (apng && canvasRef.current) {
+        if (apng && 'getPlayer' in apng && canvasRef.current) {
           const canvas = canvasRef.current
           const ctx = canvas.getContext('2d')
 
           if (!ctx) return
 
-          const player = apng.getPlayer(ctx)
+          const player = await apng.getPlayer(ctx)
           apngPlayerRef.current = player
 
           player.playbackRate = apngConfig?.speed ?? 1
-
-          if (apngConfig?.repeat !== undefined) {
-            player.numPlays = apngConfig.repeat
-          }
 
           if (isPlaying) {
             player.play()

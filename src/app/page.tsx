@@ -36,6 +36,18 @@ const demoPages = [
     href: '/demo/messages',
     status: '完了',
   },
+  {
+    title: 'シェイク画像デモ',
+    description: '画像の揺れアニメーションと背景画像を含むデモ画面',
+    href: '/demo/shake-image',
+    status: '完了',
+  },
+  {
+    title: 'カードデモ',
+    description: 'ポイント表示、テキスト表示、スタイルバリエーションを含むカードコンポーネント',
+    href: '/demo/cards',
+    status: '完了',
+  },
 ] as const
 
 const DemoCard = memo(({ demo }: { demo: (typeof demoPages)[number] }) => {

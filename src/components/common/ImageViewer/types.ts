@@ -26,6 +26,13 @@ export interface APNGConfig {
   autoPlay?: boolean
 }
 
+export interface APNGPlayer {
+  play: () => void
+  pause: () => void
+  stop: () => void
+  playbackRate: number
+}
+
 export interface ImageViewerProps {
   src: string
   alt: string

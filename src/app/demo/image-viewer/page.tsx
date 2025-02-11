@@ -11,7 +11,7 @@ const ImageViewerDemo = () => {
   const [droppedImage, setDroppedImage] = useState<string | null>(null)
   const [currentImage, setCurrentImage] = useState<'success' | 'normal'>('normal')
 
-  const handleDragStart = (imageName: string) => (e: React.DragEvent) => {
+  const handleDragStart = (imageName: string) => () => {
     setDraggedItem(imageName)
   }
 

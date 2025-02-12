@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState, useRef, useEffect } from 'react'
 import { MessageCloudProps } from './types'
 import { messageCloud, messageTail, messageInput, messageButton } from './styles'

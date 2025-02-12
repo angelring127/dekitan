@@ -16,6 +16,7 @@ export interface TextCardProps extends BaseCardProps {
   headerText: string
   bodyText: string
   headerColor?: 'green' | 'red' | 'purple'
+  headerClassName?: string
 }
 
 export type CardProps = PointCardProps | TextCardProps

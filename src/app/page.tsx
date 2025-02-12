@@ -48,6 +48,12 @@ const demoPages = [
     href: '/demo/cards',
     status: '完了',
   },
+  {
+    title: 'ダッシュボードデモ',
+    description: 'ダッシュボード画面コンポーネント',
+    href: '/demo/dashboard',
+    status: '完了',
+  },
 ] as const
 
 const DemoCard = memo(({ demo }: { demo: (typeof demoPages)[number] }) => {

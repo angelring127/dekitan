@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { memo } from 'react'
 import type { CardProps } from './types'
+import { cn } from '@/lib/utils'
 
 const Card = memo((props: CardProps) => {
   const { variant, className = '' } = props
@@ -37,7 +38,7 @@ const Card = memo((props: CardProps) => {
     )
   }
 
-  const { headerText, bodyText, headerColor = 'green' } = props
+  const { headerText, bodyText, headerColor = 'green', headerClassName = '' } = props
   const headerColorMap = {
     green: 'bg-[#4CAF50]',
     red: 'bg-[#FF0000]',
@@ -51,7 +52,7 @@ const Card = memo((props: CardProps) => {
       aria-label={`${headerText} カード: ${bodyText}`}
     >
       <div className={`${headerColorMap[headerColor]} p-3 text-center text-white`}>
-        <h3 className="text-lg font-bold">{headerText}</h3>
+        <h3 className={cn('text-lg font-bold', headerClassName)}>{headerText}</h3>
       </div>
       <div className="bg-white p-4">
         <p className="text-2xl text-center">{bodyText}</p>

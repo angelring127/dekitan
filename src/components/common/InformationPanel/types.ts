@@ -4,7 +4,12 @@ import { ButtonVariant } from '../Button/types'
 export interface InformationItem {
   id: string
   icon?: ReactNode
-  text: string | JSX.Element
+  text: ReactNode
+  buttons?: {
+    text: string
+    variant?: 'primary' | 'secondary' | 'outline'
+    onClick: () => void
+  }[]
   image?: {
     src: string
     alt: string

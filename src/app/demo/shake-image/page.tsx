@@ -12,7 +12,13 @@ export default function ShakeImageDemo() {
           onClick={() => window.history.back()}
           aria-label="뒤로가기"
         >
-          <img src="/images/ic_back.png" alt="뒤로가기" className="h-24 w-24" />
+          <Image
+            src="/images/ic_back.png"
+            alt="뒤로가기"
+            width={24}
+            height={24}
+            className="h-24 w-24"
+          />
         </button>
       </div>
 

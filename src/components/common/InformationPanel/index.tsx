@@ -5,36 +5,9 @@ import { cn } from '@/lib/utils'
 import { panelVariants, itemVariants, typingAnimation } from './styles'
 import type { InformationPanelProps, InformationItem } from './types'
 import { Button } from '../Button'
+import type { ButtonVariant } from '../Button/types'
 import Image from 'next/image'
-import React, { ReactElement } from 'react'
-
-const processNewlines = (text: string) => {
-  return text.split('\\n').map((line, i, arr) => (
-    <span key={i}>
-      {line}
-      {i < arr.length - 1 && <br />}
-    </span>
-  ))
-}
-
-const processText = (text: string | JSX.Element) => {
-  if (typeof text === 'string') {
-    return processNewlines(text)
-  }
-
-  if (React.isValidElement(text)) {
-    const element = text as ReactElement
-    if (typeof element.props.children === 'string') {
-      return React.cloneElement(
-        element,
-        { ...element.props },
-        processNewlines(element.props.children)
-      )
-    }
-  }
-
-  return text
-}
+import React from 'react'
 
 export function InformationPanel({
   items,
@@ -87,21 +60,22 @@ export function InformationPanel({
     if (useTypingEffect && sequential && items[currentIndex]) {
       setIsTyping(true)
       const text = items[currentIndex].text
-      if (typeof text !== 'string') return
-      setTypedText(text.charAt(0))
-      let currentChar = 1
+      if (typeof text === 'string') {
+        setTypedText(text.charAt(0))
+        let currentChar = 1
 
-      const typingInterval = setInterval(() => {
-        if (currentChar < text.length) {
-          setTypedText(() => text.substring(0, currentChar + 1))
-          currentChar++
-        } else {
-          setIsTyping(false)
-          clearInterval(typingInterval)
-        }
-      }, 50)
+        const typingInterval = setInterval(() => {
+          if (currentChar < text.length) {
+            setTypedText(() => text.substring(0, currentChar + 1))
+            currentChar++
+          } else {
+            setIsTyping(false)
+            clearInterval(typingInterval)
+          }
+        }, 50)
 
-      return () => clearInterval(typingInterval)
+        return () => clearInterval(typingInterval)
+      }
     }
   }, [currentIndex, items, useTypingEffect, sequential])
 
@@ -211,19 +185,36 @@ export function InformationPanel({
                   !item.icon && 'text-center w-full'
                 )}
               >
-                <p className="w-full">
-                  {useTypingEffect && sequential ? (
+                <div className="w-full whitespace-pre-line">
+                  {useTypingEffect && sequential && index === currentIndex ? (
                     <>
-                      <span className="typing-effect">{processNewlines(typedText)}</span>
+                      <span className="typing-effect">{typedText}</span>
                       <span className="invisible absolute" aria-hidden="true">
-                        {processNewlines(items[currentIndex].text as string)}
+                        {items[currentIndex].text}
                       </span>
                     </>
                   ) : (
-                    processText(item.text)
+                    item.text
                   )}
-                </p>
+                </div>
                 {renderImage(item)}
+                {item.buttons && item.buttons.length > 0 && (
+                  <div className="mt-4 w-full space-y-2">
+                    {item.buttons.map((button, buttonIndex) => (
+                      <Button
+                        key={buttonIndex}
+                        variant={(button.variant as ButtonVariant) || 'primary'}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          button.onClick()
+                        }}
+                        fullWidth
+                      >
+                        {button.text}
+                      </Button>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           )
@@ -249,7 +240,7 @@ export function InformationPanel({
           {allButtons.map((button, index) => (
             <Button
               key={index}
-              variant={button.variant || 'primary'}
+              variant={(button.variant as ButtonVariant) || 'primary'}
               onClick={(e) => {
                 e.stopPropagation()
                 button.onClick()

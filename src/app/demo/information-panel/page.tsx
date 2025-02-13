@@ -3,19 +3,6 @@
 import { useState } from 'react'
 import { InformationPanel } from '@/components/common/InformationPanel'
 import { TypewriterText } from '@/components/common/TypewriterText'
-import {
-  Star,
-  Heart,
-  Trophy,
-  Sparkles,
-  Crown,
-  Award,
-  Zap,
-  Target,
-  Search,
-  MessageSquare,
-  User,
-} from 'lucide-react'
 import Image from 'next/image'
 
 const createBasicItems = () => [
@@ -337,7 +324,6 @@ export default function InformationPanelDemo() {
   const [levelUpIndex, setLevelUpIndex] = useState(0)
   const [missionIndex, setMissionIndex] = useState(0)
   const [characterIndex, setCharacterIndex] = useState(0)
-  const [apngIndex, setApngIndex] = useState(0)
   const [spacingIndex, setSpacingIndex] = useState(0)
   const [positionIndex, setPositionIndex] = useState(0)
   const [inputButtonIndex, setInputButtonIndex] = useState(0)

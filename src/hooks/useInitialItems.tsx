@@ -10,7 +10,7 @@ interface BirthDate {
   day: string
 }
 
-export const useInitialItems = (onNext: () => void) => {
+export const useInitialItems = (onNext: () => void, onOmikuji?: () => void) => {
   const [nickname, setNickname] = useState('こうき')
   const [suffix, setSuffix] = useState('くん')
   const [birthDate, setBirthDate] = useState<BirthDate>({ year: '', month: '', day: '' })
@@ -144,15 +144,18 @@ export const useInitialItems = (onNext: () => void) => {
             <p>ホメロスが、みんなの「できた！」</p>
             <p>で創ったんだよ！</p>
           </div>
-          <Button
-            variant="secondary"
-            onClick={(e) => {
-              e.stopPropagation()
-            }}
-            className="rounded-full text-2xl font-bold p-8 min-w-[400px]"
-          >
-            おみくじをひく
-          </Button>
+          {onOmikuji && (
+            <Button
+              variant="secondary"
+              onClick={(e) => {
+                e.stopPropagation()
+                onOmikuji()
+              }}
+              className="rounded-full text-2xl font-bold p-8 min-w-[400px]"
+            >
+              おみくじをひく
+            </Button>
+          )}
           <Image
             src="/images/img_character.png"
             alt="キャラクター"
@@ -165,6 +168,27 @@ export const useInitialItems = (onNext: () => void) => {
       size: {
         width: '100%',
         height: '100%',
+      },
+    },
+    {
+      id: 'final',
+      content: (
+        <div className="flex flex-col items-center gap-4">
+          <span className="whitespace-pre-line text-center text-2xl font-bold">
+            はなうたを歌えたら{'\n'}ハッピーな一日に！{'\n'}
+            {'\n'}さっそくうたってみよう！
+          </span>
+          <Button
+            variant="primary"
+            className="shadow-[0_0_10px_rgba(255,255,255,0.5)] text-lg font-bold"
+          >
+            やってみた！
+          </Button>
+        </div>
+      ),
+      size: {
+        width: '100%',
+        height: 'auto',
       },
     },
   ]

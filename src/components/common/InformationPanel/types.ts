@@ -1,6 +1,3 @@
-import { HTMLAttributes, ReactNode } from 'react'
-import { ButtonVariant } from '../Button/types'
-
 export interface InformationPanelPosition {
   top?: number
   left?: number

@@ -1,6 +1,6 @@
 'use client'
 
-import { type ButtonHTMLAttributes } from 'react'
+import Image from 'next/image'
 
 interface NavigationProps {
   userName?: string
@@ -14,10 +14,12 @@ export function Navigation({ userName = 'こうきくん', userImage, onMenuClic
       <div className="flex items-center gap-2">
         <div className="h-8 w-8 rounded-full bg-purple-500">
           {userImage && (
-            <img
+            <Image
               src={userImage}
               alt={userName}
-              className="h-full w-full rounded-full object-cover"
+              width={32}
+              height={32}
+              className="rounded-full object-cover"
             />
           )}
         </div>

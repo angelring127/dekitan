@@ -32,7 +32,6 @@ export function InformationPanel({
   // 현재 아이템의 size와 position 값을 가져옵니다
   const currentItem = items[currentIndex]
   const currentSize = currentItem?.size || {}
-  const currentPosition = currentItem?.position || {}
 
   return (
     <div

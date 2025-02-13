@@ -1,54 +1,33 @@
 import { cva } from 'class-variance-authority'
 
-export const panelVariants = cva(
-  [
-    'w-full',
-    'max-w-[320px]',
-    'min-h-[320px]',
-    'mx-auto',
-    'overflow-y-auto',
-    'transition-all',
-    'duration-200',
-    'text-black',
-    'py-6',
-    'px-6',
-    'rounded-2xl',
-    'max-h-[80vh]',
-  ],
-  {
-    variants: {
-      background: {
-        white: 'bg-white',
-        transparent: 'bg-transparent',
-      },
-      withShadow: {
-        true: 'shadow-lg',
-        false: '',
-      },
+export const panelVariants = cva('rounded-2xl p-4 transition-all duration-300', {
+  variants: {
+    background: {
+      white: 'bg-white',
+      transparent: 'bg-transparent',
     },
-    defaultVariants: {
-      background: 'white',
-      withShadow: true,
+    withShadow: {
+      true: 'shadow-lg',
+      false: '',
     },
-  }
-)
+  },
+  defaultVariants: {
+    background: 'white',
+    withShadow: true,
+  },
+})
 
 export const itemVariants = cva(
-  ['flex', 'items-start', 'gap-3', 'text-center', 'transition-all', 'duration-300', 'py-3'],
+  'transition-all duration-300 w-full h-full flex items-center justify-center',
   {
     variants: {
       visible: {
         true: 'opacity-100 translate-y-0',
-        false: 'opacity-0 translate-y-4',
-      },
-      sequential: {
-        true: 'absolute top-6 left-0 w-full px-6',
-        false: 'relative mb-4 last:mb-0 px-6',
+        false: 'opacity-0 translate-y-4 pointer-events-none',
       },
     },
     defaultVariants: {
-      visible: true,
-      sequential: false,
+      visible: false,
     },
   }
 )

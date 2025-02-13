@@ -1,257 +1,104 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import { cn } from '@/lib/utils'
-import { panelVariants, itemVariants, typingAnimation } from './styles'
-import type { InformationPanelProps, InformationItem } from './types'
-import { Button } from '../Button'
-import type { ButtonVariant } from '../Button/types'
-import Image from 'next/image'
-import React from 'react'
+import { panelVariants, itemVariants } from './styles'
+import type { InformationPanelProps } from './types'
 
 export function InformationPanel({
   items,
-  background,
-  withShadow,
-  sequential = false,
-  currentIndex = 0,
+  currentIndex,
   onNext,
-  useTypingEffect = false,
-  buttons,
-  inputs,
-  itemSpacing = 16,
-  // 下位互換性のためのprops
-  buttonText,
-  onButtonClick,
-  inputPlaceholder,
-  inputValue,
-  onInputChange,
+  background = 'white',
+  withShadow = true,
   className,
   style,
-  ...props
+  height,
 }: InformationPanelProps) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const [typedText, setTypedText] = useState('')
-  const [isTyping, setIsTyping] = useState(false)
-
-  // 下位互換性のための変換
-  const allButtons =
-    buttons || (buttonText && onButtonClick ? [{ text: buttonText, onClick: onButtonClick }] : [])
-  const allInputs =
-    inputs ||
-    (inputPlaceholder && onInputChange
-      ? [{ placeholder: inputPlaceholder, value: inputValue || '', onChange: onInputChange }]
-      : [])
-
-  // タイピングエフェクトのためのスタイル注入
-  useEffect(() => {
-    if (typeof document !== 'undefined') {
-      const styleElement = document.createElement('style')
-      styleElement.textContent = typingAnimation
-      document.head.appendChild(styleElement)
-      return () => {
-        document.head.removeChild(styleElement)
-      }
-    }
-  }, [])
-
-  // タイピングエフェクトのロジック
-  useEffect(() => {
-    if (useTypingEffect && sequential && items[currentIndex]) {
-      setIsTyping(true)
-      const text = items[currentIndex].text
-      if (typeof text === 'string') {
-        setTypedText(text.charAt(0))
-        let currentChar = 1
-
-        const typingInterval = setInterval(() => {
-          if (currentChar < text.length) {
-            setTypedText(() => text.substring(0, currentChar + 1))
-            currentChar++
-          } else {
-            setIsTyping(false)
-            clearInterval(typingInterval)
-          }
-        }, 50)
-
-        return () => clearInterval(typingInterval)
-      }
-    }
-  }, [currentIndex, items, useTypingEffect, sequential])
-
-  useEffect(() => {
-    if (sequential && containerRef.current) {
-      containerRef.current.focus()
-    }
-  }, [sequential])
 
   const handleClick = () => {
-    if (sequential && !isTyping && onNext) {
+    if (onNext) {
       onNext()
     }
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (sequential && !isTyping && onNext && (e.key === 'Enter' || e.key === ' ')) {
+    if (onNext && (e.key === 'Enter' || e.key === ' ')) {
       onNext()
     }
   }
 
-  const renderImage = (item: InformationItem) => {
-    if (!item.image) return null
-
-    const imageSpacing = item.spacing || {}
-    const topSpacing = imageSpacing.top !== undefined ? imageSpacing.top : itemSpacing
-    const bottomSpacing = imageSpacing.bottom !== undefined ? imageSpacing.bottom : 0
-
-    if (item.image.isApng) {
-      return (
-        <div style={{ marginTop: topSpacing, marginBottom: bottomSpacing }}>
-          <Image
-            src={item.image.src}
-            alt={item.image.alt}
-            width={item.image.width || 200}
-            height={item.image.height || 200}
-            className="rounded-lg"
-            unoptimized
-            style={{
-              width: item.image.width || 200,
-              height: item.image.height || 200,
-              objectFit: 'contain',
-            }}
-          />
-        </div>
-      )
-    }
-
-    return (
-      <div style={{ marginTop: topSpacing, marginBottom: bottomSpacing }}>
-        <Image
-          src={item.image.src}
-          alt={item.image.alt}
-          width={item.image.width || 200}
-          height={item.image.height || 200}
-          className="rounded-lg"
-        />
-      </div>
-    )
-  }
+  // 현재 아이템의 size와 position 값을 가져옵니다
+  const currentItem = items[currentIndex]
+  const currentSize = currentItem?.size || {}
+  const currentPosition = currentItem?.position || {}
 
   return (
     <div
       ref={containerRef}
       className={cn(
         panelVariants({ background, withShadow }),
-        sequential && 'relative cursor-pointer',
+        'relative cursor-pointer overflow-hidden',
         'flex flex-col',
+        'w-full transition-all duration-300',
         className
       )}
-      style={style}
+      style={{
+        ...style,
+        height: height
+          ? typeof height === 'number'
+            ? `${height}px`
+            : height
+          : currentSize.height
+            ? `${currentSize.height}px`
+            : 'fit-content',
+        minHeight: height
+          ? typeof height === 'number'
+            ? `${height}px`
+            : height
+          : currentSize.height
+            ? `${currentSize.height}px`
+            : 'fit-content',
+      }}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
-      tabIndex={sequential ? 0 : undefined}
-      role={sequential ? 'button' : 'region'}
-      aria-label={sequential ? '다음으로 넘어가려면 클릭하세요' : '정보 패널'}
-      {...props}
+      tabIndex={0}
+      role="button"
+      aria-label="다음으로 넘어가려면 클릭하세요"
     >
-      <div className="flex-1">
+      <div className="w-full h-full relative">
         {items.map((item, index) => {
-          const spacing = item.spacing || {}
-          const topSpacing = spacing.top !== undefined ? spacing.top : itemSpacing
-          const bottomSpacing = spacing.bottom !== undefined ? spacing.bottom : 0
+          const position = item.position || {}
+          const size = item.size || {}
 
           return (
             <div
               key={item.id}
               className={cn(
                 itemVariants({
-                  visible: !sequential || index === currentIndex,
-                  sequential,
-                })
+                  visible: index === currentIndex,
+                }),
+                'w-full transition-all duration-300',
+                'flex items-center justify-center',
+                index === currentIndex ? 'relative' : 'absolute inset-0 invisible'
               )}
               style={{
-                marginTop: index === 0 ? 0 : topSpacing,
-                marginBottom: bottomSpacing,
+                top: position.top ? `${position.top}px` : 0,
+                left: position.left ? `${position.left}px` : 0,
+                right: position.right ? `${position.right}px` : 0,
+                bottom: position.bottom ? `${position.bottom}px` : 0,
+                height: '100%',
+                width: size.width ? `${size.width}px` : '100%',
+                maxWidth: size.maxWidth ? `${size.maxWidth}px` : '100%',
+                maxHeight: size.maxHeight ? `${size.maxHeight}px` : 'none',
               }}
             >
-              {item.icon && (
-                <div className="flex-shrink-0" aria-hidden="true">
-                  {item.icon}
-                </div>
-              )}
-              <div
-                className={cn(
-                  'flex-1 flex flex-col items-center',
-                  !item.icon && 'text-center w-full'
-                )}
-              >
-                <div className="w-full whitespace-pre-line">
-                  {useTypingEffect && sequential && index === currentIndex ? (
-                    <>
-                      <span className="typing-effect">{typedText}</span>
-                      <span className="invisible absolute" aria-hidden="true">
-                        {items[currentIndex].text}
-                      </span>
-                    </>
-                  ) : (
-                    item.text
-                  )}
-                </div>
-                {renderImage(item)}
-                {item.buttons && item.buttons.length > 0 && (
-                  <div className="mt-4 w-full space-y-2">
-                    {item.buttons.map((button, buttonIndex) => (
-                      <Button
-                        key={buttonIndex}
-                        variant={(button.variant as ButtonVariant) || 'primary'}
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          button.onClick()
-                        }}
-                        fullWidth
-                      >
-                        {button.text}
-                      </Button>
-                    ))}
-                  </div>
-                )}
-              </div>
+              {item.content}
             </div>
           )
         })}
       </div>
-
-      {(allButtons.length > 0 || allInputs.length > 0) && (
-        <div className="mt-4 px-4 space-y-2">
-          {allInputs.map((input, index) => (
-            <input
-              key={index}
-              type="text"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder={input.placeholder}
-              value={input.value}
-              onChange={(e) => {
-                e.stopPropagation()
-                input.onChange(e.target.value)
-              }}
-              onClick={(e) => e.stopPropagation()}
-            />
-          ))}
-          {allButtons.map((button, index) => (
-            <Button
-              key={index}
-              variant={(button.variant as ButtonVariant) || 'primary'}
-              onClick={(e) => {
-                e.stopPropagation()
-                button.onClick()
-              }}
-              fullWidth
-            >
-              {button.text}
-            </Button>
-          ))}
-        </div>
-      )}
     </div>
   )
 }

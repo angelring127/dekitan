@@ -7,6 +7,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      textColor: {
+        DEFAULT: '#000000',
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
@@ -47,7 +50,8 @@ module.exports = {
         },
       },
       animation: {
-        'shake-limited': 'shake 0.5s ease-in-out 10',
+        'shake-limited': 'shake 0.5s ease-in-out 3',
+        'shake-infinite': 'shake 0.5s ease-in-out infinite',
         'shrink-and-move': 'shrinkAndMove 1s ease-in-out forwards',
         'fade-in': 'fadeIn 1s ease-in-out forwards',
         'fade-in-up': 'fadeInUp 0.5s ease-out forwards',

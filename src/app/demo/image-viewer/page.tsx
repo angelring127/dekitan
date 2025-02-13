@@ -53,15 +53,16 @@ const ImageViewerDemo = () => {
 
   const omikujiAnimation: AnimationConfig = {
     type: 'slide',
-    duration: 1000,
+    duration: 500,
     slideDirection: 'up',
     timingFunction: 'ease-out',
   }
 
   const omikujiEmphasis: EmphasisConfig = {
     type: 'shake',
-    duration: 2000,
-    repeat: 0,
+    duration: 1000,
+    timingFunction: 'ease-in-out',
+    repeat: 2,
   }
 
   const elephantAnimation: AnimationConfig = {
@@ -79,15 +80,16 @@ const ImageViewerDemo = () => {
   return (
     <div className="mx-auto w-[390px] min-h-[844px] bg-white relative overflow-hidden">
       {/* 헤더 */}
-      <header className="sticky top-0 left-0 right-0 h-14 bg-white border-b flex items-center px-4 z-10">
+      <header className="sticky top-1 left-0 right-0 h-14 bg-white border-b flex items-center px-4 z-10">
+        <h1 className="text-lg font-medium ml-2">画像ビューアーデモ</h1>
+
         <button
           onClick={() => window.history.back()}
-          className="w-12 h-12 flex items-center justify-center"
+          className="w-12 h-12 flex items-center justify-center ml-auto"
           aria-label="戻る"
         >
           <Image src="/images/ic_back.png" alt="" width={48} height={48} priority />
         </button>
-        <h1 className="text-lg font-medium ml-2">画像ビューアーデモ</h1>
       </header>
 
       {/* 메인 콘텐츠 */}
@@ -123,6 +125,7 @@ const ImageViewerDemo = () => {
                   height={300}
                   entranceAnimation={omikujiAnimation}
                   emphasisAnimation={omikujiEmphasis}
+                  className="animate-shake-infinite"
                 />
               </div>
             </div>
@@ -209,7 +212,7 @@ const ImageViewerDemo = () => {
           <div className="bg-gray-50 p-4 rounded-lg">
             <h3 className="text-sm text-gray-600 mb-2">クリックして切り替え ({currentImage})</h3>
             <div
-              className="w-full aspect-square relative cursor-pointer"
+              className="w-full aspect-square relative cursor-pointer flex items-center justify-center"
               onClick={handleImageTransition}
             >
               <ImageViewer
@@ -219,12 +222,9 @@ const ImageViewerDemo = () => {
                     : '/images/img_omikuji.png'
                 }
                 alt="전환 이미지"
-                width={300}
-                height={300}
-                entranceAnimation={{
-                  type: 'fade',
-                  duration: 500,
-                }}
+                width={150}
+                height={150}
+                className="object-contain"
               />
             </div>
           </div>

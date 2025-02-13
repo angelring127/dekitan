@@ -66,8 +66,8 @@ export default function MessagesDemo() {
   }, [step])
 
   return (
-    <div className="relative w-full h-screen flex justify-center bg-black">
-      <div className="w-full md:w-[375px] h-screen md:h-[667px] relative">
+    <div className="relative w-full h-[100dvh] flex justify-center bg-black">
+      <div className="w-full max-w-[430px] h-[100dvh] relative">
         {/* 배경 이미지 */}
         <div className="absolute inset-0">
           <Image
@@ -77,7 +77,7 @@ export default function MessagesDemo() {
             height={667}
             className="w-full h-full object-cover"
             priority
-            sizes="100vw"
+            sizes="(max-width: 430px) 100vw, 430px"
           />
         </div>
 
@@ -92,7 +92,7 @@ export default function MessagesDemo() {
         <div className="absolute inset-0">
           {/* 메시지 컨테이너 */}
           <div
-            className="h-full overflow-y-auto px-4 pt-20"
+            className="h-full overflow-y-auto px-4 pt-20 pb-safe"
             onClick={handleScreenClick}
             role="button"
             tabIndex={0}

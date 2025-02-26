@@ -4,7 +4,7 @@ export type MessageType = 'default' | 'system' | 'selection' | 'input'
 
 // 메시지 데이터 타입
 export interface Message {
-  type: 'intro' | 'selection' | 'input' | 'left' | 'right'
+  type: 'intro' | 'selection' | 'input'
   message: string
   showCharacter?: boolean
   options?: Array<{

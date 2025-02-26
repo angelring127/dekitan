@@ -49,18 +49,18 @@ export default function MessagesDemo() {
       options: [
         {
           label: '好き',
-          value: 'start',
+          value: 'like',
           onClick: () => handleSelection(4),
         },
         {
           label: 'にがてだけどやってみる',
-          value: 'start',
+          value: 'dontlike_but_try',
           onClick: () => handleSelection(5),
         },
         {
           label: 'にがて',
-          value: 'later',
-          onClick: () => handleSelection(2),
+          value: 'dontlike',
+          onClick: () => handleSelection(6),
         },
       ],
     },
@@ -86,17 +86,17 @@ export default function MessagesDemo() {
       options: [
         {
           label: 'やってみる',
-          value: 'start',
+          value: 'try',
           onClick: () => handleSelection(11),
         },
         {
           label: 'ちがうことにする',
-          value: 'start',
+          value: 'different',
           onClick: () => handleSelection(8),
         },
         {
           label: 'できる',
-          value: 'later',
+          value: 'can',
           onClick: () => handleSelection(10),
         },
       ],
@@ -113,12 +113,12 @@ export default function MessagesDemo() {
       options: [
         {
           label: 'やってみる',
-          value: 'start',
+          value: 'try',
           onClick: () => handleSelection(11),
         },
         {
           label: 'できる',
-          value: 'start',
+          value: 'can',
           onClick: () => handleSelection(10),
         },
       ],
@@ -186,6 +186,7 @@ export default function MessagesDemo() {
             <div className="min-h-full flex flex-col justify-end space-y-4 pb-4">
               {displayedMessages.map((messageIndex, index) => {
                 const msg = messages[messageIndex]
+                const isLatestMessage = index === displayedMessages.length - 1
 
                 if (msg.type === 'intro') {
                   return (
@@ -228,6 +229,7 @@ export default function MessagesDemo() {
                         textColor="#FFFFFF"
                         ariaLabel="選択メッセージ"
                         animation={{ fadeIn: true }}
+                        disabled={!isLatestMessage}
                       />
                     </div>
                   )

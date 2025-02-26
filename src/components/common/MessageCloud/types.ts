@@ -60,4 +60,6 @@ export interface MessageCloudProps {
   }
   /** 접근성 레이블 */
   ariaLabel?: string
+  /** 비활성화 상태 */
+  disabled?: boolean
 }

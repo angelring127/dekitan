@@ -46,6 +46,11 @@ module.exports = {
             transform: 'scale(1) translate(0, -30%)',
           },
         },
+        'stamp': {
+          '0%': { transform: 'scale(1.5)' },
+          '50%': { transform: 'scale(0.9)' },
+          '100%': { transform: 'scale(1)' },
+        },
       },
       animation: {
         'fade-in': 'fade-in 0.5s ease-out',
@@ -53,6 +58,7 @@ module.exports = {
         'shake-infinite': 'shake-infinite 0.5s ease-in-out infinite',
         'shrink-and-move': 'shrink-and-move 1s ease-in-out forwards',
         'grow-and-center': 'grow-and-center 1s ease-out forwards',
+        'stamp': 'stamp 1s ease-in-out',
       },
     },
   },

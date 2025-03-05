@@ -18,3 +18,43 @@ body {
     text-wrap: balance;
   }
 }
+
+.gem_points {
+  border-radius: 50%;
+  background-size: cover;
+  background-image: url('/images/img_star_circle.png');
+  object-fit: cover;
+  overflow: hidden;
+}
+
+
+.animate-vibrate-infinite {
+  animation: vibrate-infinite 0.1s linear infinite;
+}
+
+@keyframes vibrate-infinite {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-2px);
+  }
+  50% {
+    transform: translateX(2px);
+  }
+  75% {
+    transform: translateX(-2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+
+.collection_self {
+  background-color: white;
+  border: 2px solid yellow; 
+  box-shadow: 0 0 0 2px yellow;
+}
+
+

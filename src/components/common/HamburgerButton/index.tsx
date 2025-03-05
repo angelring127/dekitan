@@ -63,7 +63,8 @@ export function HamburgerButton({ userName = 'できたんのワクワクワー�
                         <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-black">HOME</li>
                         <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-black">新しく始める</li>
                         <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-black">ログイン</li>
-                        <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-black">ワクワクワールドって?<br></br>お知らせ一覧</li>
+                        <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-black">ワクワクワールドって?</li>
+                        <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-black">お知らせ一覧</li>
                     </ul>
                 </div>
             )}

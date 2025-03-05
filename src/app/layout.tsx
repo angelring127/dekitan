@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
-import { HamburgerButton } from '@/components/common/HamburgerButton'
+import { Navigation } from '@/components/common/Navigation'
 import './globals.css'
 
 const geistSans = localFont({
@@ -30,7 +30,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex justify-center bg-gray-100`}
       >
         <main className="w-full max-w-[428px] min-h-screen bg-white shadow-lg flex flex-col">
-          <HamburgerButton />
+          <Navigation />
           <div className="flex-1">{children}</div>
         </main>
       </body>

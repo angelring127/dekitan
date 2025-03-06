@@ -1,6 +1,8 @@
 'use client'
 
 import Image from 'next/image'
+import { useEffect, useRef } from 'react'
+import { useNavigation } from './NavigationContext'
 
 interface NavigationProps {
   userName?: string
@@ -8,9 +10,27 @@ interface NavigationProps {
   onMenuClick?: () => void
 }
 
-export function Navigation({ userName = 'こうきくん', userImage, onMenuClick }: NavigationProps) {
+export function Navigation({ userName, userImage, onMenuClick }: NavigationProps) {
+  const { showNav } = useNavigation()
+  const navRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    if (navRef.current) {
+      if (showNav) {
+        navRef.current.style.transform = 'translateY(0)'
+        navRef.current.style.opacity = '1'
+      } else {
+        navRef.current.style.transform = 'translateY(-100%)'
+        navRef.current.style.opacity = '0'
+      }
+    }
+  }, [showNav])
+
   return (
-    <nav className="relative z-10 flex h-14 items-center justify-between px-4 bg-white shadow-md">
+    <nav
+      ref={navRef}
+      className="relative z-10 flex h-14 items-center justify-between px-4 bg-white shadow-md transition-all duration-300"
+    >
       <div className="flex items-center gap-2">
         <div className="h-8 w-8 rounded-full bg-purple-500">
           {userImage && (

@@ -5,7 +5,7 @@ export const ChildRegist = ({
   setChildInfo,
 }: {
   childinfo: { name: string; schoolYear: string; suffix: string };
-  setChildInfo: (key: keyof typeof childinfo, value: string) => void;  // Corrected type definition
+  setChildInfo: (key: keyof typeof childinfo, value: string) => void; 
 }) => {
 
   const names = ['くん', 'ちゃん', 'さん', 'なし'];
@@ -13,16 +13,16 @@ export const ChildRegist = ({
 
   const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newNickname = e.target.value;
-    setChildInfo('name', newNickname);  // Correctly passing key and value
+    setChildInfo('name', newNickname);  
   };
 
   const handleSuffixChange = (newSuffix: string) => {
-    setChildInfo('suffix', newSuffix === 'なし' ? '' : newSuffix);  // Correctly passing key and value
+    setChildInfo('suffix', newSuffix === 'なし' ? '' : newSuffix); 
   };
 
   const handleSchoolYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newSchoolYear = e.target.value;
-    setChildInfo('schoolYear', newSchoolYear);  // Correctly passing key and value
+    setChildInfo('schoolYear', newSchoolYear);  
   };
 
   const items: InformationItem[] = [

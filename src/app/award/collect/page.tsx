@@ -1,17 +1,20 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { InformationPanel } from '@/components/common/InformationPanel'
 import { myCollection } from '@/hooks/myCollection'
 import { Button } from '@/components/common/Button'
 import { useGlobalStore } from "@/store/info";
 import Image from 'next/image'
 import { useRouter } from "next/navigation";
-
+import { CollectionItem } from "@/store/info";
+import { apiClient } from '@/services/api'
 export default function MyCollections() {
-  const { mycollection } = useGlobalStore();
+  const { mycollection, addToCollection, setSingleCollectionItem, singleCollectionItem } = useGlobalStore();
   const router = useRouter();
 
-  const handleNext = () => {
+
+  const handleNext = (item: CollectionItem) => {
+    setSingleCollectionItem(item);
     setCurrentIndex((prev) => prev + 1);
   };
 
@@ -20,19 +23,29 @@ export default function MyCollections() {
   };
 
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-
+  const hasApiBeenCalled = useRef(false);
   useEffect(() => {
-    const storedIndex = localStorage.getItem("currentIndex");
-    if (storedIndex) {
-      setCurrentIndex(parseInt(storedIndex, 10));
+    if (mycollection.length === 0 && !hasApiBeenCalled.current) {
+      hasApiBeenCalled.current = true;
+      apiClient
+        .post('/award/item/gets', {
+          volatile_token: 'xxxxx',
+          player_id: 1,
+        })
+        .then((response) => {
+          addToCollection(response.data.data.list);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
     }
   }, []);
 
-  const [initialItems, setInitialItems] = useState(() => myCollection(mycollection ?? { title: "", description: "" }));
+  const [initialItems, setInitialItems] = useState(() => myCollection(singleCollectionItem));
 
   useEffect(() => {
-    localStorage.setItem('currentIndex', currentIndex.toString());
-  }, [currentIndex]);
+    setInitialItems(myCollection(singleCollectionItem));
+  }, [singleCollectionItem]);
 
   const items = initialItems?.items || [];
 
@@ -51,65 +64,57 @@ export default function MyCollections() {
     buttonText = "もどる";
     classname = 'relative w-[390px] mt-auto mb-4';
     style = {
-      background:`transparent`,
+      background: `transparent`,
     };
   }
-
   return (
-    <div 
-      className={`mx-auto flex h-[844px] w-[390px] flex-col items-center overflow-hidden ${currentIndex === 1 ? 'bg-cover bg-center bg-no-repeat' : ''}`} 
+    <div
+      className={`mx-auto flex h-[844px] w-[390px] flex-col items-center overflow-hidden ${currentIndex === 1 ? 'bg-cover bg-center bg-no-repeat' : ''}`}
       style={currentIndex === 1 ? { backgroundImage: `url('/images/messages/bg_message.png')` } : { background: 'white' }}
     >
       <div className={classname} style={style}>
         {currentIndex === 0 && (
           <>
-            <Image
-              src={mycollection?.image ?? '/images/default-image.png'}
-              alt="award"
-              width={150}
-              height={150}
-              onClick={handleNext}
-              className="collection_self relative cursor-pointer"
-              style={{ bottom: '-50%', left: '10%' }}
-            />  
-            <Image
-              src="/images/img_yellow_star.png"
-              alt="effect"
-              width={80}
-              height={80}
-              className="absolute"
-              style={{ bottom: '50%', right: '30%' }}
-            />
-            <Image
-              src="/images/img_yellow_star.png"
-              alt="effect"
-              width={80}
-              height={80}
-              className="mx-auto absolute z-10"
-              style={{ bottom: '30%', right: '20%' }}
-            />
+            {mycollection && mycollection.length > 0 && (
+              <div className="grid grid-cols-3 gap-4 mt-10">
+                {mycollection.map((item) => (
+                  <div key={item?.id} className="relative cursor-pointer">
+                    <Image
+                      src={item?.image ?? '/images/default-image.png'}
+                      alt="award"
+                      width={150}
+                      height={150}
+                      onClick={() => handleNext(item)}
+                      className="collection_self"
+                      style={{ bottom: '-50%', left: '10%' }}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+
             <Image
               src="/images/img_little_collection_animal.png"
               alt="little_rat"
               width={140}
               height={140}
-              className="absolute "
-              style={{ bottom: '0%', right: '-5%' }}
+              className="absolute z-10"
+              style={{ bottom: '0%', right: '1%' }}
             />
+
           </>
         )}
-        {currentIndex === 1 && (
-          <Image
-            src={mycollection?.image ?? '/images/default-image.png'}
-            alt="award"
-            width={150}
-            height={150}
-            className="gem_points relative animate-fade-in-up"
-            style={{ bottom: '130%', left: '30%' }}
-          />
-        )}
-
-        <div className="absolute w-full flex flex-col items-center mb-20 mt-20" style={{ bottom: '0%'}}> 
+        <div className="absolute w-full flex flex-col items-center mb-20 mt-20" style={{ bottom: '0%' }}>
+          {currentIndex === 1 && (
+            <Image
+              src={singleCollectionItem?.image ?? '/images/default-image.png'}
+              alt="award"
+              width={150}
+              height={150}
+              className="gem_points absolute animate-fade-in-up"
+              style={{ top: '-20%' }}
+            />
+          )}
           <InformationPanel
             items={items.slice(0)}
             currentIndex={currentIndex}

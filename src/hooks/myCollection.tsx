@@ -1,12 +1,14 @@
 import type { InformationItem } from '@/components/common/InformationPanel/types';
-export const myCollection = (mycollection: { title: string; description: string }) => {
+import type { CollectionItem } from "@/store/info";
+
+export const myCollection = (singleCollectionItem: CollectionItem | null) => {
     const items: InformationItem[] = [
         {
             id: '0',
             content: (
                 <div className="flex flex-col items-center gap-4">
                     <span className="whitespace-pre-line text-center text-1xl font-bold">
-                        ひとつのコレクションがふえた!
+                        ひとつのコレクションが<br></br>ふえた!
                     </span>
                 </div>
             ),
@@ -16,11 +18,11 @@ export const myCollection = (mycollection: { title: string; description: string 
             content: (
                 <div className="flex flex-col items-center gap-4">
                     <span className="whitespace-pre-line text-center text-2xl font-bold">
-                        {mycollection?.title}
+                        {singleCollectionItem?.title}
                     </span>
                     <span
                         className="whitespace-pre-line text-center text-xl font-bold"
-                        dangerouslySetInnerHTML={{ __html: mycollection?.description || "", }} />
+                        dangerouslySetInnerHTML={{ __html: singleCollectionItem?.description || "", }} />
                 </div>
             ),
         }

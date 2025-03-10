@@ -9,20 +9,24 @@ import { useRouter } from "next/navigation";
 import { Button } from '@/components/common/Button'
 import { useGlobalStore } from "@/store/info";
 export default function GetAward() {
-  const {name,points, mycollection, decreasePoints, addToCollection } = useGlobalStore();
+  const {name,points, mycollection,singleCollectionItem, decreasePoints, setSingleCollectionItem } = useGlobalStore();
   const router = useRouter();
 
   const handleNext = () => {
-    if (currentIndex < items.length - 1 && mycollection) {
+    if (currentIndex === 0) {
+      getAward();
+    }
+  
+    if (currentIndex < items.length - 1) {
       setCurrentIndex((prev) => prev + 1)
     } else {
       decreasePoints(points - 100);
-      router.push('./collect')
+       router.push('./collect')
       localStorage.setItem('currentIndex','0');
       apiClient.post('award/item/collect', { 
         volatile_token: "xxxxxxxxxxxxxxxxxxxxxxxxx",
         player_id: 123,
-        item_id: mycollection?.id })
+        item_id: singleCollectionItem?.id })
         .then((res) => {
           console.log('res', res)
         })
@@ -40,34 +44,34 @@ export default function GetAward() {
     }
   }, []);
 
-  const [initialItems, setInitialItems] = useState(() => getAwards(name, points, mycollection ?? { title: "", description: "" }));
+  const [initialItems, setInitialItems] = useState(() => getAwards(name, points, singleCollectionItem ?? { title: "", description: "" }));
 
   useEffect(() => {
     localStorage.setItem('currentIndex', currentIndex.toString());
   }, [currentIndex]);
 
-  const items = initialItems?.items || []
-
-  useEffect(() => {
-    apiClient
-      .post('/award/exchange/ordinary',{
-        volatile_token:"xxxxx",
-        player_id:1
-      })
-      .then((response) => {
-        addToCollection(response.data.data);
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-
-  }, []);
   useEffect(() => {
     if (mycollection) {
-      setInitialItems(getAwards(name, points, mycollection));
+      setInitialItems(getAwards(name, points, singleCollectionItem ?? { title: "", description: "" }));
     }
-  }, [mycollection]);
+  }, [singleCollectionItem]);
 
+
+  const items = initialItems?.items || []
+
+  const getAward = ()=>{
+    apiClient
+    .post('/award/exchange/ordinary',{
+      volatile_token:"xxxxx",
+      player_id:1
+    })
+    .then((response) => {
+      setSingleCollectionItem(response.data.data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+  }
 
   let buttonText = "";
   let buttonColor = "";
@@ -157,7 +161,7 @@ export default function GetAward() {
               style={{ top: '-210%', right: '10%' }}
             />
             <Image
-              src={mycollection?.image ?? '/images/default-image.png'}
+              src={singleCollectionItem?.image ?? '/images/default-image.png'}
               alt="award"
               width={120}
               height={120}
@@ -219,7 +223,7 @@ export default function GetAward() {
               style={{ top: '-10%', left: '10%' }}
             />
             <Image
-              src={mycollection?.image ?? '/images/default-image.png'}
+              src={singleCollectionItem?.image ?? '/images/default-image.png'}
               alt="award"
               width={150}
               height={150}

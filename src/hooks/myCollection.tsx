@@ -6,7 +6,7 @@ export const myCollection = (mycollection: { title: string; description: string 
             content: (
                 <div className="flex flex-col items-center gap-4">
                     <span className="whitespace-pre-line text-center text-1xl font-bold">
-                        ひとつのコレクションがふえたね!
+                        ひとつのコレクションがふえた!
                     </span>
                 </div>
             ),

@@ -19,7 +19,10 @@ export default function GetAward() {
       decreasePoints(points - 100);
       router.push('./collect')
       localStorage.setItem('currentIndex','0');
-      apiClient.post('award/item/collect', { item_id: mycollection?.id })
+      apiClient.post('award/item/collect', { 
+        volatile_token: "xxxxxxxxxxxxxxxxxxxxxxxxx",
+        player_id: 123,
+        item_id: mycollection?.id })
         .then((res) => {
           console.log('res', res)
         })
@@ -28,10 +31,14 @@ export default function GetAward() {
         });
     }
   }
-  const [currentIndex, setCurrentIndex] = useState<number>(() => {
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+
+  useEffect(() => {
     const storedIndex = localStorage.getItem("currentIndex");
-    return storedIndex ? parseInt(storedIndex, 10) : 0;
-  });
+    if (storedIndex) {
+      setCurrentIndex(parseInt(storedIndex, 10));
+    }
+  }, []);
 
   const [initialItems, setInitialItems] = useState(() => getAwards(name, points, mycollection ?? { title: "", description: "" }));
 
@@ -43,7 +50,10 @@ export default function GetAward() {
 
   useEffect(() => {
     apiClient
-      .post('/award/exchange/ordinary')
+      .post('/award/exchange/ordinary',{
+        volatile_token:"xxxxx",
+        player_id:1
+      })
       .then((response) => {
         addToCollection(response.data.data);
       })
@@ -69,13 +79,6 @@ export default function GetAward() {
   } else if (currentIndex === 3) {
     buttonText = "コレクションする";
     buttonColor = "bg-orange-500";
-  }
-
-  const commonPanelStyle = {
-    borderRadius: 20,
-    position: 'relative' as const,
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-    width: '250px',
   }
   return (
     <div className="mx-auto flex h-[844px] w-[390px] flex-col items-center overflow-hidden bg-[url('/images/messages/bg_message.png')] bg-cover bg-center bg-no-repeat">
@@ -226,14 +229,13 @@ export default function GetAward() {
           </>
         )}
 
-        <div className="relative w-full flex flex-col items-center mb-20">
+        <div className=" w-full flex flex-col items-center mb-20">
           <InformationPanel
             items={items.slice(0)}
             currentIndex={currentIndex}
             background="transparent"
             withShadow
-            style={commonPanelStyle}
-            className="my-4 mt-20  flex flex-col items-center justify-center"
+            className="w-[320px] my-4 mt-20  flex flex-col items-center justify-center common_panel_style"
           >
 
             {buttonText && (

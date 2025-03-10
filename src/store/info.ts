@@ -5,14 +5,33 @@ interface CollectionItem {
   title: string;
   description: string;
   image: string;
+  parent_id: string;
+}
+
+interface ChildInfo {
+  parent_id: string;
+  suffix:string;
+  name: string;
+  schoolYear: string; 
+}
+
+interface ParentInfo {
+  parent_id: string;
+  name: string;
 }
 
 interface GlobalState {
   name: string;
   points: number;
   mycollection: CollectionItem | null;
+  parentinfo: ParentInfo;
+  childinfo: ChildInfo;
 
   setName: (newName: string) => void;
+  setParentInfo: (key: keyof ParentInfo, value: string) => void;
+  setChildInfo: (key: keyof ChildInfo, value: string) => void;
+  syncParentToChild: () => void;
+  
   increasePoints: (value: number) => void;
   decreasePoints: (value: number) => void;
   addToCollection: (item: CollectionItem) => void;
@@ -20,49 +39,82 @@ interface GlobalState {
   clearCollection: () => void;
 }
 
-export const useGlobalStore = create<GlobalState>((set) => {
-  // Load the initial state from localStorage or use default values
-  const storedName = localStorage.getItem("name") || "こうき";
-  const storedPoints = parseInt(localStorage.getItem("points") || "120", 10);
-  const storedCollection = JSON.parse(localStorage.getItem("mycollection") || "null");
+export const useGlobalStore = create<GlobalState>((set, get) => ({
+  name: "こうき",
+  points: 120,
+  mycollection: null,
 
-  return {
-    name: storedName,
-    points: storedPoints,
-    mycollection: storedCollection,
+  parentinfo: { parent_id: "", name: "" },
+  childinfo: { parent_id: "", suffix: "", name: "", schoolYear: "" },
 
-    setName: (newName) => {
-      localStorage.setItem("name", newName);
-      set({ name: newName });
-    },
+  // Set all data at once
+  setAllData: (data: Partial<GlobalState>) => {
+    if (typeof window !== "undefined") {
+      Object.entries(data).forEach(([key, value]) => {
+        if (typeof value === "object" && value !== null) {
+          localStorage.setItem(key, JSON.stringify(value));
+        } else {
+          localStorage.setItem(key, value?.toString() || "");
+        }
+      });
+    }
+    set(data);
+  },
 
-    increasePoints: (value) => {
-      const newPoints = storedPoints + value;
-      localStorage.setItem("points", newPoints.toString());
-      set({ points: newPoints });
-    },
+  setName: (newName) => {
+    localStorage.setItem("name", newName);
+    set({ name: newName });
+  },
 
-    decreasePoints: (value) => {
-      const newPoints = Math.max(0, storedPoints - value);
-      localStorage.setItem("points", newPoints.toString());
-      set({ points: newPoints });
-    },
+  setParentInfo: (key, value) => {
+    localStorage.setItem(key, value);
+    set((state) => ({
+      parentinfo: { ...state.parentinfo, [key]: value },
+      ...(key === "parent_id" ? { childinfo: { ...state.childinfo, parent_id: value } } : {}),
+    }));
+  },
 
-    addToCollection: (item) => {
-      localStorage.setItem("mycollection", JSON.stringify(item));
-      set({ mycollection: item });
-    },
+  setChildInfo: (key, value) => {
+    localStorage.setItem(`child_${key}`, value);
+    set((state) => ({
+      childinfo: { ...state.childinfo, [key]: value },
+    }));
+  },
 
-    removeFromCollection: (id) => {
-      if (storedCollection?.id === id) {
-        localStorage.removeItem("mycollection");
-        set({ mycollection: null });
-      }
-    },
+  syncParentToChild: () => {
+    const parent_id = get().parentinfo.parent_id;
+    localStorage.setItem("child_parent_id", parent_id);
+    set((state) => ({
+      childinfo: { ...state.childinfo, parent_id },
+    }));
+  },
 
-    clearCollection: () => {
+  increasePoints: (value) => {
+    const newPoints = get().points + value;
+    localStorage.setItem("points", newPoints.toString());
+    set({ points: newPoints });
+  },
+
+  decreasePoints: (value) => {
+    const newPoints = Math.max(0, get().points - value);
+    localStorage.setItem("points", newPoints.toString());
+    set({ points: newPoints });
+  },
+
+  addToCollection: (item) => {
+    localStorage.setItem("mycollection", JSON.stringify(item));
+    set({ mycollection: item });
+  },
+
+  removeFromCollection: (id) => {
+    if (get().mycollection?.id === id) {
       localStorage.removeItem("mycollection");
       set({ mycollection: null });
-    },
-  };
-});
+    }
+  },
+
+  clearCollection: () => {
+    localStorage.removeItem("mycollection");
+    set({ mycollection: null });
+  },
+}));

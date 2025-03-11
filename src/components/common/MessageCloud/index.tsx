@@ -24,11 +24,13 @@ export const MessageCloud: React.FC<MessageCloudProps> = ({
   onInputSubmit,
   animation,
   ariaLabel,
+  disabled = false,
 }) => {
   const [inputValue, setInputValue] = useState('')
   const [isLongPress, setIsLongPress] = useState(false)
   const longPressTimer = useRef<NodeJS.Timeout>()
   const [isVisible, setIsVisible] = useState(true)
+  const [selectedValue, setSelectedValue] = useState<string>('')
 
   useEffect(() => {
     if (animation?.fadeIn) {
@@ -67,6 +69,11 @@ export const MessageCloud: React.FC<MessageCloudProps> = ({
     }
   }
 
+  const handleOptionClick = (option: { value: string; onClick: () => void }) => {
+    setSelectedValue(option.value)
+    option.onClick()
+  }
+
   const customStyle = {
     maxWidth,
     minHeight,
@@ -96,8 +103,9 @@ export const MessageCloud: React.FC<MessageCloudProps> = ({
       onTouchStart={handleMouseDown}
       onTouchEnd={handleMouseUp}
       role="button"
-      tabIndex={0}
+      tabIndex={disabled ? -1 : 0}
       aria-label={ariaLabel}
+      aria-disabled={disabled}
     >
       <div className={messageTail({ direction })} style={tailStyle} />
 
@@ -118,7 +126,17 @@ export const MessageCloud: React.FC<MessageCloudProps> = ({
         <div className="space-y-2">
           {message && <p className="mb-2">{message}</p>}
           {selectionOptions?.map((option) => (
-            <button key={option.value} className={messageButton()} onClick={option.onClick}>
+            <button
+              key={option.value}
+              className={cn(
+                messageButton(),
+                disabled &&
+                  option.value !== selectedValue &&
+                  'bg-gray-200 text-gray-500 hover:bg-gray-200 hover:text-gray-500'
+              )}
+              onClick={() => handleOptionClick(option)}
+              disabled={disabled}
+            >
               {option.label}
             </button>
           ))}

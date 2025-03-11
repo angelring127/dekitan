@@ -16,7 +16,7 @@ const mockUserName = 'こうき'
 
 export function Navigation({
   userName = mockUserName,
-  isLogin = false,
+  isLogin = true,
   onMenuClick,
 }: NavigationProps) {
   const { showNav } = useNavigation()

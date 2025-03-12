@@ -24,3 +24,9 @@ export const PLAYER_HONORIFIC_TITLE = [
 ]
 
 export * from './hanasu'
+export const TaskStatus ={
+  ACTIVE: 1,
+  FINISHED: 2,
+  REWARDED: 3,
+  CLOSED: 4
+}

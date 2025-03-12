@@ -1,7 +1,7 @@
 'use client'
 import { useRouter } from "next/navigation";
 import { Button } from '@/components/common/Button'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { apiClient } from '@/services/api'
 import {TaskStatus} from '@/constants/index'
 type Task = {
@@ -13,8 +13,10 @@ type Task = {
 export default function InitPage() {
   const router = useRouter();
   const [tasks, setTasks] = useState<Task[]>([]);
-
+  const hasFetched = useRef(false);
   useEffect(() => {
+    if (hasFetched.current) return;
+    hasFetched.current = true;
     apiClient.post('event/task/gets', { 
       volatile_token: "xxxxxxxxxxxxxxxxxxxxxxxxx",
       player_id: 1,
@@ -39,7 +41,7 @@ export default function InitPage() {
           {tasks && tasks.map((data) => (
             <div
               key={data?.id}
-              className="flex flex-col w-full p-2 bg-white shadow-md rounded-[20px] border border-gray-60 mb-5 cursor-pointer"
+              className="flex flex-col w-full p-2 bg-white shadow-lg rounded-[20px] border border-gray-600 mb-5 cursor-pointer"
               onClick={() => router.push('/')}
             >
               <div className="flex flex-row items-center space-x-4 mt-3 mb-3">

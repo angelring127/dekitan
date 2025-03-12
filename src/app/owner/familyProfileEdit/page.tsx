@@ -7,9 +7,9 @@ import { useRouter } from "next/navigation";
 export default function FamilyProfileEdit() {
     const router = useRouter();
     const [familyMembers, setFamilyMembers] = useState([
-        'こうきくん',
-        'ゆかちゃん',
-        'パパさん',
+        { id: 1, name: 'こうきくん' },
+        { id: 2, name: 'ゆかちゃん' },
+        { id: 3, name: 'パパさん' },
     ]);
 
     return (
@@ -18,13 +18,18 @@ export default function FamilyProfileEdit() {
             <div className="bg-white p-6 m-10 h-[600px] w-[300px] mx-auto shadow-lg rounded-lg flex flex-col space-y-6 relative">
                 <h4 className="text-center mb-6">家族のプロフィール編集</h4>
                 <div className="space-y-4">
-                    {familyMembers.map((member, index) => (
-                        <div key={index}>{member}</div>
+                    {familyMembers.map((member) => (
+                        <div
+                            key={member.id}
+                            onClick={() => router.push(`/owner/familyProfileEdit/${member.id}`)}
+                        >
+                            {member.name}
+                        </div>
                     ))}
                 </div>
 
                 <div className="flex mt-6">
-                    <div>+ 新規追加</div>
+                    <div  onClick={() => router.push(`/owner/familyProfileAdd`)}>+ 新規追加</div>
                 </div>
             </div>
 

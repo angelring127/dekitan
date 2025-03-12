@@ -4,7 +4,7 @@ export const APP_CONFIG = {
 }
 
 export const API_ENDPOINTS = {
-  BASE_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888',
+  BASE_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888/api',
 }
 
 export const ROUTES = {
@@ -16,3 +16,9 @@ export const FORTUNE_PROGRESS = {
   UNEVALUATED: 2,
 }
 
+export const TaskStatus ={
+  ACTIVE: 1,
+  FINISHED: 2,
+  REWARDED: 3,
+  CLOSED: 4
+}

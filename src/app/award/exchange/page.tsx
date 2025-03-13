@@ -3,13 +3,12 @@ import React from 'react'
 import { apiClient } from '@/services/api'
 import { InformationPanel } from '@/components/common/InformationPanel'
 import { getAwards } from '@/hooks/awardＧetting'
-import { useState, useEffect } from 'react'
+import { useState} from 'react'
 import Image from 'next/image'
 import { useRouter } from "next/navigation";
-import { Button } from '@/components/common/Button'
 import { useGlobalStore } from "@/store/info";
 export default function GetAward() {
-  const {name,points, mycollection,singleCollectionItem, decreasePoints, setSingleCollectionItem } = useGlobalStore();
+  const {name,points,singleCollectionItem, decreasePoints, setSingleCollectionItem } = useGlobalStore();
   const router = useRouter();
 
   const handleNext = () => {
@@ -22,8 +21,7 @@ export default function GetAward() {
     } else {
       decreasePoints(points - 100);
        router.push('./collect')
-      localStorage.setItem('currentIndex','0');
-      apiClient.post('award/item/collect', { 
+       apiClient.post('award/item/collect', { 
         volatile_token: "xxxxxxxxxxxxxxxxxxxxxxxxx",
         player_id: 123,
         item_id: singleCollectionItem?.id })
@@ -36,27 +34,7 @@ export default function GetAward() {
     }
   }
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-
-  useEffect(() => {
-    const storedIndex = localStorage.getItem("currentIndex");
-    if (storedIndex) {
-      setCurrentIndex(parseInt(storedIndex, 10));
-    }
-  }, []);
-
-  const [initialItems, setInitialItems] = useState(() => getAwards(name, points, singleCollectionItem ?? { title: "", description: "" }));
-
-  useEffect(() => {
-    localStorage.setItem('currentIndex', currentIndex.toString());
-  }, [currentIndex]);
-
-  useEffect(() => {
-    if (mycollection) {
-      setInitialItems(getAwards(name, points, singleCollectionItem ?? { title: "", description: "" }));
-    }
-  }, [singleCollectionItem]);
-
-
+  const initialItems =  getAwards(handleNext,name, points, singleCollectionItem ?? { title: "", description: "" });
   const items = initialItems?.items || []
 
   const getAward = ()=>{
@@ -73,17 +51,6 @@ export default function GetAward() {
     });
   }
 
-  let buttonText = "";
-  let buttonColor = "";
-  let textcolor = currentIndex === 0 ? "text-black" : "text-white";
-  if (currentIndex === 0) {
-    buttonText = "発明する";
-    buttonColor = "bg-yellow-500";
-
-  } else if (currentIndex === 3) {
-    buttonText = "コレクションする";
-    buttonColor = "bg-orange-500";
-  }
   return (
     <div className="mx-auto flex h-[844px] w-[390px] flex-col items-center overflow-hidden bg-[url('/images/messages/bg_message.png')] bg-cover bg-center bg-no-repeat">
       <div className="relative w-[390px] mt-auto mb-4">
@@ -241,14 +208,6 @@ export default function GetAward() {
             withShadow
             className="w-[320px] my-4 mt-20  flex flex-col items-center justify-center common_panel_style"
           >
-
-            {buttonText && (
-              <Button
-                className={`text-lg font-bold mt-4 ${buttonColor} ${textcolor} rounded-l-full rounded-r-full`}
-                onClick={() => { handleNext() }}>
-                {buttonText}
-              </Button>
-            )}
           </InformationPanel>
         </div>
       </div>

@@ -1,5 +1,6 @@
+import { Button } from '@/components/common/Button';
 import type { InformationItem } from '@/components/common/InformationPanel/types';
-export const getAwards = (name: string, points: number, mycollection: { title: string; description: string }) => {
+export const getAwards = (onNext: () => void, name: string, points: number, mycollection: { title: string; description: string }) => {
 
   const items: InformationItem[] = [
     {
@@ -10,6 +11,11 @@ export const getAwards = (name: string, points: number, mycollection: { title: s
           <span className="whitespace-pre-line text-center text-1xl font-bold">
             {name}くん ポイントが{points}ptたまったよ!<br /><br />1回発明ができたよ!
           </span>
+          <Button className='text-black text-lg font-bold mt-4 bg-yellow-500 rounded-l-full rounded-r-full'
+            onClick={() => onNext()}
+          >
+            発明する
+          </Button>
         </div>
       ),
     },
@@ -45,6 +51,11 @@ export const getAwards = (name: string, points: number, mycollection: { title: s
           <span
             className="whitespace-pre-line text-center text-xl font-bold"
             dangerouslySetInnerHTML={{ __html: mycollection?.description || "" }} />
+          <Button className='text-white text-lg font-bold mt-4 bg-orange-500 rounded-l-full rounded-r-full'
+            onClick={() => onNext()}
+          >
+            コレクションする
+          </Button>
         </div>
       ),
     },

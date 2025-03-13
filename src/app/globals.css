@@ -19,8 +19,20 @@ body {
   }
 }
 
+/* スクロール関連のスタイルを追加 */
+html,
+body {
+  overscroll-behavior-y: none;
+}
+
+/* スクロール可能なコンテナに適用するクラス */
+.scrollable {
+  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
+}
+
 .common_panel_style {
-  border-radius:20;
+  border-radius: 20;
   position: 'relative';
-  background-color:rgba(255, 255, 255, 0.8) ;
-  }
+  background-color: rgba(255, 255, 255, 0.8);
+}

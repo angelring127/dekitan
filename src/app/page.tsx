@@ -49,12 +49,6 @@ const demoPages = [
     status: '完了',
   },
   {
-    title: 'ダッシュボードデモ',
-    description: 'ダッシュボード画面コンポーネント',
-    href: '/demo/dashboard',
-    status: '完了',
-  },
-  {
     title: '初期画面デモ',
     description: '初期画面コンポーネント',
     href: '/demo/init-page',

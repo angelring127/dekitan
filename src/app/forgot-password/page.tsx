@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { InformationPanel } from '@/components/common/InformationPanel'
 import { Button } from '@/components/common/Button'
@@ -10,7 +9,6 @@ export default function LoginPage() {
   const router = useRouter()
   const [currentIndex] = useState(0)
   const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -27,11 +25,11 @@ export default function LoginPage() {
   const loginForm = (
     <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-4">
       <div className="space-y-4 mb-6">
-        <h2 className="text-xl font-bold text-gray-900">ログイン</h2>
+        <h2 className="text-xl font-bold text-gray-900">パスワードを忘れた方</h2>
         <p className="text-sm text-gray-600 leading-relaxed">
-          ログインID（メールアドレス）、パスワードを入力して、［ログインする］ボタンを押してください。
+          登録済みのメールアドレスを入力すると、入力したメールアドレス宛てにパスワード再発行のご案内を送信します。
           <br />
-          ※パスワード送信時にはSSL通信を使用しています。
+          メールアドレスとニックネームを入力して、[送信する]ボタンを押してください。
         </p>
       </div>
 
@@ -49,26 +47,8 @@ export default function LoginPage() {
         />
       </div>
 
-      <div className="space-y-2">
-        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-          パスワード
-        </label>
-        <input
-          id="password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
-          required
-        />
-      </div>
-
-      <Link href="/forgot-password" className="block text-sm text-red-600 hover:text-red-500">
-        パスワードを忘れましたか？
-      </Link>
-
       <Button type="submit" variant="primary" fullWidth loading={isLoading}>
-        ログイン
+        送信する
       </Button>
     </form>
   )

@@ -22,8 +22,8 @@ export default function InitPage() {
       player_id: 1,
     })
       .then((res) => {
-        const filteredTasks = res.data.data.list.filter((task: Task) => task.status === TaskStatus.ACTIVE || task.status === TaskStatus.FINISHED);
-        setTasks(filteredTasks);
+        // const filteredTasks = res.data.data.list.filter((task: Task) => task.status === TaskStatus.ACTIVE || task.status === TaskStatus.FINISHED);
+        setTasks(res.data.data.list);
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -33,7 +33,7 @@ export default function InitPage() {
   return (
     <div className="mx-auto flex h-[844px] w-[390px] flex-col items-center overflow-hidden bg-[url('/images/messages/bg_message.png')] bg-cover bg-center bg-no-repeat">
       <div className="flex flex-col w-[350px] h-[844px] bg-cyan-100 overflow-y-auto ">
-        <div className="w-full bg-white text-center py-2 text-lg font-bold">
+        <div className="w-full bg-white text-center py-2 text-2xl font-bold">
           未承認リスト
         </div>
 

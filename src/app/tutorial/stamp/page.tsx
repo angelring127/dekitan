@@ -33,11 +33,11 @@ const textItems = [
   },
   {
     id: 'text4',
-    content: 'こうきくん、やったね！\n原石ゲットだよ！\nぼくもうれしい！',
+    content: 'こうきくん、やったね！\nパワーがチャージされたよ！\nぼくもうれしい！',
   },
   {
     id: 'text5',
-    content: '原石のパワーが\n100ポイントたまると、すてきなアイテムを発明できるんだ！',
+    content: 'げんせきのエネルギーが\n100ポイントあつまると、すてきなアイテムがはつめいできるんだ！\nきょうはとくべつにパワーをあげるよ！',
   },
 ]
 
@@ -66,6 +66,8 @@ const CardDemo = memo(() => {
   const selectScore = async (score: number) => {
     setIsScore(score)
     await sleep(1000)
+
+    setCurrentIndex(currentIndex + 1)
   }
 
   return (

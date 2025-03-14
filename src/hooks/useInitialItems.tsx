@@ -64,7 +64,7 @@ export const useInitialItems = (onNext: () => void, onOmikuji?: () => void) => {
         <form
           onSubmit={handleSubmit}
           onClick={(e) => e.stopPropagation()}
-          className="flex h-full w-full flex-col items-center justify-between gap-6 p-6"
+          className="flex h-full w-full flex-col items-center justify-between gap-6"
         >
           <div className="flex w-full flex-col items-center gap-6">
             <TypewriterText
@@ -94,7 +94,7 @@ export const useInitialItems = (onNext: () => void, onOmikuji?: () => void) => {
                       type="button"
                       key={suffixItem}
                       onClick={() => setSuffix(suffixItem === 'なし' ? '' : suffixItem)}
-                      className={`flex-1 rounded-full px-6 py-2 transition-colors max-w-[30%] ${
+                      className={`flex-1 rounded-full py-2 transition-colors max-w-[30%] ${
                         suffix === (suffixItem === 'なし' ? '' : suffixItem)
                           ? 'bg-green-100 text-back'
                           : 'bg-green-500 text-white hover:bg-green-200'
@@ -112,7 +112,7 @@ export const useInitialItems = (onNext: () => void, onOmikuji?: () => void) => {
                       key={suffixItem}
                       onClick={() => setSuffix(suffixItem === 'なし' ? '' : suffixItem)}
                       style={{width: '30%'}}
-                      className={`flex-1 rounded-full px-6 py-2 transition-colors w-[30%] ${
+                      className={`flex-1 rounded-full py-2 transition-colors w-[30%] ${
                         suffix === (suffixItem === 'なし' ? '' : suffixItem)
                           ? 'bg-green-100 text-black'
                           : 'bg-green-500 text-white hover:bg-green-200'

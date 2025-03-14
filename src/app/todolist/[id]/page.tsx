@@ -46,7 +46,7 @@ export default function InitPage() {
       <div className="flex flex-col h-auto">
         <div className="relative w-[350px] mt-10 h-[360px] ">
           <Image
-            src="/images/im.png"
+            src="/images/img_todolist.png"
             alt="character"
             width={400}
             height={400}

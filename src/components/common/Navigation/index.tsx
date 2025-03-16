@@ -13,6 +13,12 @@ interface NavigationProps {
 
 // 목업 사용자 데이터
 const mockUserName = 'こうき'
+const mockUsers = [
+  { id: 1, name: 'こうき' },
+  { id: 2, name: 'たなか' },
+  { id: 3, name: 'すずき' },
+  { id: 4, name: 'さとう' },
+]
 
 export function Navigation({
   userName = mockUserName,
@@ -23,6 +29,7 @@ export function Navigation({
   const navRef = useRef<HTMLElement>(null)
   const pathname = usePathname()
   const [showMenu, setShowMenu] = useState(false)
+  const [showUserMenu, setShowUserMenu] = useState(false)
 
   const handleMenuClick = () => {
     setShowMenu(!showMenu)
@@ -35,6 +42,21 @@ export function Navigation({
     if (e.key === 'Enter' || e.key === ' ') {
       handleMenuClick()
     }
+  }
+
+  const handleUserMenuClick = () => {
+    setShowUserMenu(!showUserMenu)
+  }
+
+  const handleUserMenuKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      handleUserMenuClick()
+    }
+  }
+
+  const handleUserChange = (newUserName: string) => {
+    // 사용자 변경 처리
+    setShowUserMenu(false)
   }
 
   useEffect(() => {
@@ -56,14 +78,41 @@ export function Navigation({
         className="relative z-10 flex h-14 items-center justify-between px-4 bg-white shadow-md transition-all duration-300"
       >
         {isLogin ? (
-          // 로그인 상태일 때의 UI
+          // ログイン状態時のUI
           <>
             <div className="flex items-center gap-2">
-              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-200 text-gray-600 text-sm font-medium">
+              <div
+                className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-200 text-gray-600 text-sm font-medium cursor-pointer"
+                onClick={handleUserMenuClick}
+                onKeyDown={handleUserMenuKeyDown}
+                tabIndex={0}
+                role="button"
+                aria-label="ユーザー選択"
+                aria-expanded={showUserMenu}
+              >
                 {userName?.slice(0, 1)}
               </div>
 
-              {/* 아이콘 메뉴를 왼쪽으로 이동 */}
+              {/* ユーザー ドロップダウン メニュー */}
+              <div
+                className={`absolute top-full left-4 mt-1 w-48 bg-white rounded-lg shadow-lg py-1 z-30 transform transition-all duration-200 ease-in-out ${
+                  showUserMenu
+                    ? 'opacity-100 translate-y-0'
+                    : 'opacity-0 -translate-y-2 pointer-events-none'
+                }`}
+              >
+                {mockUsers.map((user) => (
+                  <button
+                    key={user.id}
+                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                    onClick={() => handleUserChange(user.name)}
+                  >
+                    {user.name}
+                  </button>
+                ))}
+              </div>
+
+              {/* アイコン メニューを左に移動 */}
               <div className="grid grid-cols-4 gap-2 ml-2">
                 <Link
                   href="/"

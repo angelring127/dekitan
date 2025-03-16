@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useNavigation } from './Navigation/NavigationContext'
+import { useNavigation } from './NavigationContext'
 
 export function DisablePullToRefresh() {
   const { showNav } = useNavigation()

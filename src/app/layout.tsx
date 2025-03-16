@@ -3,7 +3,7 @@ import localFont from 'next/font/local'
 import { Navigation } from '@/components/common/Navigation'
 import './globals.css'
 import { NavigationProvider } from '@/components/common/Navigation/NavigationContext'
-import { DisablePullToRefresh } from '@/components/common/DisablePullToRefresh'
+import { DisablePullToRefresh } from '@/components/common/Navigation/DisablePullToRefresh'
 import { PullIndicator } from '@/components/common/Navigation/PullIndicator'
 
 const geistSans = localFont({
@@ -36,7 +36,7 @@ export default function RootLayout({
         <NavigationProvider hideNavOnLoad={true}>
           <DisablePullToRefresh />
           <PullIndicator />
-          <main className="w-full max-w-[428px] min-h-screen bg-white shadow-lg flex flex-col">
+          <main className="w-full max-w-[500px] mx-auto min-h-screen bg-white shadow-lg flex flex-col border-l-4 border-r-4 border-[#00803a]">
             <Navigation />
             <div className="flex-1 overflow-auto">{children}</div>
           </main>

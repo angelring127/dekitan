@@ -55,7 +55,8 @@ export function Navigation({
   }
 
   const handleUserChange = (newUserName: string) => {
-    // 사용자 변경 처리
+    // TODO: 実際にユーザーを変更する
+    console.log(`使用者が ${newUserName}に変更されました。`)
     setShowUserMenu(false)
   }
 

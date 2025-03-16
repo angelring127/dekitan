@@ -5,6 +5,22 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { MessageCloud } from '@/components/common/MessageCloud'
 
+interface SelectionOption {
+  label: string
+  value: string
+  onClick: () => void
+}
+
+interface MessageType {
+  type: 'intro' | 'default' | 'selection' | 'input'
+  message: string
+  showCharacter?: boolean
+  nextStep?: number
+  direction?: 'left' | 'right'
+  options?: SelectionOption[]
+  placeholder?: string
+}
+
 export default function MessagesDemo() {
   const [step, setStep] = useState(0)
   const [displayedMessages, setDisplayedMessages] = useState<number[]>([0])
@@ -25,7 +41,7 @@ export default function MessagesDemo() {
     setDisplayedMessages((prev) => [...prev, messageIndex])
   }
 
-  const messages = [
+  const messages: MessageType[] = [
     {
       type: 'intro',
       message:
@@ -130,7 +146,6 @@ export default function MessagesDemo() {
       showCharacter: true,
       nextStep: 7,
     },
-
     {
       type: 'default',
       message:
@@ -241,7 +256,7 @@ export default function MessagesDemo() {
                       key={`${messageIndex}-${index}`}
                       message=""
                       type="input"
-                      inputPlaceholder={msg.placeholder}
+                      inputPlaceholder={msg.placeholder || '메시지를 입력하세요'}
                       onInputSubmit={(value) => {
                         console.log('입력된 메시지:', value)
                         handleSelection(messageIndex + 1)

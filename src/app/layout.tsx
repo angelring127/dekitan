@@ -36,7 +36,7 @@ export default function RootLayout({
         <NavigationProvider hideNavOnLoad={true}>
           <DisablePullToRefresh />
           <PullIndicator />
-          <main className="w-full max-w-[500px] mx-auto min-h-screen bg-white shadow-lg flex flex-col border-l-4 border-r-4 border-[#00803a]">
+          <main className="w-full max-w-[500px] mx-auto min-h-screen bg-white shadow-lg flex flex-col border-l-0 border-r-0 md:border-l-4 md:border-r-4 border-[#00803a]">
             <Navigation />
             <div className="flex-1 overflow-auto">{children}</div>
           </main>

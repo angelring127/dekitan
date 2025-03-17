@@ -48,7 +48,7 @@ export default function InitPage() {
 
             {currentIndex === 0 && (
                 <div className="relative min-h-auto w-[320px] flex flex-col items-center bg-cyan-300 justify-center">
-                    <div className="relative m-5 p-4 common_panel_style justify-center w-[300px] font-bold mt-20 text-center border-20px rounded-[10px] z-10">
+                    <div className="relative m-5 p-4 common_panel_style justify-center w-[300px] font-bold mt-20 text-center border-20px rounded-[10px] z-10 shadow-xl">
                         <span className="m-3">
                             <h1 className='text-2xl font-bold text-red-500'>おさらあらい</h1><br />
                             <h1 className='text-2xl font-bold'>できたかな？</h1>

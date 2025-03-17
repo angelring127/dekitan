@@ -51,6 +51,18 @@ module.exports = {
           '50%': { transform: 'scale(0.9)' },
           '100%': { transform: 'scale(1)' },
         },
+        'shrink-and-move-gacha': {
+          '0%': { transform: 'scale(1) translate(0, 0)' },
+          '50%': { transform: 'scale(0.8) translate(0%, 0%)' },
+          '99%': { transform: 'scale(0.3) translate(140%, 300%)' },
+          '100%': { opacity: 0 },
+        },
+        'shrink-and-move-item': {
+          '0%': { opacity: 0 },
+          '1%': { transform: 'scale(0.3) translate(140%, 300%)' },
+          '50%': { transform: 'scale(0.8) translate(0%, 0%)' },
+          '100%': { transform: 'scale(1) translate(0, 0)' },
+        },
       },
       animation: {
         'fade-in': 'fade-in 0.5s ease-out',
@@ -59,6 +71,8 @@ module.exports = {
         'shrink-and-move': 'shrink-and-move 1s ease-in-out forwards',
         'grow-and-center': 'grow-and-center 1s ease-out forwards',
         'stamp': 'stamp 1s ease-in-out',
+        'shrink-and-move-gacha': 'shrink-and-move-gacha 1s ease-in-out forwards',
+        'shrink-and-move-item': 'shrink-and-move-item 1s ease-in-out forwards',
       },
     },
   },

@@ -171,6 +171,13 @@ const CardDemo = memo(() => {
                   <Button className="rounded-full" onClick={() => setCurrentIndex(currentIndex + 1)}>次へ</Button>
                 </div>
               }
+              {
+                currentIndex == 4 && <div className="mx-auto flex flex-col gap-3 max-w-[320px] text-center">
+                  <a href='/tutorial/gacha'>
+                    <Button className="rounded-full">原石をつかう</Button>
+                  </a>
+                </div>
+              }
             </div>
           </section>
         </main>

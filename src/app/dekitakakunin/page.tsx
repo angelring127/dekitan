@@ -47,7 +47,7 @@ export default function InitPage() {
             )}
 
             {currentIndex === 0 && (
-                <div className="relative min-h-auto w-[320px] flex flex-col items-center bg-cyan-300 justify-center">
+                <div className="relative min-h-auto pt-10 w-[320px] flex flex-col items-center bg-cyan-300 justify-center">
                     <div className="relative m-5 p-4 common_panel_style justify-center w-[300px] font-bold mt-20 text-center border-20px rounded-[10px] z-10 shadow-xl">
                         <span className="m-3">
                             <h1 className='text-2xl font-bold text-red-500'>おさらあらい</h1><br />
@@ -60,7 +60,7 @@ export default function InitPage() {
                         alt="img_character"
                         width={120}
                         height={120}
-                        className="absolute top-[50px] right-10 translate-x-1/2 -translate-y-1/2 z-0"
+                        className="absolute top-[100px] right-10 translate-x-1/2 -translate-y-1/2 z-0"
                     />
 
                     <Button
@@ -100,7 +100,7 @@ export default function InitPage() {
                     <h1 className='text-2xl font-bold'>つづけてね</h1>
                     <Button
                         variant="primary"
-                        className="text-lg w-[100px] bg-blue-500 text-white font-bold rounded-l-full rounded-r-full mt-10 mb-3"
+                        className="text-3xl w-[200px] h-[80px] bg-blue-500 text-white font-bold rounded-full mt-10 mb-3"
                         onClick={() => setCurrentIndex(0)}
                     >
                         もどる
@@ -114,11 +114,13 @@ export default function InitPage() {
                     <h1 className='text-2xl text-center font-bold'>また今度 <br></br>チャレンジしてね</h1>
                     <Button
                         variant="primary"
-                        className="text-lg w-[100px] bg-blue-500 text-white font-bold rounded-l-full rounded-r-full mt-10 mb-3"
+                        className="text-3xl w-[200px] h-[80px] bg-blue-500 text-white font-bold rounded-full mt-10 mb-3"
                         onClick={() => setCurrentIndex(0)}
                     >
                         もどる
                     </Button>
+
+
                 </div>
 
             )}

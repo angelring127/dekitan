@@ -81,6 +81,7 @@ export const useInitialItems = (onNext: () => void, onOmikuji?: () => void) => {
                   type="text"
                   value={nickname}
                   onChange={(e) => setNickname(e.target.value)}
+                  maxLength={8}
                   style={{ borderBottom: '2px solid black' }}
                   className="w-full px-4 py-2 text-center text-3xl font-bold !text-green-600 focus:border-b-green-500 focus:outline-none focus:ring-0 bg-transparent"
                   aria-label="ニックネームを入力"

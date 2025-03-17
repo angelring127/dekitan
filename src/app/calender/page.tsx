@@ -73,7 +73,7 @@ export default function CalendarPage() {
   }));
 
   return (
-    <div className="h-[900px] flex flex-col">
+    <div className="h-[900px] mx-auto w-[390px] items-center flex flex-col">
       <div className="flex flex-col p-4 bg-gray-100">
         <div className="flex justify-between mb-4">
           <button onClick={prevMonth} className="px-4 py-2 bg-yellow-400 text-black font-bold rounded-full flex">

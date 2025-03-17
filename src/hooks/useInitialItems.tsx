@@ -127,7 +127,7 @@ export const useInitialItems = (onNext: () => void, onOmikuji?: () => void) => {
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">【がくねん】</label>
                 <div className="flex flex-col">
-                  <select className="block w-full rounded-lg border border-gray-300 bg-white p-2 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500" id="year" onChange={(e) => setYear(e.target.value)}>
+                  <select style={{ borderBottom: '2px solid black' }} className="w-full py-2 text-center text-1xl !text-green-600" id="year" onChange={(e) => setYear(e.target.value)}>
                     {["","年少","年中","年長","小学1年生","小学2年生","小学3年生","小学4年生","小学5年生","小学6年生"]
                       .map((item) => (
                         <option value={item} key={item}>{item}</option>

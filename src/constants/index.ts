@@ -16,3 +16,9 @@ export const FORTUNE_PROGRESS = {
   UNEVALUATED: 2,
 }
 
+export const TaskStatus ={
+  ACTIVE: 1,
+  FINISHED: 2,
+  REWARDED: 3,
+  CLOSED: 4
+}

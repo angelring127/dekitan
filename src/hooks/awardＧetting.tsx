@@ -11,9 +11,12 @@ export const getAwards = (onNext: () => void, name: string, points: number, myco
           <span className="whitespace-pre-line text-center text-1xl font-bold">
             {name}くん ポイントが{points}ptたまったよ!<br /><br />1回発明ができるよ!
           </span>
-          <button className='text-black text-lg font-bold mt-4 bg-yellow-500 rounded-l-full rounded-r-full p-3'  onClick={() => onNext()}>
-          発明する
-          </button>
+
+          <Button  variant="yelloish" className='text-lg font-bold mt-4  rounded-l-full rounded-r-full'
+            onClick={() => onNext()}
+          >
+             発明する
+          </Button>
         </div>
       ),
     },

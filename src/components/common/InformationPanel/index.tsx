@@ -14,6 +14,7 @@ export function InformationPanel({
   className,
   style,
   height,
+  children,
 }: InformationPanelProps) {
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -98,6 +99,7 @@ export function InformationPanel({
           )
         })}
       </div>
+      {children && <div className="mt-4">{children}</div>}
     </div>
   )
 }

@@ -31,4 +31,5 @@ export interface InformationPanelProps {
   className?: string
   style?: React.CSSProperties
   height?: number | string
+  children?:React.ReactNode;
 }

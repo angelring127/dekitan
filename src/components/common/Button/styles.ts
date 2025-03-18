@@ -25,6 +25,7 @@ export const buttonVariants = cva(
         tertiary: 'bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-400',
         quaternary: 'bg-teal-500 text-white hover:bg-teal-600 focus:ring-teal-400',
         quinary: 'bg-purple-500 text-white hover:bg-purple-600 focus:ring-purple-400',
+        yelloish: 'bg-yellow-500 text-black-500',
       },
       style: {
         solid: '',

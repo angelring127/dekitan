@@ -3,12 +3,14 @@ import type { InformationItem } from '@/components/common/InformationPanel/types
 import { TypewriterText } from '@/components/common/TypewriterText'
 import Image from 'next/image'
 import { Button } from '@/components/common/Button'
+import { useGlobalStore } from '@/store/info'
 
 export const useInitialItems = (onNext: () => void, onOmikuji?: () => void) => {
   const [nickname, setNickname] = useState('')
   const [suffix, setSuffix] = useState('くん')
   const [year, setYear] = useState("")
   const [omikuji, setOmikuji] = useState(0)
+  const { childinfo, setChildInfo } = useGlobalStore()
   const omikujiItem = [
     {'omikuji':"鼻歌",'theme': 'はなうた', 'comment': (
       <div className="text-center">
@@ -80,7 +82,7 @@ export const useInitialItems = (onNext: () => void, onOmikuji?: () => void) => {
                   id="nickname"
                   type="text"
                   value={nickname}
-                  onChange={(e) => setNickname(e.target.value)}
+                  onChange={(e) => {setNickname(e.target.value); setChildInfo('name', e.target.value)}}
                   maxLength={8}
                   style={{ borderBottom: '2px solid black' }}
                   className="w-full px-4 py-2 text-center text-3xl font-bold !text-green-600 focus:border-b-green-500 focus:outline-none focus:ring-0 bg-transparent"
@@ -94,7 +96,7 @@ export const useInitialItems = (onNext: () => void, onOmikuji?: () => void) => {
                     <button
                       type="button"
                       key={suffixItem}
-                      onClick={() => setSuffix(suffixItem === 'なし' ? '' : suffixItem)}
+                      onClick={() => {setSuffix(suffixItem === 'なし' ? '' : suffixItem); setChildInfo('suffix', suffixItem === 'なし' ? '' : suffixItem)}}
                       className={`flex-1 rounded-full py-2 transition-colors max-w-[30%] ${
                         suffix === (suffixItem === 'なし' ? '' : suffixItem)
                           ? 'bg-green-100 text-back'
@@ -111,7 +113,7 @@ export const useInitialItems = (onNext: () => void, onOmikuji?: () => void) => {
                     <button
                       type="button"
                       key={suffixItem}
-                      onClick={() => setSuffix(suffixItem === 'なし' ? '' : suffixItem)}
+                      onClick={() => {setSuffix(suffixItem === 'なし' ? '' : suffixItem); setChildInfo('suffix', suffixItem === 'なし' ? '' : suffixItem)}}
                       style={{width: '30%'}}
                       className={`flex-1 rounded-full py-2 transition-colors w-[30%] ${
                         suffix === (suffixItem === 'なし' ? '' : suffixItem)
@@ -128,7 +130,7 @@ export const useInitialItems = (onNext: () => void, onOmikuji?: () => void) => {
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">【がくねん】</label>
                 <div className="flex flex-col">
-                  <select style={{ borderBottom: '2px solid black' }} className="w-full py-2 text-center text-1xl !text-green-600" id="year" onChange={(e) => setYear(e.target.value)}>
+                  <select style={{ borderBottom: '2px solid black' }} className="w-full py-2 text-center text-1xl !text-green-600" id="year" onChange={(e) => {setYear(e.target.value); setChildInfo('schoolYear', e.target.value)}}>
                     {["","年少","年中","年長","小学1年生","小学2年生","小学3年生","小学4年生","小学5年生","小学6年生"]
                       .map((item) => (
                         <option value={item} key={item}>{item}</option>
@@ -193,7 +195,7 @@ export const useInitialItems = (onNext: () => void, onOmikuji?: () => void) => {
               <p>まだまだ見習いだけどね。 </p>
             </div>
             <div style={{marginTop:'15px'}}>
-              <p>ねぇ、こうきくん、 </p>
+              <p>ねぇ、{childinfo.name}{childinfo.suffix}、 </p>
               <p>最近どんなことできた？！ </p>
             </div>
             <div style={{marginTop:'15px'}}>
@@ -206,7 +208,7 @@ export const useInitialItems = (onNext: () => void, onOmikuji?: () => void) => {
             </div>
             <div style={{marginTop:'15px'}}>
               <h1 className="text-center text-2xl font-bold text-gray-800">
-                こうき君の「できた！」<br></br>
+                {childinfo.name}{childinfo.suffix}の「できた！」<br></br>
                   探しにいこう！
               </h1>
             </div>

@@ -8,6 +8,7 @@ import { apiClient } from "@/services/api";
 const Menu: React.FC = () => {
     const router = useRouter();
     const [password, setPassword] = useState<string>("");
+    const [role, setRole] = useState(1);
     const [isPasswordValid, setIsPasswordValid] = useState(false);
     const [task, setTask] = useState<string | null>(null);
     const [omikuji, setOmikuji] = useState<any | null>(null);
@@ -108,6 +109,11 @@ const Menu: React.FC = () => {
                     <div className="mb-4" onClick={() => router.push("/profile/editFamilyProfile")}>
                         家族のプロフィール編集
                     </div>
+                    {role === 1 && (
+                        <div className="mb-4" onClick={() => router.push("/owner/withdraw")}>
+                            退会
+                        </div>
+                    )}
                     <div className="mb-4" onClick={() => router.push("/logout")}>
                         ログアウト
                     </div>

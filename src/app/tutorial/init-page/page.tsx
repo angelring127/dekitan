@@ -13,6 +13,9 @@ export default function InitPage() {
 
   const handleNext = () => {
     if (currentIndex < items.length - 1 && currentIndex !== 2) {
+      if(currentIndex == 1) {
+        initialItems.smoothScrollTo()
+      }
       setCurrentIndex((prev) => prev + 1)
     }
   }
@@ -131,7 +134,7 @@ export default function InitPage() {
           background="transparent"
           withShadow
           style={commonPanelStyle}
-          className="w-full max-w-[320px] flex flex-col h-[75%] animate-scroll"
+          className="w-full max-w-[320px] flex flex-col h-[75%]"
         />
       </div>
     </div>

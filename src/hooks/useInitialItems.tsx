@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useImperativeHandle, useRef, useState } from 'react'
 import type { InformationItem } from '@/components/common/InformationPanel/types'
 import { TypewriterText } from '@/components/common/TypewriterText'
 import Image from 'next/image'
@@ -58,6 +58,35 @@ export const useInitialItems = (onNext: () => void, onOmikuji?: () => void) => {
       window.removeEventListener("resize", updateHeight);
     };
   }, []);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const smoothScrollTo = () => {
+    setTimeout(() => {
+      const duration = 15000
+      const targetPosition = 900
+      if (!containerRef.current) return;
+  
+      const start = containerRef.current.scrollTop;
+      const startTime = performance.now();
+  
+      const animateScroll = (currentTime: number) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeInOut = progress < 0.5 ? 2 * progress ** 2 : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+  
+        if (containerRef.current) {
+          containerRef.current.scrollTop = start + easeInOut * (targetPosition - start);
+        }
+  
+        if (progress < 1) {
+          requestAnimationFrame(animateScroll);
+        }
+      };
+  
+      requestAnimationFrame(animateScroll);
+    }, 3000)
+  };
 
   const items: InformationItem[] = [
     {
@@ -178,8 +207,8 @@ export const useInitialItems = (onNext: () => void, onOmikuji?: () => void) => {
     {
       id: 'welcome',
       content: (
-        <div className="flex h-full w-full flex-col items-center justify-between gap-6 p-6 overflow-hidden" ref={parentRef}>
-          <div className="whitespace-pre-line text-xl font-medium text-gray-800 animate-scroll" style={{animationDelay: "3s"}}>
+        <div className="flex h-full w-full flex-col items-center justify-between gap-6 p-6" ref={parentRef}>
+          <div className="whitespace-pre-line text-xl font-medium text-gray-800 overflow-y-auto scrollbar-hide" ref={containerRef}>
             <p>ワクワクワールドへようこそ！</p>
             <p>
               こんにちは、{nickname}
@@ -326,5 +355,6 @@ export const useInitialItems = (onNext: () => void, onOmikuji?: () => void) => {
     setNickname,
     setSuffix,
     setYear,
+    smoothScrollTo
   }
 }

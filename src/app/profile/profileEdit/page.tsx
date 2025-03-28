@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { Button } from "@/components/common/Button";
 import { apiClient } from "@/services/api";
-import { useGlobalStore } from "@/store/info";
 import { useRouter } from "next/navigation";
 import InputField from "@/components/common/InputField";
 
@@ -17,7 +16,7 @@ interface FormValues {
 
 const ProfileEditForm: React.FC = () => {
     const router = useRouter();
-    const [role, setRole] = useState(1);
+    const role = 1;
     const [formData, setFormData] = useState<FormValues>({
         nickname: "",
         email: "",
@@ -25,10 +24,9 @@ const ProfileEditForm: React.FC = () => {
         password: "",
     });
     const [errors, setErrors] = useState<Partial<FormValues>>({});
-    const [isSubmitted, setIsSubmitted] = useState(false);
 
     const validateForm = () => {
-        let newErrors: Partial<FormValues> = {};
+        const newErrors: Partial<FormValues> = {};
 
         // if (!formData.nickname) newErrors.nickname = "ニックネームは必須";
         if (formData.nickname.length > 8) newErrors.nickname = "８文字以内";
@@ -57,13 +55,12 @@ const ProfileEditForm: React.FC = () => {
         if (validateForm()) {
             const data = {
                 ...Object.fromEntries(
-                    Object.entries(formData).filter(([key, value]) => value !== "" && value !== null)
+                    Object.entries(formData).filter(([, value]) => value !== "" && value !== null)
                 ),
                 user_id: 1
             };
             try {
                 const response = await apiClient.post("/account/profile/user/put", data);
-                setIsSubmitted(true);
                 if (response.data.status === 2000) {
                     router.push("/profile/menu");
                 }

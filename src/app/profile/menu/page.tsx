@@ -5,13 +5,17 @@ import { Button } from "@/components/common/Button";
 import { useRouter } from "next/navigation";
 import { apiClient } from "@/services/api";
 
+interface Omikuji {
+    theme?: string;
+}
+
 const Menu: React.FC = () => {
     const router = useRouter();
     const [password, setPassword] = useState<string>("");
-    const [role, setRole] = useState(1);
+    const role = 1;
     const [isPasswordValid, setIsPasswordValid] = useState(false);
     const [task, setTask] = useState<string | null>(null);
-    const [omikuji, setOmikuji] = useState<any | null>(null);
+    const [omikuji, setOmikuji] = useState<Omikuji | null>(null);
     const [userPassword, setUserPassword] = useState<string>("");
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 

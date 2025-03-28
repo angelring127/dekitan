@@ -34,8 +34,18 @@ body {
 .common_panel_style {
   border-radius: 20;
   position: 'relative';
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color:rgba(255, 255, 255, 0.8) ;
+  }
+
+/* Tailwind でスクロールバーを非表示にする */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 .gem_points {
   border-radius: 50%;
   background-size: cover;
@@ -50,11 +60,3 @@ body {
   border: 2px solid yellow; 
   box-shadow: 0 0 0 2px yellow;
 }
-
-.common_panel_style {
-border-radius:20;
-position: 'relative';
-background-color:rgba(255, 255, 255, 0.8) ;
-}
-
-

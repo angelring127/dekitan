@@ -46,6 +46,10 @@ module.exports = {
             transform: 'scale(1) translate(0, -30%)',
           },
         },
+        'scroll': {
+          '0%': { transform: 'translateY(0)' },
+          '100%': { transform: "translateY(calc(-100% + var(--parent-height)))" },
+        }
       },
       animation: {
         'fade-in': 'fade-in 0.5s ease-out',
@@ -53,6 +57,7 @@ module.exports = {
         'shake-infinite': 'shake-infinite 0.5s ease-in-out infinite',
         'shrink-and-move': 'shrink-and-move 1s ease-in-out forwards',
         'grow-and-center': 'grow-and-center 1s ease-out forwards',
+        'scroll': 'scroll 10s ease-in-out 3s forwards',
       },
     },
   },

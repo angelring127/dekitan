@@ -47,6 +47,11 @@ const config: Config = {
           '25%': { transform: 'rotate(-5deg)' },
           '75%': { transform: 'rotate(5deg)' },
         },
+        'stamp': {
+          '0%': { transform: 'scale(1.5)', boxShadow: '0 0 0 0 rgba(0, 0, 0, 0.2)' },
+          '50%': { transform: 'scale(0.9)', boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)' },
+          '100%': { transform: 'scale(1)', boxShadow: '0 0 0 0 rgba(0, 0, 0, 0.2)' },
+        },
       },
       animation: {
         'fade-in': 'fade-in 0.3s ease-out',
@@ -57,6 +62,7 @@ const config: Config = {
         'scale-in': 'scale-in 0.3s ease-out',
         shine: 'shine 1.5s ease-in-out infinite',
         shake: 'shake 0.5s ease-in-out infinite',
+        'stamp': 'stamp 1s ease-in-out',
         infinite: 'infinite',
       },
     },

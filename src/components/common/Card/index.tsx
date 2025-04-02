@@ -38,25 +38,27 @@ const Card = memo((props: CardProps) => {
     )
   }
 
-  const { headerText, bodyText, headerColor = 'green', headerClassName = '' } = props
+  const { headerText, bodyText, headerColor = 'green', headerClassName = '', children } = props
   const headerColorMap = {
-    green: 'bg-[#4CAF50]',
-    red: 'bg-[#FF0000]',
+    green: 'bg-[#37ae94]',
+    red: 'bg-[#e6e6e6]',
     purple: 'bg-[#8B5CF6]',
   }
 
   return (
     <div
-      className={`w-[90%] min-h-[120px] mx-auto my-4 rounded-2xl shadow-md overflow-hidden ${className}`}
+      className={cn('rounded-xl shadow-md overflow-hidden', className)}
       role="article"
       aria-label={`${headerText} カード: ${bodyText}`}
     >
-      <div className={`${headerColorMap[headerColor]} p-3 text-center text-white`}>
-        <h3 className={cn('text-lg font-bold', headerClassName)}>{headerText}</h3>
+      <div className={cn(headerColorMap[headerColor], 'py-2 px-4')}>
+        <h3 className={cn('font-bold', headerClassName)}>{headerText}</h3>
       </div>
-      <div className="bg-white p-4">
-        <p className="text-2xl text-center">{bodyText}</p>
-      </div>
+      {children || (
+        <div className="bg-white py-4 px-4">
+          <p className="text-[60px] font-bold">{bodyText}</p>
+        </div>
+      )}
     </div>
   )
 })

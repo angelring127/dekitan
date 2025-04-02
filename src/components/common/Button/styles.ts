@@ -29,12 +29,7 @@ export const buttonVariants = cva(
       },
       style: {
         solid: '',
-        outline: [
-          'bg-transparent',
-          'border-2',
-          'hover:bg-opacity-10',
-          'hover:bg-current',
-        ],
+        outline: ['bg-transparent', 'border-2', 'hover:bg-opacity-10', 'hover:bg-current'],
       },
       fullWidth: {
         true: 'w-full',
@@ -74,4 +69,4 @@ export const buttonVariants = cva(
       fullWidth: false,
     },
   }
-) 
+)

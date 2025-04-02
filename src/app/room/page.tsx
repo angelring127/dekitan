@@ -6,107 +6,221 @@ import Card from '@/components/common/Card'
 
 export default function DashboardDemo() {
   return (
-    <div className="relative flex min-h-screen w-full flex-col bg-white text-black">
+    <div className="relative flex w-full flex-col bg-white text-black h-[1500px]">
       {/* 배경 이미지 */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0">
           <Image
-            src="/images/img_lab.png"
+            src="/images/room/bg_dekitan_home.png"
             alt="実験室背景"
             fill
             className="object-cover object-center"
             priority
           />
         </div>
-        <div className="absolute inset-0 top-[540px]">
-          <Image
-            src="/images/messages/bg_message.png"
-            alt="メッセージ背景"
-            fill
-            className="object-cover"
-            priority
-          />
-        </div>
       </div>
 
       {/* 포인트 표시 영역 */}
-      <div className="relative z-10 flex gap-3 p-4 pb-[15px]">
-        <Card variant="point" title="今の持ちポイント" point={73} className="flex-1" />
-        <Card variant="point" title="これまでのポイント" point={124} className="flex-1" />
+      <div className="relative z-10 flex items-center gap-3 p-4 pb-[15px]">
+        <div className="flex gap-2 flex-1">
+          <div className="relative w-[140px]">
+            <Image
+              src="/images/room/point_frame_now.png"
+              alt="今のポイント背景"
+              width={160}
+              height={50}
+              className="w-full h-auto"
+            />
+            <div className="absolute inset-0 flex items-end justify-center pb-1">
+              <p className="text-lg font-bold text-emerald-600">102 ポイント</p>
+            </div>
+          </div>
+          <div className="relative w-[140px]">
+            <Image
+              src="/images/room/point_frame_all.png"
+              alt="これまでのポイント背景"
+              width={160}
+              height={50}
+              className="w-full h-auto"
+            />
+            <div className="absolute inset-0 flex items-end justify-center pb-1">
+              <p className="text-lg font-bold text-emerald-600">200 ポイント</p>
+            </div>
+          </div>
+        </div>
+        <button
+          className="w-[75px] h-[75px] transition-transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-lg"
+          onClick={() => {}}
+          aria-label="発明する"
+        >
+          <Image
+            src="/images/room/invent_icon_shadow.png"
+            alt="発明アイコン"
+            width={85}
+            height={85}
+            className="w-full h-auto"
+          />
+        </button>
       </div>
 
       {/* 실험실 영역 */}
-      <div className="relative z-10 h-[340px] w-full">
+      <div className="relative z-10 h-[640px] w-full">
         <div className="absolute inset-0 flex flex-col items-center justify-between py-[15px]">
           {/* 발명 버튼 */}
-          <div className="relative z-10 w-[90%] px-4">
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-yellow-300 px-4 py-0.5 rounded-full text-center text-xs text-red-500 font-bold whitespace-nowrap shadow-sm">
-              発明できるよ！
-            </div>
-            <Button
-              variant="secondary"
-              className="w-full h-16 text-xl font-bold rounded-full text-white shadow-[0_4px_0_0_rgba(255,255,255,1)]"
-              onClick={() => {}}
-            >
-              原石を使って発明する
-            </Button>
-          </div>
+          <div className="relative z-10 w-[95%] px-4"></div>
           {/* 캐릭터 이미지 */}
           <div className="flex justify-center">
             <Image
-              src="/images/img_character.png"
+              src="/images/room/animA1_zlib.png"
               alt="キャラクター"
               width={160}
               height={160}
-              className="mb-[-30px] object-contain"
+              className="mb-[-60px] object-contain"
               priority
             />
           </div>
         </div>
       </div>
 
-      {/* 메시지 카드 영역 */}
-      <div className="relative z-10 px-4 space-y-3 pb-40">
-        <Card
-          variant="text"
-          headerText="できたんと話す"
-          headerColor="red"
-          bodyText="やってみるをさがす"
-          className="w-full text-3xl font-black"
-          headerClassName="text-3xl font-black"
-        />
-        <Card
-          variant="text"
-          headerText="できた？"
-          headerColor="green"
-          bodyText="おさらあらい"
-          className="w-full text-3xl font-black"
-          headerClassName="text-3xl font-black"
-        />
-        <Card
-          variant="text"
-          headerText="できた？"
-          headerColor="green"
-          bodyText="じてんしゃにのる"
-          className="w-full text-3xl font-black"
-          headerClassName="text-3xl font-black"
-        />
-        <Card
-          variant="text"
-          headerText="ハッピーおみくじ"
-          headerColor="purple"
-          bodyText="空にあるもの"
-          className="w-full text-3xl font-black"
-          headerClassName="text-3xl font-black"
-        />
-        <div className="pt-14">
-          <Button
-            variant="secondary"
-            className="w-full h-16 text-xl font-bold rounded-full bg-white border-2 border-blue-500 text-blue-500 hover:bg-blue-50"
+      {/* 버튼 영역 */}
+      <div className="relative z-10 px-4 space-y-3 pb-20">
+        <div className="pt-[20px]">
+          <button
+            className="relative w-[300px] mx-auto block transition-transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-pink-400 rounded-lg"
             onClick={() => {}}
+            aria-label="ハッピーテーマ"
           >
-            未承認リスト
-          </Button>
+            <Image
+              src="/images/room/happy_theme_button.png"
+              alt="ハッピーテーマ背景"
+              width={300}
+              height={60}
+              className="w-full h-auto"
+            />
+            <div className="absolute inset-0 flex items-end justify-center pb-4">
+              <p className="text-xl font-black text-black">空にあるもの</p>
+            </div>
+          </button>
+          <div className="pt-3 w-[300px] mx-auto">
+            <Button
+              variant="secondary"
+              className="w-full h-12 text-xl font-bold rounded-full bg-[#e40075] text-white hover:bg-[#e40075]/90 shadow-[4px_4px_0_0_rgba(0,0,0,0.25)]"
+              onClick={() => {}}
+            >
+              未承認リスト
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* 카드 영역 */}
+      <div className="relative z-10 px-4 space-y-3">
+        <div className="w-[85%] mx-auto space-y-3">
+          <Card
+            variant="text"
+            headerText="できたんと話す"
+            headerColor="red"
+            bodyText=""
+            className="w-full shadow-[0_4px_0_0_rgba(0,0,0,0.25)]"
+            headerClassName="text-xl font-bold text-black text-center"
+          >
+            <div className="bg-white py-4 px-4 flex justify-center">
+              <Image
+                src="/images/icons/plus_icon_g.png"
+                alt="プラスアイコン"
+                width={24}
+                height={24}
+                className="w-6 h-6"
+              />
+            </div>
+          </Card>
+          <Card
+            variant="text"
+            headerText="できた？"
+            headerColor="green"
+            bodyText="おさらあらい"
+            className="w-full shadow-[0_4px_0_0_rgba(0,0,0,0.25)]"
+            headerClassName="text-xl font-bold text-white text-center"
+          >
+            <div className="bg-white py-4 px-4">
+              <p className="text-3xl font-bold text-center">おさらあらい</p>
+            </div>
+          </Card>
+          <Card
+            variant="text"
+            headerText="できた？"
+            headerColor="green"
+            bodyText="じてんしゃにのる"
+            className="w-full shadow-[0_4px_0_0_rgba(0,0,0,0.25)]"
+            headerClassName="text-xl font-bold text-white text-center"
+          >
+            <div className="bg-white py-4 px-4">
+              <p className="text-3xl font-bold text-center">じてんしゃにのる</p>
+            </div>
+          </Card>
+        </div>
+      </div>
+
+      {/* 아이콘 버튼 영역 */}
+      <div className="relative z-10 px-4 pt-6">
+        <div className="w-[85%] mx-auto">
+          <div className="grid grid-cols-4 gap-2">
+            {/* はつめいする */}
+            <button className="flex flex-col items-center gap-1">
+              <div className="w-[75px] h-[75px] transition-transform hover:scale-105 active:scale-95">
+                <Image
+                  src="/images/icons/invent_maru_icon.png"
+                  alt="はつめいする"
+                  width={75}
+                  height={75}
+                  className="w-full h-auto"
+                />
+              </div>
+              <span className="text-sm font-bold">はつめいする</span>
+            </button>
+
+            {/* できたカレンダー */}
+            <button className="flex flex-col items-center gap-1">
+              <div className="w-[75px] h-[75px] transition-transform hover:scale-105 active:scale-95">
+                <Image
+                  src="/images/icons/calendar_maru_icon.png"
+                  alt="できたカレンダー"
+                  width={75}
+                  height={75}
+                  className="w-full h-auto"
+                />
+              </div>
+              <span className="text-sm font-bold">できたカレンダー</span>
+            </button>
+
+            {/* コレクションをみる */}
+            <button className="flex flex-col items-center gap-1">
+              <div className="w-[75px] h-[75px] transition-transform hover:scale-105 active:scale-95">
+                <Image
+                  src="/images/icons/collection_maru_icon.png"
+                  alt="コレクションをみる"
+                  width={75}
+                  height={75}
+                  className="w-full h-auto"
+                />
+              </div>
+              <span className="text-sm font-bold">コレクション</span>
+            </button>
+
+            {/* まだリスト */}
+            <button className="flex flex-col items-center gap-1">
+              <div className="w-[75px] h-[75px] transition-transform hover:scale-105 active:scale-95">
+                <Image
+                  src="/images/icons/list_maru_icon.png"
+                  alt="まだリスト"
+                  width={75}
+                  height={75}
+                  className="w-full h-auto"
+                />
+              </div>
+              <span className="text-sm font-bold">まだリスト</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -33,7 +33,7 @@ export default function MessagesDemo() {
       showCharacter: true,
     },
     {
-      type: 'default',
+      type: 'intro',
       message: '（カテゴリー）はすき？',
       nextStep: 3,
     },
@@ -76,7 +76,7 @@ export default function MessagesDemo() {
       showCharacter: true,
     },
     {
-      type: 'default',
+      type: 'intro',
       message: 'じゃあ、こんなことできるか？（やること）',
     },
     {
@@ -132,7 +132,7 @@ export default function MessagesDemo() {
     },
 
     {
-      type: 'default',
+      type: 'intro',
       message:
         '（やること）なにごともやってみることがだいじ！がんばっているようすをこんどおしえてね！',
     },
@@ -152,38 +152,30 @@ export default function MessagesDemo() {
 
   return (
     <div className="relative w-full h-[100dvh] flex justify-center bg-black">
-      <div className="w-full max-w-[430px] h-[100dvh] relative">
+      <div className="w-full max-w-[500px] h-[100dvh] relative">
         {/* 배경 이미지 */}
         <div className="absolute inset-0">
           <Image
-            src="/images/messages/bg_message.png"
+            src="/images/hanasu/talk_bg.png"
             alt="メッセージ背景"
             width={375}
             height={667}
             className="w-full h-full object-cover"
             priority
-            sizes="(max-width: 430px) 100vw, 430px"
+            sizes="(max-width: 500px) 100vw, 500px"
           />
         </div>
-
-        {/* 뒤로가기 버튼 - 고정 위치 */}
-        <div className="absolute top-0 right-0 z-30 px-4 py-3">
-          <Link href="/" className="w-16 h-16 flex items-center justify-center" aria-label="戻る">
-            <Image src="/images/ic_back.png" alt="" width={48} height={48} className="text-white" />
-          </Link>
-        </div>
-
         {/* 콘텐츠 영역 */}
         <div className="absolute inset-0">
           {/* 메시지 컨테이너 */}
           <div
-            className="h-full overflow-y-auto px-4 pt-20 pb-safe"
+            className="h-full overflow-y-auto px-4 pt-20"
             onClick={handleScreenClick}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => e.key === 'Enter' && handleScreenClick()}
           >
-            <div className="min-h-full flex flex-col justify-end space-y-4 pb-4">
+            <div className="min-h-full flex flex-col justify-end space-y-4">
               {displayedMessages.map((messageIndex, index) => {
                 const msg = messages[messageIndex]
                 const isLatestMessage = index === displayedMessages.length - 1
@@ -191,26 +183,25 @@ export default function MessagesDemo() {
                 if (msg.type === 'intro') {
                   return (
                     <div key={`${messageIndex}-${index}`} className="relative">
-                      {msg.showCharacter && (
-                        <div className="absolute -top-6 left-0 w-16 h-16">
-                          <Image
-                            src="/images/ic_character.png"
-                            alt=""
-                            width={64}
-                            height={64}
-                            className="rounded-full"
-                          />
-                        </div>
-                      )}
+                      <div className="absolute -top-1 -left-1 w-16 h-16 z-10">
+                        <Image
+                          src="/images/hanasu/dekitan_kaiwa_icon.png"
+                          alt=""
+                          width={64}
+                          height={64}
+                          className="rounded-full"
+                        />
+                      </div>
                       <div className="pt-8">
                         <MessageCloud
                           message={msg.message || ''}
                           direction="left"
                           type="default"
-                          backgroundColor="#4B5563"
-                          textColor="#FFFFFF"
+                          backgroundColor="#FFFFFF"
+                          textColor="#000000"
                           ariaLabel="開始メッセージ"
                           animation={{ fadeIn: true }}
+                          name="できたん"
                         />
                       </div>
                     </div>
@@ -219,18 +210,36 @@ export default function MessagesDemo() {
 
                 if (msg.type === 'selection') {
                   return (
-                    <div key={`${messageIndex}-${index}`} className="mt-4">
-                      <MessageCloud
-                        message={msg.message || ''}
-                        direction={msg.direction === 'right' ? 'right' : 'left'}
-                        type="selection"
-                        selectionOptions={msg.options || []}
-                        backgroundColor="#1F2937"
-                        textColor="#FFFFFF"
-                        ariaLabel="選択メッセージ"
-                        animation={{ fadeIn: true }}
-                        disabled={!isLatestMessage}
-                      />
+                    <div key={`${messageIndex}-${index}`} className="relative mt-4">
+                      {msg.direction === 'left' && (
+                        <div className="absolute -top-1 -left-1 w-16 h-16 z-10">
+                          <Image
+                            src="/images/hanasu/dekitan_kaiwa_icon.png"
+                            alt=""
+                            width={64}
+                            height={64}
+                            className="rounded-full"
+                          />
+                        </div>
+                      )}
+                      <div className={msg.direction === 'left' ? 'pt-8' : ''}>
+                        <MessageCloud
+                          message={msg.message || ''}
+                          direction={msg.direction === 'right' ? 'right' : 'left'}
+                          type="selection"
+                          selectionOptions={msg.options || []}
+                          backgroundColor="#ffddbf"
+                          textColor="#000000"
+                          selectedOptionStyle={{
+                            backgroundColor: '#e6e6e6',
+                            color: '#000000',
+                          }}
+                          ariaLabel="選択メッセージ"
+                          animation={{ fadeIn: true }}
+                          disabled={!isLatestMessage}
+                          name={msg.direction === 'left' ? 'できたん' : undefined}
+                        />
+                      </div>
                     </div>
                   )
                 }
@@ -255,16 +264,31 @@ export default function MessagesDemo() {
                 }
 
                 return (
-                  <MessageCloud
-                    key={`${messageIndex}-${index}`}
-                    message={msg.message || ''}
-                    direction={msg.direction === 'right' ? 'right' : 'left'}
-                    type="default"
-                    backgroundColor={msg.direction === 'right' ? '#3B82F6' : '#4B5563'}
-                    textColor="#FFFFFF"
-                    ariaLabel={`メッセージ ${messageIndex + 1}`}
-                    animation={{ fadeIn: true }}
-                  />
+                  <div key={`${messageIndex}-${index}`} className="relative">
+                    {msg.direction === 'left' && (
+                      <div className="absolute -top-1 -left-1 w-16 h-16 z-10">
+                        <Image
+                          src="/images/hanasu/dekitan_kaiwa_icon.png"
+                          alt=""
+                          width={64}
+                          height={64}
+                          className="rounded-full"
+                        />
+                      </div>
+                    )}
+                    <div className={msg.direction === 'left' ? 'pt-8' : ''}>
+                      <MessageCloud
+                        message={msg.message || ''}
+                        direction={msg.direction === 'right' ? 'right' : 'left'}
+                        type="default"
+                        backgroundColor="#FFFFFF"
+                        textColor="#000000"
+                        ariaLabel={`メッセージ ${messageIndex + 1}`}
+                        animation={{ fadeIn: true }}
+                        name={msg.direction === 'left' ? 'できたん' : undefined}
+                      />
+                    </div>
+                  </div>
                 )
               })}
               <div ref={messagesEndRef} />

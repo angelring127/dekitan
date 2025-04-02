@@ -22,6 +22,8 @@ export interface MessageCloudProps {
   direction?: MessageDirection
   /** 메시지 타입 */
   type?: MessageType
+  /** 이름 */
+  name?: string
   /** 배경색 */
   backgroundColor?: string
   /** 텍스트 색상 */

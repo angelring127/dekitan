@@ -8,6 +8,8 @@ interface NavigationContextType {
   setShowNav: (show: boolean) => void
   isPulling: boolean
   pullProgress: number
+  showUserMenu: boolean
+  setShowUserMenu: (show: boolean) => void
 }
 
 const NavigationContext = createContext<NavigationContextType | undefined>(undefined)
@@ -21,6 +23,7 @@ export function NavigationProvider({
 }) {
   const pathname = usePathname()
   const [showNav, setShowNav] = useState(false) // 기본값은 항상 false로 시작
+  const [showUserMenu, setShowUserMenu] = useState(false)
   const [lastScrollY, setLastScrollY] = useState(0)
   const [touchStartY, setTouchStartY] = useState(0)
   const [touchStartTime, setTouchStartTime] = useState(0)
@@ -144,7 +147,16 @@ export function NavigationProvider({
   ])
 
   return (
-    <NavigationContext.Provider value={{ showNav, setShowNav, isPulling, pullProgress }}>
+    <NavigationContext.Provider
+      value={{
+        showNav,
+        setShowNav,
+        isPulling,
+        pullProgress,
+        showUserMenu,
+        setShowUserMenu,
+      }}
+    >
       {children}
     </NavigationContext.Provider>
   )

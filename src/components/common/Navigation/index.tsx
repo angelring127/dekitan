@@ -25,11 +25,22 @@ export function Navigation({
   isLogin = true,
   onMenuClick,
 }: NavigationProps) {
-  const { showNav } = useNavigation()
+  const { showNav, showUserMenu, setShowUserMenu } = useNavigation()
   const navRef = useRef<HTMLElement>(null)
   const pathname = usePathname()
   const [showMenu, setShowMenu] = useState(false)
-  const [showUserMenu, setShowUserMenu] = useState(false)
+
+  // 스크롤 방지 효과
+  useEffect(() => {
+    if (showUserMenu) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'auto'
+    }
+    return () => {
+      document.body.style.overflow = 'auto'
+    }
+  }, [showUserMenu])
 
   const handleMenuClick = () => {
     setShowMenu(!showMenu)
@@ -95,21 +106,46 @@ export function Navigation({
 
               {/* ユーザー ドロップダウン メニュー */}
               <div
-                className={`absolute top-full left-4 mt-1 w-48 bg-white rounded-lg shadow-lg py-1 z-30 transform transition-all duration-200 ease-in-out ${
+                className={`fixed top-[80px] left-1/2 -translate-x-1/2 w-[95%] max-w-[475px] bg-white shadow-lg z-[9999] transform transition-all duration-200 ease-in-out ${
                   showUserMenu
                     ? 'opacity-100 translate-y-0'
                     : 'opacity-0 -translate-y-2 pointer-events-none'
                 }`}
+                style={{
+                  position: 'fixed',
+                  top: '80px',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  width: '95%',
+                  maxWidth: '475px',
+                  zIndex: 9999,
+                }}
               >
-                {mockUsers.map((user) => (
+                <div className="bg-[#00803a] text-white font-medium flex justify-between items-center">
+                  <span className="flex-1 text-center py-3">ユーザーきりかえ</span>
                   <button
-                    key={user.id}
-                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                    onClick={() => handleUserChange(user.name)}
+                    onClick={() => setShowUserMenu(false)}
+                    className="text-white hover:text-gray-200 w-12 h-12 flex items-center justify-center"
+                    aria-label="メニューを閉じる"
                   >
-                    {user.name}
+                    ✕
                   </button>
-                ))}
+                </div>
+                <div className="overflow-y-auto">
+                  {mockUsers.map((user, index) => (
+                    <div key={user.id}>
+                      <button
+                        className="w-full text-left px-6 py-3 text-sm font-bold text-gray-700 hover:bg-gray-100 transition-colors"
+                        onClick={() => handleUserChange(user.name)}
+                      >
+                        {user.name}
+                      </button>
+                      {index < mockUsers.length - 1 && (
+                        <div className="border-b border-dashed border-[#b3b3b3] mx-4" />
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
 
               {/* アイコン メニューを左に移動 */}

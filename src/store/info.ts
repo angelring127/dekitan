@@ -8,16 +8,29 @@ export interface CollectionItem {
   parent_id: string;
 }
 
+interface ChildInfo {
+  parent_id: string;
+  suffix: string;
+  name: string;
+  schoolYear: string;
+}
+
+interface ParentInfo {
+  parent_id: string;
+  name: string;
+}
 
 interface GlobalState {
   name: string;
   points: number;
   mycollection: CollectionItem[];
   singleCollectionItem: CollectionItem | null;
-
-
+  parentinfo: ParentInfo;
+  childinfo: ChildInfo;
 
   setName: (newName: string) => void;
+  setParentInfo: (key: keyof ParentInfo, value: string) => void;
+  setChildInfo: (key: keyof ChildInfo, value: string) => void;
   increasePoints: (value: number) => void;
   decreasePoints: (value: number) => void;
   addToCollection: (item: CollectionItem) => void;
@@ -26,7 +39,7 @@ interface GlobalState {
   clearCollection: () => void;
 }
 
-export const useGlobalStore = create<GlobalState>((set, get) => ({
+export const useGlobalStore = create((set, get) => ({
   name: "こうき",
   points: 120,
   mycollection: [],
@@ -53,7 +66,20 @@ export const useGlobalStore = create<GlobalState>((set, get) => ({
     set({ name: newName });
   },
 
+  setParentInfo: (key, value) => {
+    localStorage.setItem(key, value);
+    set((state) => ({
+      parentinfo: { ...state.parentinfo, [key]: value },
+      ...(key === "parent_id" ? { childinfo: { ...state.childinfo, parent_id: value } } : {}),
+    }));
+  },
 
+  setChildInfo: (key, value) => {
+    localStorage.setItem(`child_${key}`, value);
+    set((state) => ({
+      childinfo: { ...state.childinfo, [key]: value },
+    }));
+  },
 
   increasePoints: (value) => {
     const newPoints = get().points + value;

@@ -2,13 +2,14 @@
 
 import React, { useState, useRef, useEffect } from 'react'
 import { MessageCloudProps } from './types'
-import { messageCloud, messageTail, messageInput, messageButton } from './styles'
+import { messageCloud, messageTail, messageInput, messageButton, messageName } from './styles'
 import { cn } from '@/lib/utils'
 
 export const MessageCloud: React.FC<MessageCloudProps> = ({
   message,
   direction = 'left',
   type = 'default',
+  name,
   backgroundColor,
   textColor,
   borderStyle,
@@ -107,7 +108,7 @@ export const MessageCloud: React.FC<MessageCloudProps> = ({
       aria-label={ariaLabel}
       aria-disabled={disabled}
     >
-      <div className={messageTail({ direction })} style={tailStyle} />
+      {name && <div className={messageName()}>{name}</div>}
 
       {type === 'input' ? (
         <form onSubmit={handleInputSubmit}>
@@ -129,10 +130,9 @@ export const MessageCloud: React.FC<MessageCloudProps> = ({
             <button
               key={option.value}
               className={cn(
-                messageButton(),
-                disabled &&
-                  option.value !== selectedValue &&
-                  'bg-gray-200 text-gray-500 hover:bg-gray-200 hover:text-gray-500'
+                messageButton({
+                  type: option.value === selectedValue ? 'selected' : 'default',
+                })
               )}
               onClick={() => handleOptionClick(option)}
               disabled={disabled}

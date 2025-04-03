@@ -1,10 +1,10 @@
 import { tv } from 'tailwind-variants'
 
 export const messageCloud = tv({
-  base: 'relative min-h-[48px] p-4 rounded-2xl break-words max-w-[80%]',
+  base: 'relative min-h-[48px] px-8 py-6 rounded-2xl break-words max-w-[80%]',
   variants: {
     direction: {
-      left: 'ml-3',
+      left: 'ml-8',
       right: 'ml-auto mr-3',
     },
     type: {
@@ -25,6 +25,10 @@ export const messageCloud = tv({
   },
 })
 
+export const messageName = tv({
+  base: 'absolute -top-6 left-8 text-sm font-medium text-gray-600',
+})
+
 export const messageTail = tv({
   base: 'absolute w-3 h-3 transform',
   variants: {
@@ -43,11 +47,13 @@ export const messageInput = tv({
 })
 
 export const messageButton = tv({
-  base: 'w-full p-3 text-center rounded-xl transition-colors text-white',
+  base: 'w-full p-3 text-center rounded-full transition-colors text-white border-2 border-[#05803a] shadow-[2px_2px_0px_#cbb199]',
   variants: {
     type: {
-      default: 'bg-blue-500 hover:bg-blue-600',
-      system: 'bg-gray-600 hover:bg-gray-700',
+      default: 'bg-[#05803a] hover:bg-[#05803a]/90',
+      system: 'bg-[#05803a] hover:bg-[#05803a]/90',
+      selected:
+        'bg-[#e6e6e6] text-black hover:bg-[#e6e6e6] border-[#e6e6e6] shadow-[2px_2px_0px_#cbb199]',
     },
   },
   defaultVariants: {

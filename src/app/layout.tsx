@@ -26,7 +26,7 @@ export default function RootLayout({
           {`try{Typekit.load();}catch(e){}`}
         </Script>
       </head>
-      <body className="antialiased min-h-screen flex justify-center bg-gray-100 font-ud-marugo">
+      <body className="antialiased min-h-screen flex justify-center bg-gray-100">
         <NavigationProvider hideNavOnLoad={true}>
           <DisablePullToRefresh />
           <PullIndicator />

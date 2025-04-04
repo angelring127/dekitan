@@ -9,7 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        'ud-marugo': ['fot-udmarugo-large-pr6n', 'sans-serif'],
+        sans: ['fot-udmarugo-large-pr6n', 'sans-serif'],
       },
       colors: {
         background: 'var(--background)',

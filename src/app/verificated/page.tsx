@@ -78,7 +78,7 @@ export default function InitPage({
   }
 
   useEffect(() => {
-    apiClient.post("/api/account/regist/varificate", {
+    apiClient.post("/api/account/regist/verificate", {
       "token": searchParams.t
     }).then((res) => {
       setPlayerId(res.data.player_id)

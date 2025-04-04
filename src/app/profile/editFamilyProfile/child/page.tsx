@@ -21,7 +21,6 @@ export default function EditChild() {
 
     const names = ['くん', 'ちゃん', 'さん', 'なし'];
     const [errors, setErrors] = useState<Partial<FormValues>>({});
-    const [isSubmitted, setIsSubmitted] = useState(false);
     const router = useRouter();
 
     const [childInfo, setChildInfo] = useState({
@@ -45,7 +44,7 @@ export default function EditChild() {
     };
 
     const validateForm = () => {
-        let newErrors: Partial<FormValues> = {};
+        const newErrors: Partial<FormValues> = {};
 
         if (formData.nickname && formData.nickname.length > 8) newErrors.nickname = "８文字以内";
 
@@ -67,7 +66,6 @@ export default function EditChild() {
             try {
                 const response = await apiClient.post("account/profile/player/put", data);
                 console.log(response.data);
-                setIsSubmitted(true);
                 if (response.data.status === 2000) {
                     router.push('/profile/editFamilyProfile');
                 }
@@ -82,7 +80,6 @@ export default function EditChild() {
         try {
             const response = await apiClient.post("/account/profile/player/delete", data);
             console.log("Success:", response.data);
-            setIsSubmitted(true);
             router.push('/profile/editFamilyProfile');
         } catch (error) {
             console.error("Error submitting form:", error);

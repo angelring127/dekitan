@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/common/Button";
 import { apiClient } from "@/services/api";
-import { useGlobalStore } from "@/store/info";
 import { useRouter } from "next/navigation";
 import InputField from "@/components/common/InputField";
 
@@ -20,10 +19,9 @@ const AddSubOwner = () => {
         password: "",
     });
     const [errors, setErrors] = useState<Partial<FormValues>>({});
-    const [isSubmitted, setIsSubmitted] = useState(false);
 
     const validateForm = () => {
-        let newErrors: Partial<FormValues> = {};
+        const newErrors: Partial<FormValues> = {};
 
         if (!formData.nickname) newErrors.nickname = "ニックネームは必須";
         else if (formData.nickname.length > 8) newErrors.nickname = "８文字以内";
@@ -42,7 +40,6 @@ const AddSubOwner = () => {
             try {
                 const response = await apiClient.post("/account/profile/user/add", formData);
                 console.log("Success:", response.data);
-                setIsSubmitted(true);
             } catch (error) {
                 console.error("Error submitting form:", error);
             }
@@ -72,7 +69,7 @@ const AddSubOwner = () => {
                             value={formData.password.trim()}
                             onBlur={() => { }}
                             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                            error={errors.nickname ?? ""}
+                            error={errors.password ?? ""}
                         />
 
                     </div>

@@ -1,16 +1,14 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Button } from "@/components/common/Button";
-import { apiClient } from "@/services/api";
-import { useGlobalStore } from "@/store/info";
 import { useRouter } from "next/navigation";
 
 
 const AddFamilyProfile = () => {
 
     const router = useRouter();
-    const [role, setRole] = useState(1);
+    const role = 1;
 
     const renderContent = () => {
         if (role === 1) {

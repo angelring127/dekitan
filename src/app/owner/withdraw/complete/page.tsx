@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/common/Button";
 
-const withdrawComplete: React.FC = () => {
+const WithdrawComplete: React.FC = () => {
     const router = useRouter();
 
     return (
@@ -32,4 +32,4 @@ const withdrawComplete: React.FC = () => {
     );
 };
 
-export default withdrawComplete;
+export default WithdrawComplete;

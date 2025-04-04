@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/common/Button";
 import { apiClient } from "@/services/api";
 import { useRouter } from "next/navigation";
@@ -19,7 +19,6 @@ const EditSubOwner = () => {
         password: "",
     });
     const [errors, setErrors] = useState<Partial<FormValues>>({});
-    const [isSubmitted, setIsSubmitted] = useState(false);
     const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false);
 
     const searchParams = useSearchParams();
@@ -27,7 +26,7 @@ const EditSubOwner = () => {
     const nickname = searchParams.get("nickname");
 
     const validateForm = () => {
-        let newErrors: Partial<FormValues> = {};
+        const newErrors: Partial<FormValues> = {};
 
         if (formData.nickname && formData.nickname.length > 8) newErrors.nickname = "８文字以内";
 
@@ -57,7 +56,6 @@ const EditSubOwner = () => {
             try {
                 const response = await apiClient.post("/account/profile/user/put", data);
                 console.log("Success:", response.data);
-                setIsSubmitted(true);
                 router.push('/profile/editFamilyProfile')
             } catch (error) {
                 console.error("Error submitting form:", error);
@@ -71,7 +69,6 @@ const EditSubOwner = () => {
         try {
             const response = await apiClient.post("/account/profile/user/delete", data);
             console.log("Success:", response.data);
-            setIsSubmitted(true);
             router.push('/profile/editFamilyProfile')
         } catch (error) {
             console.error("Error submitting form:", error);

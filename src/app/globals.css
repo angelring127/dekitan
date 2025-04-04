@@ -10,7 +10,7 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'fot-udmarugo-large-pr6n', Arial, Helvetica, sans-serif;
 }
 
 @layer utilities {
@@ -34,8 +34,8 @@ body {
 .common_panel_style {
   border-radius: 20;
   position: 'relative';
-  background-color:rgba(255, 255, 255, 0.8) ;
-  }
+  background-color: rgba(255, 255, 255, 0.8);
+}
 
 /* Tailwind でスクロールバーを非表示にする */
 .scrollbar-hide::-webkit-scrollbar {
@@ -54,9 +54,8 @@ body {
   overflow: hidden;
 }
 
-
 .collection_self {
   background-color: white;
-  border: 2px solid yellow; 
+  border: 2px solid yellow;
   box-shadow: 0 0 0 2px yellow;
 }

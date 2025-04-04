@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import localFont from 'next/font/local'
 import { Navigation } from '@/components/common/Navigation'
 import './globals.css'
 import { NavigationProvider } from '@/components/common/Navigation/NavigationContext'
@@ -7,18 +6,7 @@ import { DisablePullToRefresh } from '@/components/common/Navigation/DisablePull
 import { PullIndicator } from '@/components/common/Navigation/PullIndicator'
 import { Button } from '@/components/common/Button'
 import { Backdrop } from '@/components/common/Navigation/Backdrop'
-
-const geistSans = localFont({
-  src: './fonts/GeistVF.woff',
-  variable: '--font-geist-sans',
-  weight: '100 900',
-})
-
-const geistMono = localFont({
-  src: './fonts/GeistMonoVF.woff',
-  variable: '--font-geist-mono',
-  weight: '100 900',
-})
+import Script from 'next/script'
 
 export const metadata: Metadata = {
   title: 'わくわくワールド',
@@ -32,9 +20,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex justify-center bg-gray-100`}
-      >
+      <head>
+        <Script src="https://use.typekit.net/ixd2nzw.js" strategy="beforeInteractive" />
+        <Script id="typekit-load" strategy="afterInteractive">
+          {`try{Typekit.load();}catch(e){}`}
+        </Script>
+      </head>
+      <body className="antialiased min-h-screen flex justify-center bg-gray-100 font-ud-marugo">
         <NavigationProvider hideNavOnLoad={true}>
           <DisablePullToRefresh />
           <PullIndicator />

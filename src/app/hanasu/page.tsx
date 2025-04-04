@@ -1,154 +1,44 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
 import { MessageCloud } from '@/components/common/MessageCloud'
+import { useChat } from '@/hooks/useChat'
+import { useGlobalStore } from '@/store/info'
 
-export default function MessagesDemo() {
-  const [step, setStep] = useState(0)
-  const [displayedMessages, setDisplayedMessages] = useState<number[]>([0])
+export default function Hanasu() {
+  const { name } = useGlobalStore()
+  const {
+    step,
+    displayedMessages,
+    messages,
+    isLoading,
+    error,
+    loadMessages,
+    handleNextStep,
+    handleSelection,
+  } = useChat()
+
   const messagesEndRef = useRef<HTMLDivElement>(null)
-
-  // 일반 탭을 위한 함수 - 다음 메시지나 지정된 메시지를 화면에 추가
-  const handleNextStep = (targetStep?: number) => {
-    const nextStep = targetStep !== undefined ? targetStep : step + 1
-    if (nextStep < messages.length) {
-      setStep(nextStep)
-      setDisplayedMessages((prev) => [...prev, nextStep])
-    }
-  }
-
-  // 선택지를 위한 함수 - 선택된 메시지를 화면에 추가
-  const handleSelection = (messageIndex: number) => {
-    setStep(messageIndex)
-    setDisplayedMessages((prev) => [...prev, messageIndex])
-  }
-
-  const messages = [
-    {
-      type: 'intro',
-      message:
-        '（ニックネーム）（呼び名）ねえ、ねえ！ぼくといっしょにできたのげんせきをさがしにいこう！きょうはどんなことしようか？',
-      showCharacter: true,
-    },
-    {
-      type: 'intro',
-      message: '（カテゴリー）はすき？',
-      nextStep: 3,
-    },
-    {
-      type: 'intro',
-      message: 'そうなんだ！じゃあ、（カテゴリー）はすき？',
-      showCharacter: true,
-    },
-    {
-      type: 'selection',
-      message: '',
-      direction: 'right',
-      options: [
-        {
-          label: '好き',
-          value: 'like',
-          onClick: () => handleSelection(4),
-        },
-        {
-          label: 'にがてだけどやってみる',
-          value: 'dontlike_but_try',
-          onClick: () => handleSelection(5),
-        },
-        {
-          label: 'にがて',
-          value: 'dontlike',
-          onClick: () => handleSelection(6),
-        },
-      ],
-    },
-    {
-      type: 'intro',
-      message: 'そうなんだ！',
-      showCharacter: true,
-      nextStep: 6,
-    },
-    {
-      type: 'intro',
-      message: 'にがてなのにがんばるね！',
-      showCharacter: true,
-    },
-    {
-      type: 'intro',
-      message: 'じゃあ、こんなことできるか？（やること）',
-    },
-    {
-      type: 'selection',
-      message: '',
-      direction: 'right',
-      options: [
-        {
-          label: 'やってみる',
-          value: 'try',
-          onClick: () => handleSelection(11),
-        },
-        {
-          label: 'ちがうことにする',
-          value: 'different',
-          onClick: () => handleSelection(8),
-        },
-        {
-          label: 'できる',
-          value: 'can',
-          onClick: () => handleSelection(10),
-        },
-      ],
-    },
-    {
-      type: 'intro',
-      message: 'わかった！またにしようね！うーんと、これはどうかな？（やること）',
-      showCharacter: true,
-    },
-    {
-      type: 'selection',
-      message: '',
-      direction: 'right',
-      options: [
-        {
-          label: 'やってみる',
-          value: 'try',
-          onClick: () => handleSelection(11),
-        },
-        {
-          label: 'できる',
-          value: 'can',
-          onClick: () => handleSelection(10),
-        },
-      ],
-    },
-    {
-      type: 'intro',
-      message:
-        '（ニックネーム）（呼び名）もうできるの？すごいね！そしたらこんなのはどう？（やること）',
-      showCharacter: true,
-      nextStep: 7,
-    },
-
-    {
-      type: 'intro',
-      message:
-        '（やること）なにごともやってみることがだいじ！がんばっているようすをこんどおしえてね！',
-    },
-  ]
 
   const handleScreenClick = () => {
     const currentMessage = messages[step]
-    if (currentMessage.type !== 'selection' && currentMessage.type !== 'input') {
-      // nextStep이 있으면 해당 메시지로, 없으면 다음 메시지로
-      handleNextStep(currentMessage.nextStep)
+    if (currentMessage?.type !== 'selection' && currentMessage?.type !== 'input') {
+      handleNextStep(currentMessage?.nextStep)
     }
   }
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [step])
+
+  if (error) {
+    return (
+      <div className="relative w-full h-[100dvh] flex justify-center items-center bg-black">
+        <div className="text-white">{error}</div>
+      </div>
+    )
+  }
 
   return (
     <div className="relative w-full h-[100dvh] flex justify-center bg-black">
@@ -179,6 +69,8 @@ export default function MessagesDemo() {
               {displayedMessages.map((messageIndex, index) => {
                 const msg = messages[messageIndex]
                 const isLatestMessage = index === displayedMessages.length - 1
+
+                if (!msg) return null
 
                 if (msg.type === 'intro') {
                   return (
@@ -230,10 +122,6 @@ export default function MessagesDemo() {
                           selectionOptions={msg.options || []}
                           backgroundColor="#ffddbf"
                           textColor="#000000"
-                          selectedOptionStyle={{
-                            backgroundColor: '#e6e6e6',
-                            color: '#000000',
-                          }}
                           ariaLabel="選択メッセージ"
                           animation={{ fadeIn: true }}
                           disabled={!isLatestMessage}
@@ -244,52 +132,7 @@ export default function MessagesDemo() {
                   )
                 }
 
-                if (msg.type === 'input') {
-                  return (
-                    <MessageCloud
-                      key={`${messageIndex}-${index}`}
-                      message=""
-                      type="input"
-                      inputPlaceholder={msg.placeholder}
-                      onInputSubmit={(value) => {
-                        console.log('입력된 메시지:', value)
-                        handleSelection(messageIndex + 1)
-                      }}
-                      backgroundColor="#1F2937"
-                      textColor="#FFFFFF"
-                      ariaLabel="メッセージ入力"
-                      animation={{ fadeIn: true }}
-                    />
-                  )
-                }
-
-                return (
-                  <div key={`${messageIndex}-${index}`} className="relative">
-                    {msg.direction === 'left' && (
-                      <div className="absolute -top-1 -left-1 w-16 h-16 z-10">
-                        <Image
-                          src="/images/hanasu/dekitan_kaiwa_icon.png"
-                          alt=""
-                          width={64}
-                          height={64}
-                          className="rounded-full"
-                        />
-                      </div>
-                    )}
-                    <div className={msg.direction === 'left' ? 'pt-8' : ''}>
-                      <MessageCloud
-                        message={msg.message || ''}
-                        direction={msg.direction === 'right' ? 'right' : 'left'}
-                        type="default"
-                        backgroundColor="#FFFFFF"
-                        textColor="#000000"
-                        ariaLabel={`メッセージ ${messageIndex + 1}`}
-                        animation={{ fadeIn: true }}
-                        name={msg.direction === 'left' ? 'できたん' : undefined}
-                      />
-                    </div>
-                  </div>
-                )
+                return null
               })}
               <div ref={messagesEndRef} />
             </div>

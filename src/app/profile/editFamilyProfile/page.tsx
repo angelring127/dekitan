@@ -12,9 +12,8 @@ interface Nickname {
 
 const SubOwnerEdit = () => {
     const [nicknames, setNicknames] = useState<Nickname[]>([]);
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [role, setRole] = useState(1);
+    const role = 1;
     const router = useRouter();
 
     useEffect(() => {
@@ -27,10 +26,9 @@ const SubOwnerEdit = () => {
                     console.log(response.data.data.list);
                 }
             } catch (err) {
+                console.error('Error fetching data:', err);
                 setError('An error occurred while fetching the data');
-            } finally {
-                setLoading(false);
-            }
+            } 
         };
 
         fetchNicknames();

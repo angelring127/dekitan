@@ -10,7 +10,7 @@ export const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('volatile_token')
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
@@ -26,7 +26,8 @@ apiClient.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       // Handle unauthorized access
-      localStorage.removeItem('token')
+      localStorage.removeItem('volatile_token')
+      localStorage.removeItem('player_id')
     }
     return Promise.reject(error)
   }

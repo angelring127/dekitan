@@ -5,15 +5,14 @@ import { useNavigation } from './NavigationContext'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import Image from 'next/image'
+import { useGlobalStore } from '@/store/info'
+import { useAuthStore } from '@/store/auth'
 
 interface NavigationProps {
-  userName?: string
-  isLogin?: boolean
   onMenuClick?: () => void
 }
 
 // 목업 사용자 데이터
-const mockUserName = 'こうき'
 const mockUsers = [
   { id: 1, name: 'こうき' },
   { id: 2, name: 'たなか' },
@@ -21,15 +20,27 @@ const mockUsers = [
   { id: 4, name: 'さとう' },
 ]
 
-export function Navigation({
-  userName = mockUserName,
-  isLogin = true,
-  onMenuClick,
-}: NavigationProps) {
+export function Navigation({ onMenuClick }: NavigationProps) {
   const { showNav, showUserMenu, setShowUserMenu } = useNavigation()
   const navRef = useRef<HTMLElement>(null)
   const pathname = usePathname()
   const [showMenu, setShowMenu] = useState(false)
+  const [isClient, setIsClient] = useState(false)
+
+  // 스토어에서 유저 정보 가져오기
+  const { name, setName, childinfo, parentinfo } = useGlobalStore()
+  const { isAuthenticated } = useAuthStore()
+
+  // 유저 이름 설정 (인증된 경우 스토어에서 가져온 이름 사용, 아닌 경우 기본값 사용)
+  // childinfo.name이 있으면 그것을 사용, 없으면 parentinfo.name을 사용, 둘 다 없으면 name을 사용
+  const userName = isAuthenticated
+    ? childinfo.name || parentinfo.name || name || 'ゲスト'
+    : 'ゲスト'
+
+  // 클라이언트 사이드 렌더링 확인
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   // 스크롤 방지 효과
   useEffect(() => {
@@ -68,28 +79,30 @@ export function Navigation({
 
   const handleUserChange = (newUserName: string) => {
     // 사용자 변경 처리
+    setName(newUserName)
     setShowUserMenu(false)
   }
 
-  useEffect(() => {
-    if (navRef.current) {
-      if (showNav) {
-        navRef.current.style.transform = 'translateY(0)'
-        navRef.current.style.opacity = '1'
-      } else {
-        navRef.current.style.transform = 'translateY(-100%)'
-        navRef.current.style.opacity = '0'
-      }
-    }
-  }, [showNav])
+  // 서버 사이드 렌더링 시에는 아무것도 렌더링하지 않음
+  if (!isClient) {
+    return null
+  }
 
   return (
     <>
       <nav
         ref={navRef}
-        className="relative z-10 flex h-20 items-center justify-between px-4 bg-white shadow-md transition-all duration-300"
+        className={`fixed top-0 z-10 flex h-20 items-center justify-between px-4 bg-white transition-all duration-300 ${
+          showNav ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
+        }`}
+        style={{
+          width: '100%',
+          maxWidth: '500px',
+          left: '50%',
+          transform: showNav ? 'translateX(-50%)' : 'translateX(-50%) translateY(-100%)',
+        }}
       >
-        {isLogin ? (
+        {isAuthenticated ? (
           // ログイン状態時のUI
           <>
             <div className="flex items-center gap-2">
@@ -117,19 +130,16 @@ export function Navigation({
 
               {/* ユーザー ドロップダウン メニュー */}
               <div
-                className={`fixed top-[80px] left-1/2 -translate-x-1/2 w-[95%] max-w-[475px] bg-white shadow-lg z-[9999] transform transition-all duration-200 ease-in-out ${
+                className={`fixed top-[80px] bg-white shadow-lg z-[9999] transform transition-all duration-200 ease-in-out ${
                   showUserMenu
                     ? 'opacity-100 translate-y-0'
                     : 'opacity-0 -translate-y-2 pointer-events-none'
                 }`}
                 style={{
-                  position: 'fixed',
-                  top: '130px',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
                   width: '95%',
                   maxWidth: '475px',
-                  zIndex: 9999,
+                  left: '50%',
+                  transform: 'translateX(-50%)',
                 }}
               >
                 <div className="bg-[#00803a] text-white font-medium flex justify-between items-center">
@@ -263,13 +273,19 @@ export function Navigation({
           </>
         )}
       </nav>
-
+      {showNav && <div className="h-20" />} {/* 네비게이션이 표시될 때만 공간 확보 */}
       {/* 햄버거 메뉴 드롭다운 - 중앙 위치 및 애니메이션 적용 */}
-      {!isLogin && (
+      {!isAuthenticated && (
         <div
-          className={`fixed inset-x-0 top-14 bg-white shadow-lg z-20 overflow-hidden transition-all duration-300 transform ${
+          className={`fixed top-20 bg-white shadow-lg z-20 overflow-hidden transition-all duration-300 transform ${
             showMenu ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
           }`}
+          style={{
+            width: '100%',
+            maxWidth: '500px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+          }}
         >
           <ul className="py-2 max-w-md mx-auto">
             <li>

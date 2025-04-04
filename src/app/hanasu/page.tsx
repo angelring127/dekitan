@@ -4,20 +4,9 @@ import React, { useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { MessageCloud } from '@/components/common/MessageCloud'
 import { useChat } from '@/hooks/useChat'
-import { useGlobalStore } from '@/store/info'
 
 export default function Hanasu() {
-  const { name } = useGlobalStore()
-  const {
-    step,
-    displayedMessages,
-    messages,
-    isLoading,
-    error,
-    loadMessages,
-    handleNextStep,
-    handleSelection,
-  } = useChat()
+  const { step, displayedMessages, messages, error, handleNextStep } = useChat()
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
@@ -43,6 +32,10 @@ export default function Hanasu() {
   return (
     <div className="relative w-full h-[100dvh] flex justify-center bg-black">
       <div className="w-full max-w-[500px] h-[100dvh] relative">
+        {/* 타이틀 */}
+        <div className="absolute top-0 left-0 right-0 w-full h-20 flex items-center justify-center bg-white z-[11]">
+          <h1 className="text-[#00803a] font-bold">できたんと話す</h1>
+        </div>
         {/* 배경 이미지 */}
         <div className="absolute inset-0">
           <Image

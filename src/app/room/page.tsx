@@ -3,8 +3,9 @@
 import Image from 'next/image'
 import { Button } from '@/components/common/Button'
 import Card from '@/components/common/Card'
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 
-export default function DashboardDemo() {
+const RoomPage = () => {
   return (
     <div className="relative flex w-full flex-col bg-white text-black h-[1500px]">
       {/* 배경 이미지 */}
@@ -224,5 +225,13 @@ export default function DashboardDemo() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function ProtectedRoomPage() {
+  return (
+    <ProtectedRoute>
+      <RoomPage />
+    </ProtectedRoute>
   )
 }

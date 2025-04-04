@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useNavigation } from './NavigationContext'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import Image from 'next/image'
 
 interface NavigationProps {
   userName?: string
@@ -86,14 +87,14 @@ export function Navigation({
     <>
       <nav
         ref={navRef}
-        className="relative z-10 flex h-14 items-center justify-between px-4 bg-white shadow-md transition-all duration-300"
+        className="relative z-10 flex h-20 items-center justify-between px-4 bg-white shadow-md transition-all duration-300"
       >
         {isLogin ? (
           // ログイン状態時のUI
           <>
             <div className="flex items-center gap-2">
               <div
-                className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-200 text-gray-600 text-sm font-medium cursor-pointer"
+                className="flex flex-col items-center justify-center cursor-pointer w-16"
                 onClick={handleUserMenuClick}
                 onKeyDown={handleUserMenuKeyDown}
                 tabIndex={0}
@@ -101,7 +102,17 @@ export function Navigation({
                 aria-label="ユーザー選択"
                 aria-expanded={showUserMenu}
               >
-                {userName?.slice(0, 1)}
+                <Image
+                  src={
+                    showUserMenu ? '/images/icons/user_icon_b.png' : '/images/icons/user_icon_a.png'
+                  }
+                  alt="ユーザーアイコン"
+                  width={40}
+                  height={40}
+                />
+                <span className="text-xs mt-1 text-gray-600 truncate w-full text-center">
+                  {userName}
+                </span>
               </div>
 
               {/* ユーザー ドロップダウン メニュー */}
@@ -113,7 +124,7 @@ export function Navigation({
                 }`}
                 style={{
                   position: 'fixed',
-                  top: '80px',
+                  top: '130px',
                   left: '50%',
                   transform: 'translateX(-50%)',
                   width: '95%',
@@ -149,42 +160,52 @@ export function Navigation({
               </div>
 
               {/* アイコン メニューを左に移動 */}
-              <div className="grid grid-cols-4 gap-2 ml-2">
+              <div className="grid grid-cols-4 gap-6 ml-10 mt-2">
                 <Link
                   href="/"
-                  className={`text-2xl flex items-center justify-center w-10 h-10 ${
+                  className={`flex items-center justify-center w-14 h-14 ${
                     pathname === '/' ? 'text-blue-500' : 'text-gray-600'
                   }`}
                   tabIndex={0}
                 >
-                  🏡
+                  <Image src="/images/icons/home_icon.png" alt="ホーム" width={48} height={48} />
                 </Link>
                 <Link
                   href="/calendar"
-                  className={`text-2xl flex items-center justify-center w-10 h-10 ${
+                  className={`flex items-center justify-center w-14 h-14 ${
                     pathname === '/calendar' ? 'text-blue-500' : 'text-gray-600'
                   }`}
                   tabIndex={0}
                 >
-                  📅
+                  <Image
+                    src="/images/icons/calendar_icon.png"
+                    alt="カレンダー"
+                    width={48}
+                    height={48}
+                  />
                 </Link>
                 <Link
                   href="/notes"
-                  className={`text-2xl flex items-center justify-center w-10 h-10 ${
+                  className={`flex items-center justify-center w-14 h-14 ${
                     pathname === '/notes' ? 'text-blue-500' : 'text-gray-600'
                   }`}
                   tabIndex={0}
                 >
-                  📒
+                  <Image
+                    src="/images/icons/collection_icon.png"
+                    alt="ノート"
+                    width={48}
+                    height={48}
+                  />
                 </Link>
                 <Link
                   href="/memo"
-                  className={`text-2xl flex items-center justify-center w-10 h-10 ${
+                  className={`flex items-center justify-center w-14 h-14 ${
                     pathname === '/memo' ? 'text-blue-500' : 'text-gray-600'
                   }`}
                   tabIndex={0}
                 >
-                  📝
+                  <Image src="/images/icons/list_icon.png" alt="メモ" width={48} height={48} />
                 </Link>
               </div>
             </div>

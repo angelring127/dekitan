@@ -7,18 +7,12 @@ import { usePathname } from 'next/navigation'
 import Image from 'next/image'
 import { useGlobalStore } from '@/store/info'
 import { useAuthStore } from '@/store/auth'
+import { useProfileStore } from '@/store/profile'
+import { Profile } from '@/api/profile'
 
 interface NavigationProps {
   onMenuClick?: () => void
 }
-
-// 목업 사용자 데이터
-const mockUsers = [
-  { id: 1, name: 'こうき' },
-  { id: 2, name: 'たなか' },
-  { id: 3, name: 'すずき' },
-  { id: 4, name: 'さとう' },
-]
 
 export function Navigation({ onMenuClick }: NavigationProps) {
   const { showNav, showUserMenu, setShowUserMenu } = useNavigation()
@@ -30,17 +24,20 @@ export function Navigation({ onMenuClick }: NavigationProps) {
   // 스토어에서 유저 정보 가져오기
   const { name, setName, childinfo, parentinfo } = useGlobalStore()
   const { isAuthenticated } = useAuthStore()
-
-  // 유저 이름 설정 (인증된 경우 스토어에서 가져온 이름 사용, 아닌 경우 기본값 사용)
-  // childinfo.name이 있으면 그것을 사용, 없으면 parentinfo.name을 사용, 둘 다 없으면 name을 사용
-  const userName = isAuthenticated
-    ? childinfo.name || parentinfo.name || name || 'ゲスト'
-    : 'ゲスト'
+  const { profiles, currentProfile, fetchProfiles, setCurrentProfile, isLoading } =
+    useProfileStore()
 
   // 클라이언트 사이드 렌더링 확인
   useEffect(() => {
     setIsClient(true)
   }, [])
+
+  // 인증 상태가 변경되면 프로필 목록 가져오기
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchProfiles()
+    }
+  }, [isAuthenticated, fetchProfiles])
 
   // 스크롤 방지 효과
   useEffect(() => {
@@ -77,11 +74,16 @@ export function Navigation({ onMenuClick }: NavigationProps) {
     }
   }
 
-  const handleUserChange = (newUserName: string) => {
-    // 사용자 변경 처리
-    setName(newUserName)
+  const handleUserChange = (profile: Profile) => {
+    setCurrentProfile(profile)
+    setName(profile.nickname)
     setShowUserMenu(false)
   }
+
+  // 현재 선택된 프로필의 이름 또는 기본 이름
+  const userName = isAuthenticated
+    ? currentProfile?.nickname || childinfo.name || parentinfo.name || name || 'ゲスト'
+    : 'ゲスト'
 
   // 서버 사이드 렌더링 시에는 아무것도 렌더링하지 않음
   if (!isClient) {
@@ -152,20 +154,35 @@ export function Navigation({ onMenuClick }: NavigationProps) {
                     ✕
                   </button>
                 </div>
-                <div className="overflow-y-auto">
-                  {mockUsers.map((user, index) => (
-                    <div key={user.id}>
-                      <button
-                        className="w-full text-left px-6 py-3 text-sm font-bold text-gray-700 hover:bg-gray-100 transition-colors"
-                        onClick={() => handleUserChange(user.name)}
-                      >
-                        {user.name}
-                      </button>
-                      {index < mockUsers.length - 1 && (
-                        <div className="border-b border-dashed border-[#b3b3b3] mx-4" />
-                      )}
+                <div className="overflow-y-auto max-h-[60vh]">
+                  {isLoading ? (
+                    <div className="p-4 text-center text-gray-500">読み込み中...</div>
+                  ) : profiles.length > 0 ? (
+                    profiles.map((profile, index) => (
+                      <div key={profile.id}>
+                        <button
+                          className={`w-full text-left px-6 py-3 text-sm font-bold ${
+                            currentProfile?.id === profile.id
+                              ? 'bg-gray-100 text-[#00803a]'
+                              : 'text-gray-700 hover:bg-gray-100'
+                          } transition-colors`}
+                          onClick={() => handleUserChange(profile)}
+                        >
+                          {profile.nickname}
+                          {profile.role === 1 && ' (オーナー)'}
+                          {profile.role === 2 && ' (サブ・オーナー)'}
+                          {profile.role === 3 && ' (子ユーザー)'}
+                        </button>
+                        {index < profiles.length - 1 && (
+                          <div className="border-b border-dashed border-[#b3b3b3] mx-4" />
+                        )}
+                      </div>
+                    ))
+                  ) : (
+                    <div className="p-4 text-center text-gray-500">
+                      プロファイルが見つかりません
                     </div>
-                  ))}
+                  )}
                 </div>
               </div>
 

@@ -1,9 +1,10 @@
-import axios, { AxiosHeaders, AxiosRequestConfig } from 'axios'
-import { API_ENDPOINTS } from '@/constants'
+import axiosInstance from './axios'
 import { useGlobalStore } from '@/store/info'
 import { useAuthStore } from '@/store/auth'
+import { AxiosHeaders, AxiosRequestConfig } from 'axios'
 
-const LOGIN_URL = `${API_ENDPOINTS.BASE_URL}account/auth/login`
+const LOGIN_URL = '/account/auth/login'
+const VERIFY_URL = '/account/auth/verify'
 
 export interface LoginResponse {
   data: {
@@ -25,34 +26,63 @@ export interface LoginRequest {
 
 export const login = async (credentials: LoginRequest): Promise<boolean> => {
   try {
-    const response = await axios.post<LoginResponse>(LOGIN_URL, credentials)
+    console.log('로그인 시도:', credentials)
 
-    console.log(response)
+    // 로그인 요청
+    const response = await axiosInstance.post<LoginResponse>(LOGIN_URL, credentials)
+
+    console.log('로그인 응답:', response.data)
+    console.log('로그인 응답 헤더:', response.headers)
+
+    // 응답 헤더에서 쿠키 확인
+    const setCookieHeader = response.headers['set-cookie']
+    if (setCookieHeader) {
+      console.log('로그인 후 서버가 설정한 쿠키:', setCookieHeader)
+    }
+
+    // 쿠키 확인
+    const cookies = document.cookie.split(';')
+    console.log('로그인 후 모든 쿠키:', cookies)
+
+    // 세션 쿠키 확인 (karenainsworth_session 또는 session)
+    const sessionCookie = cookies.find(
+      (cookie) =>
+        cookie.trim().startsWith('karenainsworth_session=') || cookie.trim().startsWith('session=')
+    )
+
+    if (sessionCookie) {
+      console.log('로그인 후 세션 쿠키가 발견되었습니다:', sessionCookie)
+    }
+
     if (response.data.status === 2000) {
       const { volatile_token, player_id } = response.data.data
-      console.log(volatile_token, player_id)
+      console.log('받은 토큰:', volatile_token)
+      console.log('받은 플레이어 ID:', player_id)
 
       // 로컬 스토리지에 토큰과 플레이어 ID 저장
       localStorage.setItem('volatile_token', volatile_token)
       localStorage.setItem('player_id', player_id.toString())
 
+      // 저장 후 확인
+      console.log('저장된 토큰:', localStorage.getItem('volatile_token'))
+      console.log('저장된 플레이어 ID:', localStorage.getItem('player_id'))
+
       // 인증 스토어 업데이트
       useAuthStore.getState().setToken(volatile_token)
 
       // 유저 정보를 스토어에 저장
-      const { setName, setAllData } = useGlobalStore.getState()
+      const { setName } = useGlobalStore.getState()
 
       // 기본 이름 설정 (API에서 이름을 제공하지 않는 경우)
       setName(`Player ${player_id}`)
 
-      // 기본 포인트 설정 (API에서 포인트를 제공하지 않는 경우)
-      setAllData({ points: 0 })
-
       return true
     }
+
+    console.error('로그인 실패:', response.data)
     return false
   } catch (err) {
-    console.error('Failed to login:', err)
+    console.error('로그인 중 오류가 발생했습니다:', err)
     return false
   }
 }
@@ -63,20 +93,59 @@ export const verifyToken = async (): Promise<boolean> => {
     const player_id = localStorage.getItem('player_id')
 
     if (!volatile_token || !player_id) {
+      console.error('인증 토큰 또는 플레이어 ID가 없습니다.')
       return false
     }
 
-    // 실제 API 경로로 수정 (서버에 맞게 조정 필요)
-    const response = await axios.post(`${API_ENDPOINTS.BASE_URL}account/auth/verify`, {
-      volatile_token,
+    // 토큰 검증 요청 - 토큰은 인터셉터에서 자동으로 헤더와 본문에 추가됨
+    const response = await axiosInstance.post(VERIFY_URL, {
       player_id: Number(player_id),
+      // volatile_token은 인터셉터에서 자동으로 추가됨
     })
 
+    console.log('토큰 검증 응답:', response.data)
+    console.log('토큰 검증 응답 헤더:', response.headers)
+
+    // 응답 헤더에서 쿠키 확인
+    const setCookieHeader = response.headers['set-cookie']
+    if (setCookieHeader) {
+      console.log('토큰 검증 후 서버가 설정한 쿠키:', setCookieHeader)
+    }
+
+    // 쿠키 확인
+    const cookies = document.cookie.split(';')
+    console.log('토큰 검증 후 모든 쿠키:', cookies)
+
+    // 세션 쿠키 확인 (karenainsworth_session 또는 session)
+    const sessionCookie = cookies.find(
+      (cookie) =>
+        cookie.trim().startsWith('karenainsworth_session=') || cookie.trim().startsWith('session=')
+    )
+
+    if (sessionCookie) {
+      console.log('토큰 검증 후 세션 쿠키가 발견되었습니다:', sessionCookie)
+    }
+
     // 응답 상태 코드에 따라 유효성 판단
-    return response.data.status === 2000
+    if (response.data.status === 2000) {
+      return true
+    }
+
+    // 인증 토큰 관련 오류 처리
+    if (response.data.status === 4003 || response.data.status_code === 4004) {
+      console.error('인증 토큰 오류:', response.data.message)
+      localStorage.removeItem('volatile_token')
+      localStorage.removeItem('player_id')
+
+      // 로그인 페이지로 리다이렉트
+      if (typeof window !== 'undefined') {
+        window.location.href = '/login'
+      }
+    }
+
+    return false
   } catch (err) {
-    console.error('Failed to verify token:', err)
-    // 오류 발생 시 일단 유효하다고 간주 (서버에 검증 API가 없는 경우)
-    return true
+    console.error('토큰 검증 중 오류가 발생했습니다:', err)
+    return false
   }
 }

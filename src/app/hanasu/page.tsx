@@ -9,6 +9,7 @@ export default function Hanasu() {
   const { step, displayedMessages, messages, error, handleNextStep } = useChat()
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const messageContainerRef = useRef<HTMLDivElement>(null)
 
   const handleScreenClick = () => {
     const currentMessage = messages[step]
@@ -18,7 +19,9 @@ export default function Hanasu() {
   }
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' })
+    }
   }, [step])
 
   if (error) {
@@ -52,13 +55,14 @@ export default function Hanasu() {
         <div className="absolute inset-0">
           {/* 메시지 컨테이너 */}
           <div
+            ref={messageContainerRef}
             className="h-full overflow-y-auto px-4 pt-20"
             onClick={handleScreenClick}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => e.key === 'Enter' && handleScreenClick()}
           >
-            <div className="min-h-full flex flex-col justify-end space-y-4">
+            <div className="min-h-full flex flex-col justify-end space-y-4 pb-4">
               {displayedMessages.map((messageIndex, index) => {
                 const msg = messages[messageIndex]
                 const isLatestMessage = index === displayedMessages.length - 1
@@ -127,7 +131,7 @@ export default function Hanasu() {
 
                 return null
               })}
-              <div ref={messagesEndRef} />
+              <div ref={messagesEndRef} className="pb-4" />
             </div>
           </div>
         </div>

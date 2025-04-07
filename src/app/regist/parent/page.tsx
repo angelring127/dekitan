@@ -74,14 +74,18 @@ const RegisterForm: React.FC = () => {
         e.preventDefault();
         if (validateForm()) {
             try {
-                console.log(childinfo)
                 formData.player_name = childinfo.name
-                formData.player_honorific_title = PLAYER_HONORIFIC_TITLE.filter(e => e.label === childinfo.suffix)[0]['value']
+                formData.player_honorific_title = PLAYER_HONORIFIC_TITLE.filter(e => e.honorific == childinfo.suffix)[0]['value']
                 formData.birth_day = gradeToBirthdate(childinfo.schoolYear)
-
+                
                 await apiClient.post("/account/regist/entry", formData)
                 .then((response) => {
-                    setParentInfo("name", formData.nickname);
+                    if(response.status === 2000) {
+                        setParentInfo("name", formData.nickname);
+                    }
+                })
+                .catch((e) => {
+
                 });
             } catch (error) {
                 console.error("Error submitting form:", error);

@@ -81,8 +81,10 @@ export default function InitPage({
     apiClient.post("/api/account/regist/verificate", {
       "token": searchParams.t
     }).then((res) => {
-      setPlayerId(res.data.player_id)
-      setVolatileToken(res.data.volatile_token)
+      if(res.data.player_id && res.data.volatile_token) {
+        setPlayerId(res.data.player_id)
+        setVolatileToken(res.data.volatile_token)
+      }
     })
   }, [])
 

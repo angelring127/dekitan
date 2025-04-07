@@ -70,6 +70,8 @@ export const useInitialItems = (onNext: () => void, onOmikuji?: () => void) => {
     updateHeight();
     window.addEventListener("resize", updateHeight);
 
+    setChildInfo("suffix", "くん")
+
     return () => {
       window.removeEventListener("resize", updateHeight);
     };

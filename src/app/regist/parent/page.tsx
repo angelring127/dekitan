@@ -78,7 +78,7 @@ const RegisterForm: React.FC = () => {
                 formData.player_honorific_title = PLAYER_HONORIFIC_TITLE.filter(e => e.honorific == childinfo.suffix)[0]['value']
                 formData.birth_day = gradeToBirthdate(childinfo.schoolYear)
                 
-                await apiClient.post("/account/regist/entry", formData)
+                await apiClient.post("/api/account/regist/entry", formData)
                 .then((response) => {
                     if(response.status === 2000) {
                         setParentInfo("name", formData.nickname);

@@ -21,6 +21,7 @@ export interface ChatMessage {
   showCharacter?: boolean
   nextStep?: number
   direction?: 'left' | 'right'
+  title?: string
   options?: {
     label: string
     value: string

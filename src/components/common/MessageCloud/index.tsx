@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react'
 import { MessageCloudProps } from './types'
-import { messageCloud, messageTail, messageInput, messageButton, messageName } from './styles'
+import { messageCloud, messageInput, messageButton, messageName, messageTitle } from './styles'
 import { cn } from '@/lib/utils'
 
 export const MessageCloud: React.FC<MessageCloudProps> = ({
@@ -10,12 +10,11 @@ export const MessageCloud: React.FC<MessageCloudProps> = ({
   direction = 'left',
   type = 'default',
   name,
+  title,
   backgroundColor,
   textColor,
   borderStyle,
   borderRadius,
-  tailSize = 16,
-  tailPosition = 24,
   maxWidth = '70%',
   minHeight = '48px',
   onClick,
@@ -84,13 +83,6 @@ export const MessageCloud: React.FC<MessageCloudProps> = ({
     borderRadius,
   }
 
-  const tailStyle = {
-    width: `${tailSize}px`,
-    height: `${tailSize}px`,
-    top: `${tailPosition}px`,
-    backgroundColor,
-  }
-
   return (
     <div
       className={cn(
@@ -109,6 +101,7 @@ export const MessageCloud: React.FC<MessageCloudProps> = ({
       aria-disabled={disabled}
     >
       {name && <div className={messageName()}>{name}</div>}
+      {title && <div className={messageTitle()}>{title}</div>}
 
       {type === 'input' ? (
         <form onSubmit={handleInputSubmit}>
@@ -126,20 +119,23 @@ export const MessageCloud: React.FC<MessageCloudProps> = ({
       ) : type === 'selection' ? (
         <div className="space-y-2">
           {message && <p className="mb-2">{message}</p>}
-          {selectionOptions?.map((option) => (
-            <button
-              key={option.value}
-              className={cn(
-                messageButton({
-                  type: option.value === selectedValue ? 'selected' : 'default',
-                })
-              )}
-              onClick={() => handleOptionClick(option)}
-              disabled={disabled}
-            >
-              {option.label}
-            </button>
-          ))}
+          <div className={title ? 'mt-8' : ''}>
+            {selectionOptions?.map((option) => (
+              <button
+                key={option.value}
+                className={cn(
+                  messageButton({
+                    type: option.value === selectedValue ? 'selected' : 'default',
+                  }),
+                  selectedValue ? (option.value === selectedValue ? 'block' : 'hidden') : 'block'
+                )}
+                onClick={() => handleOptionClick(option)}
+                disabled={disabled}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
         </div>
       ) : (
         <p>{message}</p>

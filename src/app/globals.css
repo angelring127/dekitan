@@ -17,6 +17,52 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+
+  .font-l {
+    font-family: 'fot-udmarugo-large-pr6n', sans-serif;
+    font-weight: 300;
+  }
+
+  .font-m {
+    font-family: 'fot-udmarugo-large-pr6n', sans-serif;
+    font-weight: 500;
+  }
+
+  .font-db {
+    font-size: 17px;
+    font-family: 'fot-udmarugo-large-pr6n', sans-serif;
+    font-weight: 600;
+  }
+
+  .font-db-title {
+    font-size: 22px;
+    font-family: 'fot-udmarugo-large-pr6n', sans-serif;
+    font-weight: 700;
+  }
+
+  .font-db-btn {
+    font-size: 17px;
+    font-family: 'fot-udmarugo-large-pr6n', sans-serif;
+    font-weight: 700;
+  }
+
+  .font-name {
+    font-size: 15px;
+    font-family: 'fot-udmarugo-large-pr6n', sans-serif;
+    font-weight: 600;
+  }
+
+  .font-title {
+    color: #00803a;
+    font-size: 32px;
+    font-family: 'fot-udmarugo-large-pr6n', sans-serif;
+    font-weight: 700;
+  }
+
+  .font-b {
+    font-family: 'fot-udmarugo-large-pr6n', sans-serif;
+    font-weight: 700;
+  }
 }
 
 /* スクロール関連のスタイルを追加 */

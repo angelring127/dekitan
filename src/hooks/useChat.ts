@@ -31,7 +31,7 @@ export const useChat = () => {
         direction: 'right',
         options: [
           {
-            label: '好き',
+            label: 'はい',
             value: 'like',
             onClick: () => handleSelection(4),
           },
@@ -43,7 +43,7 @@ export const useChat = () => {
           {
             label: 'にがて',
             value: 'dontlike',
-            onClick: () => handleSelection(6),
+            onClick: () => handleSelection(2),
           },
         ],
       },
@@ -65,6 +65,7 @@ export const useChat = () => {
       {
         type: 'selection',
         message: '',
+        title: 'さかあがり',
         direction: 'right',
         options: [
           {

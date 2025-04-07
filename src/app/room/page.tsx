@@ -1,11 +1,18 @@
 'use client'
 
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/common/Button'
 import Card from '@/components/common/Card'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 
 const RoomPage = () => {
+  const router = useRouter()
+
+  const handleHanasuClick = () => {
+    router.push('/hanasu')
+  }
+
   return (
     <div className="relative flex w-full flex-col bg-white text-black h-[1500px]">
       {/* 배경 이미지 */}
@@ -126,13 +133,19 @@ const RoomPage = () => {
             headerClassName="text-xl font-bold text-black text-center"
           >
             <div className="bg-white py-4 px-4 flex justify-center">
-              <Image
-                src="/images/icons/plus_icon_g.png"
-                alt="プラスアイコン"
-                width={24}
-                height={24}
-                className="w-6 h-6"
-              />
+              <button
+                onClick={handleHanasuClick}
+                className="transition-transform hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-lg"
+                aria-label="できたんと話す"
+              >
+                <Image
+                  src="/images/icons/plus_icon_g.png"
+                  alt="プラスアイコン"
+                  width={24}
+                  height={24}
+                  className="w-6 h-6"
+                />
+              </button>
             </div>
           </Card>
           <Card

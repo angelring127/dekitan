@@ -1,7 +1,7 @@
 import { tv } from 'tailwind-variants'
 
 export const messageCloud = tv({
-  base: 'relative min-h-[48px] px-8 py-6 rounded-2xl break-words max-w-[80%]',
+  base: 'relative min-h-[48px] px-8 py-6 rounded-2xl break-words max-w-[80%] font-db',
   variants: {
     direction: {
       left: 'ml-8',
@@ -26,7 +26,11 @@ export const messageCloud = tv({
 })
 
 export const messageName = tv({
-  base: 'absolute -top-6 left-8 text-sm font-medium text-gray-600',
+  base: 'absolute -top-6 left-8 font-name',
+})
+
+export const messageTitle = tv({
+  base: 'absolute top-0 left-0 right-0 text-center font-db-title py-2',
 })
 
 export const messageTail = tv({
@@ -47,7 +51,7 @@ export const messageInput = tv({
 })
 
 export const messageButton = tv({
-  base: 'w-full p-3 text-center rounded-full transition-colors text-white border-2 border-[#05803a] shadow-[2px_2px_0px_#cbb199]',
+  base: 'w-full p-3 text-center rounded-full transition-colors text-white border-2 border-[#05803a] font-db-btn shadow-[2px_2px_0px_#cbb199] mb-2',
   variants: {
     type: {
       default: 'bg-[#05803a] hover:bg-[#05803a]/90',

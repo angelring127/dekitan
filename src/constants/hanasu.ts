@@ -49,3 +49,13 @@ export const TASK_CATEGORY: Record<string, TaskCategory> = {
     value: 6,
   },
 }
+
+export const STAMP_IMAGE_PATH_LIST = {
+  sugoi: '/images/hanasu/stamps/stamp_01.png',
+  hai: '/images/hanasu/stamps/stamp_02.png',
+  wakatta: '/images/hanasu/stamps/stamp_03.png',
+}
+
+export const STAMP_IMAGE_SUGOI_KEY = 'sugoi'
+export const STAMP_IMAGE_HAI_KEY = 'hai'
+export const STAMP_IMAGE_WAKATTA_KEY = 'wakatta'

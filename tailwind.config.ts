@@ -11,6 +11,12 @@ const config: Config = {
       fontFamily: {
         sans: ['fot-udmarugo-large-pr6n', 'sans-serif'],
       },
+      fontWeight: {
+        light: 300, // L
+        medium: 500, // M
+        semibold: 600, // DB
+        bold: 700, // B
+      },
       colors: {
         background: 'var(--background)',
         foreground: 'var(--foreground)',

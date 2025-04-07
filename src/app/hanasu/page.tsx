@@ -37,7 +37,7 @@ export default function Hanasu() {
       <div className="w-full max-w-[500px] h-[100dvh] relative">
         {/* 타이틀 */}
         <div className="absolute top-0 left-0 right-0 w-full h-20 flex items-center justify-center bg-white z-[11]">
-          <h1 className="text-[#00803a] font-bold">できたんと話す</h1>
+          <h1 className="font-title">できたんと話す</h1>
         </div>
         {/* 배경 이미지 */}
         <div className="absolute inset-0">
@@ -123,6 +123,7 @@ export default function Hanasu() {
                           animation={{ fadeIn: true }}
                           disabled={!isLatestMessage}
                           name={msg.direction === 'left' ? 'できたん' : undefined}
+                          title={msg.title}
                         />
                       </div>
                     </div>

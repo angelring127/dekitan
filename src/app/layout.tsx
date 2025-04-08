@@ -37,20 +37,15 @@ export default function RootLayout({
               <Backdrop />
             </div>
             <footer>
-              <div className="flex flex-wrap">
-                <div className="w-[50%]">
-                  <a
-                    className="w-full text-[32px] font-semibold"
-                    href="https://www.kokuyo.co.jp/com/"
-                  >
-                    会社情報
-                  </a>
-                </div>
-                <div className="w-[50%]">
-                  <a className="w-full text-[32px] font-semibold" href="">
-                    お問い合わせ窓口
-                  </a>
-                </div>
+              <div className="flex flex-col items-center w-full">
+                <Button variant="tertiary" className="w-full rounded-none">
+                  会社情報
+                </Button>
+              </div>
+              <div className="w-[50%]">
+                <a className="w-full text-[32px] font-semibold" href="">
+                  お問い合わせ窓口
+                </a>
               </div>
               <div className="flex flex-wrap">
                 <div className="w-[50%]">
@@ -66,36 +61,6 @@ export default function RootLayout({
                     初期設定・FAQ
                   </a>
                 </div>
-              </div>
-              <div className="flex flex-wrap">
-                <div className="w-[50%]">
-                  <a
-                    className="w-full text-[32px] font-semibold"
-                    href="https://hellofamily.kokuyo.co.jp/view/contract"
-                  >
-                    特定商取引法に基づく表記
-                  </a>
-                </div>
-                <div className="w-[50%"></div>
-              </div>
-              <div className="flex flex-wrap">
-                <div className="w-[50%]">
-                  <a
-                    className="w-full text-[32px] font-semibold"
-                    href="https://hellofamily.kokuyo.co.jp/view/policy"
-                  >
-                    プライバシーポリシー
-                  </a>
-                </div>
-                <div className="w-[50%]"></div>
-              </div>
-              <div className="flex flex-wrap">
-                <div className="w-[50%]">
-                  <a className="w-full text-[32px] font-semibold" href="">
-                    サポート
-                  </a>
-                </div>
-                <div className="w-[50%]"></div>
               </div>
             </footer>
           </main>

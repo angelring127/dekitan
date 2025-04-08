@@ -37,7 +37,7 @@ const RegisterForm: React.FC = () => {
   const router = useRouter()
 
   const validateForm = () => {
-    const newErrors: Partial<FormValues> = {}
+    let newErrors: Partial<FormValues> = {}
 
     if (!formData.nickname) newErrors.nickname = 'ニックネームを入力してください。'
     else if (formData.nickname.length > 8) newErrors.nickname = '８文字以内'

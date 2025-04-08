@@ -52,7 +52,7 @@ export default function InitPage() {
       "nickname": childinfo.name,
       "birth_day": gradeToBirthdate(childinfo.schoolYear),
       "honoric_title": PLAYER_HONORIFIC_TITLE.filter(e => e.label === childinfo.suffix)[0]['value'],
-    }).then((res) => {
+    }).then(() => {
 
     })
   }

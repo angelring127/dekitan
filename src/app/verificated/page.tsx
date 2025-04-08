@@ -29,7 +29,7 @@ export default function InitPage({
       await updateChild()
       setCurrentIndex((prev) => prev + 1);
     } else {
-      router.push('/');
+      router.push('/room');
     }
   };
 
@@ -55,13 +55,35 @@ export default function InitPage({
     return `${birthYear}-04-02`;
   }
 
+  function birthdateToGrade(birthdate: string): string {
+    const today = new Date();
+    const baseDate = new Date(today.getFullYear(), 3, 2); // 4月2日
+  
+    const bd = new Date(birthdate);
+    const age = baseDate.getFullYear() - bd.getFullYear();
+  
+    const grades: Record<number, string> = {
+      3: "年少",
+      4: "年中",
+      5: "年長",
+      6: "小学1年生",
+      7: "小学2年生",
+      8: "小学3年生",
+      9: "小学4年生",
+      10: "小学5年生",
+      11: "小学6年生",
+    };
+
+    return grades[age] || "";
+  }
   const getChild = async () => {
     await apiClient.post("/account/profile/player/get", {
       "volatile_token": volatile_token,
       "player_id": player_id,
     }).then((res) => {
-      setChildInfo("name", res.data.nickname)
-      setChildInfo("honoric_title", PLAYER_HONORIFIC_TITLE.filter(e => e.value === res.data.profile[0].honorific_title)[0]['label'])
+      setChildInfo("name", res.data.data.nickname)
+      setChildInfo("suffix", PLAYER_HONORIFIC_TITLE.find(e => e.value === res.data.data.profile.honorific_title)?.label || '');
+      setChildInfo("schoolYear", birthdateToGrade(res.data.data.profile.birth_day));
     })
   }
 

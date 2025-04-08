@@ -62,8 +62,8 @@ export default function InitPage() {
       "volatile_token": "",
       "player_id": "",
     }).then((res) => {
-      setChildInfo("name", res.data.nickname)
-      setChildInfo("honoric_title", PLAYER_HONORIFIC_TITLE.filter(e => e.value === res.data.profile[0].honorific_title)[0]['label'])
+      setChildInfo("name", res.data.data.nickname)
+      setChildInfo("honoric_title", PLAYER_HONORIFIC_TITLE.filter(e => e.value === res.data.data.profile[0].honorific_title)[0]['label'])
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

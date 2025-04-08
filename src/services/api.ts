@@ -3,6 +3,7 @@ import { API_ENDPOINTS } from '@/constants'
 
 export const apiClient = axios.create({
   baseURL: API_ENDPOINTS.BASE_URL,
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },

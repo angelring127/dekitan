@@ -37,37 +37,65 @@ export default function RootLayout({
               <Backdrop />
             </div>
             <footer>
-              <div className="flex flex-col items-center w-full">
-                <a className="w-[80%]" href="https://www.kokuyo.co.jp/com/">
-                  <Button variant="tertiary" className="w-full rounded-none">
+              <div className="flex flex-wrap">
+                <div className="w-[50%]">
+                  <a
+                    className="w-full text-[32px] font-semibold"
+                    href="https://www.kokuyo.co.jp/com/"
+                  >
                     会社情報
-                  </Button>
-                </a>
-                <a className="w-[80%]" href="https://hellofamily.kokuyo.co.jp/view/page/terms">
-                  <Button variant="tertiary" className="w-full rounded-none">
-                    利用規約
-                  </Button>
-                </a>
-                <a className="w-[80%]" href="https://hellofamily.kokuyo.co.jp/view/contract">
-                  <Button variant="tertiary" className="w-full rounded-none">
-                    特定商取引法に基づく表記
-                  </Button>
-                </a>
-                <a className="w-[80%]" href="https://hellofamily.kokuyo.co.jp/view/policy">
-                  <Button variant="tertiary" className="w-full rounded-none">
-                    プライバシーポリシー
-                  </Button>
-                </a>
-                <a className="w-[80%]" href="">
-                  <Button variant="tertiary" className="w-full rounded-none">
+                  </a>
+                </div>
+                <div className="w-[50%]">
+                  <a className="w-full text-[32px] font-semibold" href="">
                     お問い合わせ窓口
-                  </Button>
-                </a>
-                <a className="w-[80%]" href="">
-                  <Button variant="tertiary" className="w-full rounded-none">
+                  </a>
+                </div>
+              </div>
+              <div className="flex flex-wrap">
+                <div className="w-[50%]">
+                  <a
+                    className="w-full text-[32px] font-semibold"
+                    href="https://hellofamily.kokuyo.co.jp/view/page/terms"
+                  >
+                    利用規約
+                  </a>
+                </div>
+                <div className="w-[50%]">
+                  <a className="w-full text-[32px] font-semibold" href="">
                     初期設定・FAQ
-                  </Button>
-                </a>
+                  </a>
+                </div>
+              </div>
+              <div className="flex flex-wrap">
+                <div className="w-[50%]">
+                  <a
+                    className="w-full text-[32px] font-semibold"
+                    href="https://hellofamily.kokuyo.co.jp/view/contract"
+                  >
+                    特定商取引法に基づく表記
+                  </a>
+                </div>
+                <div className="w-[50%"></div>
+              </div>
+              <div className="flex flex-wrap">
+                <div className="w-[50%]">
+                  <a
+                    className="w-full text-[32px] font-semibold"
+                    href="https://hellofamily.kokuyo.co.jp/view/policy"
+                  >
+                    プライバシーポリシー
+                  </a>
+                </div>
+                <div className="w-[50%]"></div>
+              </div>
+              <div className="flex flex-wrap">
+                <div className="w-[50%]">
+                  <a className="w-full text-[32px] font-semibold" href="">
+                    サポート
+                  </a>
+                </div>
+                <div className="w-[50%]"></div>
               </div>
             </footer>
           </main>

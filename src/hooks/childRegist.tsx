@@ -27,6 +27,16 @@ export const ChildRegist = ({
 
     const items: InformationItem[] = [
         {
+            id: "verificate",
+            content: (
+                <div className='gap-6'>
+                    <p>アクセスいただいたURLを検証しています。。。。</p>
+                    <div className='w-full flex justify-center'>OK</div>
+                    <div className='w-full flex justify-center'>登録が完了しました。</div>
+                </div>
+            )
+        },
+        {
             id: 'input',
             content: (
                 <form

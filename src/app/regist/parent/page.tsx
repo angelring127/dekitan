@@ -33,12 +33,13 @@ const RegisterForm: React.FC = () => {
 
   const [errors, setErrors] = useState<Partial<FormValues>>({})
   const [isAgreed, setIsAgreed] = useState(false)
-  const { parentinfo, setParentInfo } = useGlobalStore()
-  const { childinfo, setChildInfo } = useGlobalStore()
+  const parentinfo = useGlobalStore((state: GlobalState) => state.parentinfo)
+  const setParentInfo = useGlobalStore((state: GlobalState) => state.setParentInfo)
+  const childinfo = useGlobalStore((state: GlobalState) => state.childinfo)
   const router = useRouter()
 
   const validateForm = () => {
-    let newErrors: Partial<FormValues> = {}
+    const newErrors: Partial<FormValues> = {}
 
     if (!formData.nickname) newErrors.nickname = 'ニックネームを入力してください。'
     else if (formData.nickname.length > 8) newErrors.nickname = '８文字以内'
@@ -81,7 +82,7 @@ const RegisterForm: React.FC = () => {
       try {
         formData.player_name = childinfo.name
         formData.player_honorific_title = PLAYER_HONORIFIC_TITLE.filter(
-          (e) => e.honorific == childinfo.suffix
+          (item) => item.honorific == childinfo.suffix
         )[0]['value']
         formData.birth_day = gradeToBirthdate(childinfo.schoolYear)
 
@@ -92,7 +93,7 @@ const RegisterForm: React.FC = () => {
               setParentInfo('name', formData.nickname)
             }
           })
-          .catch((e) => {})
+          .catch(() => {})
       } catch (error) {
         console.error('Error submitting form:', error)
       }

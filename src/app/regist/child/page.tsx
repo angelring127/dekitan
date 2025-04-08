@@ -76,7 +76,7 @@ export default function InitPage() {
       .then((res) => {
         setChildInfo('name', res.data.data.nickname)
         setChildInfo(
-          'honoric_title',
+          'suffix',
           PLAYER_HONORIFIC_TITLE.filter(
             (e) => e.value === res.data.data.profile[0].honorific_title
           )[0]['label']

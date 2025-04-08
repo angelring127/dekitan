@@ -1,13 +1,10 @@
 'use client'
 
-import Link from 'next/link'
 import Image from 'next/image'
 import ImageViewer from '@/components/common/ImageViewer'
 import { memo, useState } from 'react'
 import { InformationPanel } from '@/components/common/InformationPanel'
 import { Button } from '@/components/common/Button'
-import { Radius } from 'lucide-react'
-import { TypewriterText } from '@/components/common/TypewriterText'
 import { EmphasisConfig } from '@/components/common/ImageViewer/types'
 
 const textItems = [
@@ -15,7 +12,11 @@ const textItems = [
     id: 'text',
     content: (
       <div className="flex flex-col items-center w-full px-4">
-        こうきくん、できたんだね！<br/>やったー！<br/>すごい、すごーい！
+        こうきくん、できたんだね！
+        <br />
+        やったー！
+        <br />
+        すごい、すごーい！
       </div>
     ),
   },
@@ -23,7 +24,11 @@ const textItems = [
     id: 'text2',
     content: (
       <div className="flex flex-col items-center w-full px-4">
-        「︎できた」の原石が<br/>みつかったよ！<br/>おうちの人にみてもらおうよ！
+        「︎できた」の原石が
+        <br />
+        みつかったよ！
+        <br />
+        おうちの人にみてもらおうよ！
       </div>
     ),
   },
@@ -61,7 +66,7 @@ const CardDemo = memo(() => {
     repeat: 0,
   }
 
-  const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+  const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
   const selectScore = async (score: number) => {
     setIsScore(score)
@@ -72,31 +77,38 @@ const CardDemo = memo(() => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 
-          "volatile_token": "xxxx",
-          "player_id": "1",
-          "task_id": "1",
-          "point": score,
+        body: JSON.stringify({
+          volatile_token: 'xxxx',
+          player_id: '1',
+          task_id: '1',
+          point: score,
         }),
-      });
-  
+      })
+
       if (!response.ok) {
-        throw new Error('スコアの送信に失敗しました');
+        throw new Error('スコアの送信に失敗しました')
       }
     } catch (error) {
-      console.error('エラー:', error);
+      console.error('エラー:', error)
     }
     setCurrentIndex(currentIndex + 1)
   }
 
   return (
-    <div style={{ backgroundImage: `url('/images/messages/bg_message.png')`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+    <div
+      style={{
+        backgroundImage: `url('/images/messages/bg_message.png')`,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
       <div className="mx-auto min-h-screen">
         <main className="p-4">
           <section className="mb-8" aria-labelledby="point-card-section">
-            <div className='mx-auto h-auto'>
-              {
-                !isStamp && <Image
+            <div className="mx-auto h-auto">
+              {!isStamp && (
+                <Image
                   src="/images/circle.png"
                   alt="Stamp"
                   width={400}
@@ -104,9 +116,9 @@ const CardDemo = memo(() => {
                   className="mx-auto h-auto mb-5"
                   onClick={() => setIsStamp(true)}
                 />
-              }
-              {
-                (isStamp && currentIndex == 0) && <ImageViewer
+              )}
+              {isStamp && currentIndex == 0 && (
+                <ImageViewer
                   src="/images/circle_stamp.png"
                   alt="Stamp"
                   width={400}
@@ -119,9 +131,9 @@ const CardDemo = memo(() => {
                   }`}
                   emphasisAnimation={stampEmphasis}
                 />
-              }
-              {
-                currentIndex != 0 && <ImageViewer
+              )}
+              {currentIndex != 0 && (
+                <ImageViewer
                   src="/images/gensekiok.png"
                   alt="Stamp"
                   width={400}
@@ -129,11 +141,11 @@ const CardDemo = memo(() => {
                   className="mx-auto h-auto mb-5 animate-fade-in-up"
                   emphasisAnimation={gensekiEmphasis}
                 />
-              }
+              )}
             </div>
             <div className="mx-auto h-auto">
-              {
-                isStamp && <InformationPanel
+              {isStamp && (
+                <InformationPanel
                   items={textItems}
                   sequential
                   currentIndex={currentIndex}
@@ -141,55 +153,70 @@ const CardDemo = memo(() => {
                   useTypingEffect
                   className="block mb-5"
                 />
-              }
-              {
-                currentIndex == 1 && <div className="mx-auto max-w-[320px] text-center flex flex-col gap-3">
-                  <Button className="rounded-full" onClick={handleNext}>みてもらう</Button>
-                  <Button className="rounded-full" onClick={handleNext}>あとでみてもらう</Button>
+              )}
+              {currentIndex == 1 && (
+                <div className="mx-auto max-w-[320px] text-center flex flex-col gap-3">
+                  <Button className="rounded-full" onClick={handleNext}>
+                    みてもらう
+                  </Button>
+                  <Button className="rounded-full" onClick={handleNext}>
+                    あとでみてもらう
+                  </Button>
                 </div>
-              }
-              {
-                currentIndex == 2 && <div className="mx-auto flex flex-col gap-3 max-w-[320px] text-center">
+              )}
+              {currentIndex == 2 && (
+                <div className="mx-auto flex flex-col gap-3 max-w-[320px] text-center">
                   <Button className="rounded-full" onClick={() => selectScore(3)}>
                     めちゃすごい！ 3pt
-                    {isScore == 3 && <Image
-                      src="/images/ic_great_job_circle.png"
-                      alt="Stamp"
-                      width={85}
-                      height={85}
-                      style={{position: 'absolute', right: 0, left: 250, margin: 'auto'}}
-                      className="animate-stamp"
-                    />}
+                    {isScore == 3 && (
+                      <Image
+                        src="/images/ic_great_job_circle.png"
+                        alt="Stamp"
+                        width={85}
+                        height={85}
+                        style={{ position: 'absolute', right: 0, left: 250, margin: 'auto' }}
+                        className="animate-stamp"
+                      />
+                    )}
                   </Button>
                   <Button className="rounded-full" onClick={() => selectScore(2)}>
                     グッド！ 2pt
-                    {isScore == 2 && <Image
-                      src="/images/ic_great_job_circle.png"
-                      alt="Stamp"
-                      width={85}
-                      height={85}
-                      style={{position: 'absolute', right: 0, left: 250, margin: 'auto'}}
-                      className="animate-stamp"
-                    />}
+                    {isScore == 2 && (
+                      <Image
+                        src="/images/ic_great_job_circle.png"
+                        alt="Stamp"
+                        width={85}
+                        height={85}
+                        style={{ position: 'absolute', right: 0, left: 250, margin: 'auto' }}
+                        className="animate-stamp"
+                      />
+                    )}
                   </Button>
                   <Button className="rounded-full" onClick={() => selectScore(1)}>
                     がんばったね！ 1pt
-                    {isScore == 1 && <Image
-                      src="/images/ic_great_job_circle.png"
-                      alt="Stamp"
-                      width={85}
-                      height={85}
-                      style={{position: 'absolute', right: 0, left: 250, margin: 'auto'}}
-                      className="animate-stamp"
-                    />}
+                    {isScore == 1 && (
+                      <Image
+                        src="/images/ic_great_job_circle.png"
+                        alt="Stamp"
+                        width={85}
+                        height={85}
+                        style={{ position: 'absolute', right: 0, left: 250, margin: 'auto' }}
+                        className="animate-stamp"
+                      />
+                    )}
                   </Button>
                 </div>
-              }
-              {
-                currentIndex == 3 && <div className="mx-auto flex flex-col gap-3 max-w-[320px] text-center">
-                  <Button className="rounded-full" onClick={() => setCurrentIndex(currentIndex + 1)}>次へ</Button>
+              )}
+              {currentIndex == 3 && (
+                <div className="mx-auto flex flex-col gap-3 max-w-[320px] text-center">
+                  <Button
+                    className="rounded-full"
+                    onClick={() => setCurrentIndex(currentIndex + 1)}
+                  >
+                    次へ
+                  </Button>
                 </div>
-              }
+              )}
             </div>
           </section>
         </main>

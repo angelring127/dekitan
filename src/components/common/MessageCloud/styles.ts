@@ -12,6 +12,7 @@ export const messageCloud = tv({
       system: 'bg-gray-100 text-gray-800',
       input: 'bg-white text-black',
       selection: 'bg-white text-black',
+      stamp: 'bg-white text-black',
     },
     animation: {
       fadeIn: 'animate-fadeIn',
@@ -58,6 +59,18 @@ export const messageButton = tv({
       system: 'bg-[#05803a] hover:bg-[#05803a]/90',
       selected:
         'bg-[#e6e6e6] text-black hover:bg-[#e6e6e6] border-[#e6e6e6] shadow-[2px_2px_0px_#cbb199]',
+    },
+  },
+  defaultVariants: {
+    type: 'default',
+  },
+})
+
+export const messageEndButton = tv({
+  base: 'max-w-[200px] p-3 text-center rounded-full transition-colors text-white font-db-btn mb-2 shadow-[4px_4px_8px_rgba(0,0,0,0.3)]',
+  variants: {
+    type: {
+      default: 'bg-gray-300 text-black hover:bg-gray-300/90',
     },
   },
   defaultVariants: {

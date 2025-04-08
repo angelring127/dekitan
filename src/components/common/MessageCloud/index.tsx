@@ -143,3 +143,5 @@ export const MessageCloud: React.FC<MessageCloudProps> = ({
     </div>
   )
 }
+
+export { messageEndButton } from './styles'

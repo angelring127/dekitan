@@ -1,10 +1,10 @@
 export type MessageDirection = 'left' | 'right'
 
-export type MessageType = 'default' | 'system' | 'selection' | 'input'
+export type MessageType = 'default' | 'system' | 'selection' | 'input' | 'stamp'
 
 // 메시지 데이터 타입
 export interface Message {
-  type: 'intro' | 'selection' | 'input'
+  type: 'intro' | 'selection' | 'input' | 'stamp'
   message: string
   showCharacter?: boolean
   options?: Array<{
@@ -66,4 +66,6 @@ export interface MessageCloudProps {
   ariaLabel?: string
   /** 비활성화 상태 */
   disabled?: boolean
+  /** 스탬프 이미지 크기 */
+  stampSize?: number
 }

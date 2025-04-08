@@ -16,7 +16,7 @@ export interface ChatRequestParams {
 }
 
 export interface ChatMessage {
-  type: 'input' | 'intro' | 'selection'
+  type: 'input' | 'intro' | 'selection' | 'stamp' | 'end'
   message: string
   showCharacter?: boolean
   nextStep?: number

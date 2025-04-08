@@ -4,6 +4,8 @@ import React, { useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { MessageCloud } from '@/components/common/MessageCloud'
 import { useChat } from '@/hooks/useChat'
+import { STAMP_IMAGE_PATH_LIST } from '@/constants/hanasu'
+import { messageEndButton } from '@/components/common/MessageCloud'
 
 export default function Hanasu() {
   const { step, displayedMessages, messages, error, handleNextStep } = useChat()
@@ -125,6 +127,67 @@ export default function Hanasu() {
                           name={msg.direction === 'left' ? 'できたん' : undefined}
                           title={msg.title}
                         />
+                      </div>
+                    </div>
+                  )
+                }
+
+                if (msg.type === 'stamp') {
+                  return (
+                    <div key={`${messageIndex}-${index}`} className="relative mt-4">
+                      <div className="absolute -top-1 -left-1 w-16 h-16 z-10">
+                        <Image
+                          src="/images/hanasu/dekitan_kaiwa_icon.png"
+                          alt=""
+                          width={64}
+                          height={64}
+                          className="rounded-full"
+                        />
+                      </div>
+                      <div className={msg.direction === 'left' ? 'pt-8' : ''}>
+                        <div
+                          className={`flex ${msg.direction === 'right' ? 'justify-end' : 'justify-start'}`}
+                        >
+                          <div className="relative -top-8 left-10 w-64 h-64">
+                            <Image
+                              src={
+                                STAMP_IMAGE_PATH_LIST[
+                                  msg.message as keyof typeof STAMP_IMAGE_PATH_LIST
+                                ] || ''
+                              }
+                              alt="スタンプ"
+                              fill
+                              className="object-contain"
+                              aria-label="スタンプ"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                }
+
+                if (msg.type === 'end') {
+                  return (
+                    <div key={`${messageIndex}-${index}`} className="relative mt-4">
+                      <MessageCloud
+                        message={msg.message || ''}
+                        direction="left"
+                        type="default"
+                        backgroundColor="#FFFFFF"
+                        textColor="#000000"
+                        ariaLabel="終了メッセージ"
+                        animation={{ fadeIn: true }}
+                        name="できたん"
+                      />
+                      <div className="flex justify-center mt-4">
+                        <button
+                          className={`${messageEndButton({ type: 'default' })} bg-gray-300 text-black py-4 px-8 rounded`}
+                          aria-label="おわりボタン"
+                          onClick={handleScreenClick}
+                        >
+                          おわり
+                        </button>
                       </div>
                     </div>
                   )

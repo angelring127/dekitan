@@ -12,12 +12,12 @@ export default function InitPage() {
   const [showFinalPanel, setShowFinalPanel] = useState(false)
 
   const handleNext = () => {
-    if (currentIndex < items.length - 1 && currentIndex !== 2) {
-      if(currentIndex == 1) {
-        initialItems.smoothScrollTo()
-      }
-      setCurrentIndex((prev) => prev + 1)
-    }
+    // if (currentIndex < items.length - 1 && currentIndex !== 2) {
+    //   if(currentIndex == 1) {
+    //     initialItems.smoothScrollTo()
+    //   }
+    //   setCurrentIndex((prev) => prev + 1)
+    // }
   }
 
   const handleOmikuji = () => {

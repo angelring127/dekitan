@@ -1,44 +1,60 @@
-import { useEffect, useImperativeHandle, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { InformationItem } from '@/components/common/InformationPanel/types'
 import { TypewriterText } from '@/components/common/TypewriterText'
 import Image from 'next/image'
 import { Button } from '@/components/common/Button'
-import { useGlobalStore } from '@/store/info'
+import { useGlobalStore } from "@/store/info";
+// import { BrowserRouter,useNavigate } from "react-router-dom";
+import { useRouter } from 'next/navigation'
 
 export const useInitialItems = (onNext: () => void, onOmikuji?: () => void) => {
   const [nickname, setNickname] = useState('')
   const [suffix, setSuffix] = useState('くん')
   const [year, setYear] = useState("")
-  const [omikuji, setOmikuji] = useState(0)
+  // const [omikuji, setOmikuji] = useState(0)
   const { childinfo, setChildInfo } = useGlobalStore()
-  const omikujiItem = [
-    {'omikuji':"鼻歌",'theme': 'はなうた', 'comment': (
-      <div className="text-center">
-        <div style={{marginTop: '15px'}}>
-          空を見上げてゆったりした 
-          時間を過ごしてみるといいかも 
-          何か見つけたらラッキー！ 
-        </div>
-        <div style={{marginTop: '15px'}}>
-          おもしろい形の雲があったら 
-          <p className='color-red'>小吉</p>
-        </div>
-        <div style={{marginTop: '15px'}}>
-          飛んでいるものを 
-          見つけるもよし　 
-        </div>
-        <div style={{marginTop: '15px'}}>
-          一番星を家族とさがすもよし
-        </div>
-      </div>
-    )},
-    {'omikuji':"空",'theme': '空にあるもの'},
-  ]
+  const router = useRouter();
+  // const omikujiItem = [
+  //   {'omikuji':"鼻歌",'theme': 'はなうた', 'comment': (
+  //     <div className="text-center">
+  //       <div style={{marginTop: '15px'}}>
+  //         空を見上げてゆったりした 
+  //         時間を過ごしてみるといいかも 
+  //         何か見つけたらラッキー！ 
+  //       </div>
+  //       <div style={{marginTop: '15px'}}>
+  //         おもしろい形の雲があったら 
+  //         <p className='color-red'>小吉</p>
+  //       </div>
+  //       <div style={{marginTop: '15px'}}>
+  //         飛んでいるものを 
+  //         見つけるもよし　 
+  //       </div>
+  //       <div style={{marginTop: '15px'}}>
+  //         一番星を家族とさがすもよし
+  //       </div>
+  //     </div>
+  //   )},
+  //   {'omikuji':"空",'theme': '空にあるもの'},
+  // ]
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     e.stopPropagation()
     onNext()
+  }
+
+  const handleNickName = (value: string) => {
+    setNickname(value)
+    setChildInfo("name", value)
+  }
+  const handleSuffix = (value: string) => {
+    setSuffix(value)
+    setChildInfo('suffix', value)
+  }
+  const handleSchoolYear = (value: string) => {
+    setYear(value)
+    setChildInfo('schoolYear', value)
   }
 
   const parentRef = useRef<HTMLDivElement>(null);
@@ -54,9 +70,12 @@ export const useInitialItems = (onNext: () => void, onOmikuji?: () => void) => {
     updateHeight();
     window.addEventListener("resize", updateHeight);
 
+    setChildInfo("suffix", "くん")
+
     return () => {
       window.removeEventListener("resize", updateHeight);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -111,7 +130,7 @@ export const useInitialItems = (onNext: () => void, onOmikuji?: () => void) => {
                   id="nickname"
                   type="text"
                   value={nickname}
-                  onChange={(e) => {setNickname(e.target.value); setChildInfo('name', e.target.value)}}
+                  onChange={(e) => {handleNickName(e.target.value)}}
                   maxLength={8}
                   style={{ borderBottom: '2px solid black' }}
                   className="w-full px-4 py-2 text-center text-3xl font-bold !text-green-600 focus:border-b-green-500 focus:outline-none focus:ring-0 bg-transparent"
@@ -125,7 +144,7 @@ export const useInitialItems = (onNext: () => void, onOmikuji?: () => void) => {
                     <button
                       type="button"
                       key={suffixItem}
-                      onClick={() => {setSuffix(suffixItem === 'なし' ? '' : suffixItem); setChildInfo('suffix', suffixItem === 'なし' ? '' : suffixItem)}}
+                      onClick={() => {handleSuffix(suffixItem === 'なし' ? '' : suffixItem)}}
                       className={`flex-1 rounded-full py-2 transition-colors max-w-[30%] ${
                         suffix === (suffixItem === 'なし' ? '' : suffixItem)
                           ? 'bg-green-100 text-back'
@@ -142,7 +161,7 @@ export const useInitialItems = (onNext: () => void, onOmikuji?: () => void) => {
                     <button
                       type="button"
                       key={suffixItem}
-                      onClick={() => {setSuffix(suffixItem === 'なし' ? '' : suffixItem); setChildInfo('suffix', suffixItem === 'なし' ? '' : suffixItem)}}
+                      onClick={() => {handleSuffix(suffixItem === 'なし' ? '' : suffixItem)}}
                       style={{width: '30%'}}
                       className={`flex-1 rounded-full py-2 transition-colors w-[30%] ${
                         suffix === (suffixItem === 'なし' ? '' : suffixItem)
@@ -159,7 +178,7 @@ export const useInitialItems = (onNext: () => void, onOmikuji?: () => void) => {
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">【がくねん】</label>
                 <div className="flex flex-col">
-                  <select style={{ borderBottom: '2px solid black' }} className="w-full py-2 text-center text-1xl !text-green-600" id="year" onChange={(e) => {setYear(e.target.value); setChildInfo('schoolYear', e.target.value)}}>
+                  <select style={{ borderBottom: '2px solid black' }} className="w-full py-2 text-center text-1xl !text-green-600" id="year" onChange={(e) => {handleSchoolYear(e.target.value)}}>
                     {["","年少","年中","年長","小学1年生","小学2年生","小学3年生","小学4年生","小学5年生","小学6年生"]
                       .map((item) => (
                         <option value={item} key={item}>{item}</option>
@@ -171,9 +190,10 @@ export const useInitialItems = (onNext: () => void, onOmikuji?: () => void) => {
             </div>
           </div>
           <Button
-            type="submit"
+            type="button"
             className="rounded-full w-full"
             disabled={!(year && nickname)}
+            onClick={() => router.push("/regist/parent")}
           >
             つぎへ
           </Button>
@@ -283,7 +303,7 @@ export const useInitialItems = (onNext: () => void, onOmikuji?: () => void) => {
           <span className="whitespace-pre-line text-center text-2xl font-bold">
             きょうはこれ！<br></br>
             ハッピーテーマ<br></br>
-            {omikujiItem[omikuji]['theme']}
+            {/* {omikujiItem[omikuji]['theme']} */}
           </span>
           <Button
             variant="quinary"
@@ -304,7 +324,7 @@ export const useInitialItems = (onNext: () => void, onOmikuji?: () => void) => {
       content: (
         <div className="flex flex-col items-center gap-4">
           <span className="whitespace-pre-line text-center text-2xl font-bold">
-            {omikujiItem[omikuji]['comment']}
+            {/* {omikujiItem[omikuji]['comment']} */}
           </span>
           <Button
             variant="quinary"

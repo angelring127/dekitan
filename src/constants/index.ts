@@ -17,3 +17,9 @@ export const FORTUNE_PROGRESS = {
 }
 
 export * from './hanasu'
+export const PLAYER_HONORIFIC_TITLE = [
+  { 'honorific': 'くん', 'label': 'くん', 'value': 1 },
+  { 'honorific': 'ちゃん', 'label': 'ちゃん', 'value': 2 },
+  { 'honorific': 'さん', 'label': 'さん', 'value': 3 },
+  { 'honorific': '', 'label': 'なし', 'value': 4 },
+]

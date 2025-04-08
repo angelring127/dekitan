@@ -5,10 +5,10 @@ import { InformationPanel } from '@/components/common/InformationPanel'
 import { ChildRegist } from '@/hooks/childRegist'
 import { Button } from '@/components/common/Button'
 import { useGlobalStore } from '@/store/info'
-import type { GlobalState } from '@/types/info'
 import { useRouter } from 'next/navigation'
 import { apiClient } from '@/services/api'
 import { PLAYER_HONORIFIC_TITLE } from '@/constants'
+// import { useLocation } from 'react-router-dom';
 
 export default function InitPage({
   searchParams,
@@ -29,7 +29,7 @@ export default function InitPage({
       await updateChild()
       setCurrentIndex((prev) => prev + 1)
     } else {
-      router.push('/')
+      router.push('/room')
     }
   }
 
@@ -62,36 +62,61 @@ export default function InitPage({
     return `${birthYear}-04-02`
   }
 
+  function birthdateToGrade(birthdate: string): string {
+    const today = new Date()
+    const baseDate = new Date(today.getFullYear(), 3, 2) // 4月2日
+
+    const bd = new Date(birthdate)
+    const age = baseDate.getFullYear() - bd.getFullYear()
+
+    const grades: Record<number, string> = {
+      3: '年少',
+      4: '年中',
+      5: '年長',
+      6: '小学1年生',
+      7: '小学2年生',
+      8: '小学3年生',
+      9: '小学4年生',
+      10: '小学5年生',
+      11: '小学6年生',
+    }
+
+    return grades[age] || ''
+  }
   const getChild = async () => {
     await apiClient
-      .post('/api/account/profile/player/get', {
+      .post('/account/profile/player/get', {
         volatile_token: volatile_token,
         player_id: player_id,
       })
       .then((res) => {
-        setChildInfo('name', res.data.nickname)
+        setChildInfo('name', res.data.data.nickname)
         setChildInfo(
           'suffix',
-          PLAYER_HONORIFIC_TITLE.filter((e) => e.value === res.data.profile[0].honorific_title)[0][
-            'label'
-          ]
+          PLAYER_HONORIFIC_TITLE.find((e) => e.value === res.data.data.profile.honorific_title)
+            ?.label || ''
         )
+        setChildInfo('schoolYear', birthdateToGrade(res.data.data.profile.birth_day))
       })
   }
 
   const updateChild = async () => {
-    await apiClient.post('/api/account/profile/player/put', {
-      volatile_token: volatile_token,
-      player_id: player_id,
-      nickname: childinfo.name,
-      birth_day: gradeToBirthdate(childinfo.schoolYear),
-      honoric_title: PLAYER_HONORIFIC_TITLE.filter((e) => e.label === childinfo.suffix)[0]['value'],
-    })
+    await apiClient
+      .post('/account/profile/player/put', {
+        volatile_token: volatile_token,
+        player_id: player_id,
+        nickname: childinfo.name,
+        birth_day: gradeToBirthdate(childinfo.schoolYear),
+        honoric_title: PLAYER_HONORIFIC_TITLE.filter((e) => e.label === childinfo.suffix)[0][
+          'value'
+        ],
+      })
+      .then(() => {})
   }
 
   useEffect(() => {
     apiClient
-      .post('/api/account/regist/verificate', {
+      .post('/account/regist/verificate', {
         token: searchParams.t,
       })
       .then((res) => {
@@ -100,7 +125,8 @@ export default function InitPage({
           setVolatileToken(res.data.data.volatile_token)
         }
       })
-  }, [searchParams.t])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div className="mx-auto flex h-[844px] w-[390px] items-center justify-center bg-[url('/images/messages/bg_message.png')] bg-cover bg-center bg-no-repeat">

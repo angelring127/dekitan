@@ -55,7 +55,7 @@ export default function InitPage() {
 
   const updateChild = async () => {
     await apiClient
-      .post('/api/account/profile/player/put', {
+      .post('/account/profile/player/put', {
         volatile_token: '',
         player_id: '',
         nickname: childinfo.name,
@@ -69,20 +69,21 @@ export default function InitPage() {
 
   useEffect(() => {
     apiClient
-      .post('/api/account/profile/player/get', {
+      .post('/account/profile/player/get', {
         volatile_token: '',
         player_id: '',
       })
       .then((res) => {
-        setChildInfo('name', res.data.nickname)
+        setChildInfo('name', res.data.data.nickname)
         setChildInfo(
-          'suffix',
-          PLAYER_HONORIFIC_TITLE.filter((e) => e.value === res.data.profile[0].honorific_title)[0][
-            'label'
-          ]
+          'honoric_title',
+          PLAYER_HONORIFIC_TITLE.filter(
+            (e) => e.value === res.data.data.profile[0].honorific_title
+          )[0]['label']
         )
       })
-  }, [setChildInfo])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div className="mx-auto flex h-[844px] w-[390px] items-center justify-center bg-[url('/images/messages/bg_message.png')] bg-cover bg-center bg-no-repeat">

@@ -7,7 +7,7 @@ import {TaskStatus} from '@/constants/index'
 type Task = {
   id: number;
   title: string;
-  status: number;
+  updated_at: string;
 };
 
 export default function InitPage() {
@@ -20,9 +20,9 @@ export default function InitPage() {
     apiClient.post('event/task/gets', { 
       volatile_token: "xxxxxxxxxxxxxxxxxxxxxxxxx",
       player_id: 1,
+      status: 2
     })
       .then((res) => {
-        // const filteredTasks = res.data.data.list.filter((task: Task) => task.status === TaskStatus.ACTIVE || task.status === TaskStatus.FINISHED);
         setTasks(res.data.data.list);
       })
       .catch((error) => {
@@ -45,7 +45,10 @@ export default function InitPage() {
               onClick={() => router.push('/')}
             >
               <div className="flex flex-row items-center space-x-4 mt-3 mb-3">
-                <h2 className="text-black-800">{data.id}</h2>
+                <h2 className="text-black-800">
+                  {data.updated_at.split(" ")[0].split("-")[0]}<br/>
+                  {data.updated_at.split(" ")[0].split("-")[1]}/{data.updated_at.split(" ")[0].split("-")[2]}
+                </h2>
                 <h2 className="text-black-600 font-bold">{data.title}</h2>
               </div>
             </div>

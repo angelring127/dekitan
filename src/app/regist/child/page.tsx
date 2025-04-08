@@ -46,7 +46,7 @@ export default function InitPage() {
   }
 
   const updateChild = async () => {
-    await apiClient.post("/api/account/profile/player/put", {
+    await apiClient.post("/account/profile/player/put", {
       "volatile_token": "",
       "player_id": "",
       "nickname": childinfo.name,
@@ -58,13 +58,14 @@ export default function InitPage() {
   }
 
   useEffect(() => {
-    apiClient.post("/api/account/profile/player/get", {
+    apiClient.post("/account/profile/player/get", {
       "volatile_token": "",
       "player_id": "",
     }).then((res) => {
       setChildInfo("name", res.data.nickname)
       setChildInfo("honoric_title", PLAYER_HONORIFIC_TITLE.filter(e => e.value === res.data.profile[0].honorific_title)[0]['label'])
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

@@ -33,11 +33,11 @@ const RegisterForm: React.FC = () => {
     const [errors, setErrors] = useState<Partial<FormValues>>({});
     const [isAgreed, setIsAgreed] = useState(false);
     const { parentinfo, setParentInfo } = useGlobalStore();
-    const { childinfo, setChildInfo } = useGlobalStore();
+    const { childinfo } = useGlobalStore();
     const router = useRouter();
 
     const validateForm = () => {
-        let newErrors: Partial<FormValues> = {};
+        const newErrors: Partial<FormValues> = {};
 
         if (!formData.nickname) newErrors.nickname = "ニックネームを入力してください。";
         else if (formData.nickname.length > 8) newErrors.nickname = "８文字以内";
@@ -78,13 +78,13 @@ const RegisterForm: React.FC = () => {
                 formData.player_honorific_title = PLAYER_HONORIFIC_TITLE.filter(e => e.honorific == childinfo.suffix)[0]['value']
                 formData.birth_day = gradeToBirthdate(childinfo.schoolYear)
                 
-                await apiClient.post("/api/account/regist/entry", formData)
+                await apiClient.post("/account/regist/entry", formData)
                 .then((response) => {
                     if(response.status == 200) {
                         setParentInfo("name", formData.nickname);
                     }
                 })
-                .catch((e) => {
+                .catch(() => {
 
                 });
             } catch (error) {

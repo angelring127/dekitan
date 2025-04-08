@@ -8,7 +8,7 @@ import { useGlobalStore } from "@/store/info";
 import { useRouter } from "next/navigation";
 import { apiClient } from '@/services/api';
 import { PLAYER_HONORIFIC_TITLE } from '@/constants';
-import { useLocation } from 'react-router-dom';
+// import { useLocation } from 'react-router-dom';
 
 export default function InitPage({
   searchParams,
@@ -56,7 +56,7 @@ export default function InitPage({
   }
 
   const getChild = async () => {
-    await apiClient.post("/api/account/profile/player/get", {
+    await apiClient.post("/account/profile/player/get", {
       "volatile_token": volatile_token,
       "player_id": player_id,
     }).then((res) => {
@@ -66,19 +66,19 @@ export default function InitPage({
   }
 
   const updateChild = async () => {
-    await apiClient.post("/api/account/profile/player/put", {
+    await apiClient.post("/account/profile/player/put", {
       "volatile_token": volatile_token,
       "player_id": player_id,
       "nickname": childinfo.name,
       "birth_day": gradeToBirthdate(childinfo.schoolYear),
       "honoric_title": PLAYER_HONORIFIC_TITLE.filter(e => e.label === childinfo.suffix)[0]['value'],
-    }).then((res) => {
+    }).then(() => {
 
     })
   }
 
   useEffect(() => {
-    apiClient.post("/api/account/regist/verificate", {
+    apiClient.post("/account/regist/verificate", {
       "token": searchParams.t
     }).then((res) => {
       if(res.data?.data?.player_id && res.data?.data?.volatile_token) {
@@ -86,6 +86,7 @@ export default function InitPage({
         setVolatileToken(res.data.data.volatile_token)
       }
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

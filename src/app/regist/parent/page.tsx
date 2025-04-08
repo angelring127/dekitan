@@ -80,7 +80,7 @@ const RegisterForm: React.FC = () => {
                 
                 await apiClient.post("/api/account/regist/entry", formData)
                 .then((response) => {
-                    if(response.status === 2000) {
+                    if(response.status == 200) {
                         setParentInfo("name", formData.nickname);
                     }
                 })

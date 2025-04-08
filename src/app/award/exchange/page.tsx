@@ -3,52 +3,62 @@ import React from 'react'
 import { apiClient } from '@/services/api'
 import { InformationPanel } from '@/components/common/InformationPanel'
 import { getAwards } from '@/hooks/awardＧetting'
-import { useState} from 'react'
+import { useState } from 'react'
 import Image from 'next/image'
-import { useRouter } from "next/navigation";
-import { useGlobalStore } from "@/store/info";
+import { useRouter } from 'next/navigation'
+import { useGlobalStore } from '@/store/info'
+import type { GlobalState } from '@/types/info'
+
 export default function GetAward() {
-  const {name,points,singleCollectionItem, decreasePoints, setSingleCollectionItem } = useGlobalStore();
-  const router = useRouter();
+  const { name, points, singleCollectionItem, decreasePoints, setSingleCollectionItem } =
+    useGlobalStore() as GlobalState
+  const router = useRouter()
 
   const handleNext = () => {
     if (currentIndex === 0) {
-      getAward();
+      getAward()
     }
-  
+
     if (currentIndex < items.length - 1) {
       setCurrentIndex((prev) => prev + 1)
     } else {
-      decreasePoints(points - 100);
-       router.push('./collect')
-       apiClient.post('award/item/collect', { 
-        volatile_token: "xxxxxxxxxxxxxxxxxxxxxxxxx",
-        player_id: 123,
-        item_id: singleCollectionItem?.id })
+      decreasePoints(points - 100)
+      router.push('./collect')
+      apiClient
+        .post('award/item/collect', {
+          volatile_token: 'xxxxxxxxxxxxxxxxxxxxxxxxx',
+          player_id: 123,
+          item_id: singleCollectionItem?.id,
+        })
         .then((res) => {
           console.log('res', res)
         })
         .catch((error) => {
-          console.error('Error:', error);
-        });
+          console.error('Error:', error)
+        })
     }
   }
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const initialItems =  getAwards(handleNext,name, points, singleCollectionItem ?? { title: "", description: "" });
+  const [currentIndex, setCurrentIndex] = useState<number>(0)
+  const initialItems = getAwards(
+    handleNext,
+    name,
+    points,
+    singleCollectionItem ?? { title: '', description: '' }
+  )
   const items = initialItems?.items || []
 
-  const getAward = ()=>{
+  const getAward = () => {
     apiClient
-    .post('/award/exchange/ordinary',{
-      volatile_token:"xxxxx",
-      player_id:1
-    })
-    .then((response) => {
-      setSingleCollectionItem(response.data.data);
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
+      .post('/award/exchange/ordinary', {
+        volatile_token: 'xxxxx',
+        player_id: 1,
+      })
+      .then((response) => {
+        setSingleCollectionItem(response.data.data)
+      })
+      .catch((error) => {
+        console.error('Error:', error)
+      })
   }
 
   return (
@@ -63,8 +73,10 @@ export default function GetAward() {
               height={280}
               className="gem_points"
             />
-            <span className="absolute 
-    inset-0 flex items-center justify-center  text-3xl font-bold">
+            <span
+              className="absolute 
+    inset-0 flex items-center justify-center  text-3xl font-bold"
+            >
               {points} ポイント
             </span>
             <Image
@@ -76,13 +88,12 @@ export default function GetAward() {
               style={{ bottom: '-45%', right: '-15%' }}
             />
           </div>
-
         )}
 
         {currentIndex === 1 && (
           <>
             <Image
-              className=' mx-auto  absolute  cursor-pointer'
+              className=" mx-auto  absolute  cursor-pointer"
               src="/images/img_stonecrusher_burst.png"
               alt="crusher"
               width={500}
@@ -91,7 +102,7 @@ export default function GetAward() {
               style={{ top: '-28%' }}
             />
             <Image
-              className=' mx-auto relative  cursor-pointer'
+              className=" mx-auto relative  cursor-pointer"
               src="/images/img_stonecrusher.png"
               alt="crusher"
               width={500}
@@ -174,7 +185,7 @@ export default function GetAward() {
         {currentIndex === 3 && (
           <>
             <Image
-              src='/images/img_little_girl.png'
+              src="/images/img_little_girl.png"
               alt="littlegirl"
               width={80}
               height={80}
@@ -182,7 +193,7 @@ export default function GetAward() {
               style={{ top: '-10%', right: '10%' }}
             />
             <Image
-              src='/images/img_little_girl_2.png'
+              src="/images/img_little_girl_2.png"
               alt="littlegirl"
               width={80}
               height={80}
@@ -194,7 +205,7 @@ export default function GetAward() {
               alt="award"
               width={150}
               height={150}
-              className='gem_points relative animate-fade-in-up'
+              className="gem_points relative animate-fade-in-up"
               style={{ bottom: '-20%', left: '30%' }}
             />
           </>
@@ -207,12 +218,9 @@ export default function GetAward() {
             background="transparent"
             withShadow
             className="w-[320px] my-4 mt-20  flex flex-col items-center justify-center common_panel_style"
-          >
-          </InformationPanel>
+          ></InformationPanel>
         </div>
       </div>
     </div>
-  );
+  )
 }
-
-

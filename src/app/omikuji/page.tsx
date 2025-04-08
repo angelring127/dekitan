@@ -1,3 +1,11 @@
+export default function InitPage() {
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <p className="text-gray-500">開発中</p>
+    </div>
+  )
+}
+
 // 'use client'
 // import { apiClient } from '@/services/api'
 // import { useState, useEffect } from 'react'

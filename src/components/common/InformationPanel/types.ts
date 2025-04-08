@@ -31,5 +31,7 @@ export interface InformationPanelProps {
   className?: string
   style?: React.CSSProperties
   height?: number | string
-  children?:React.ReactNode;
+  children?: React.ReactNode
+  sequential?: boolean
+  useTypingEffect?: boolean
 }

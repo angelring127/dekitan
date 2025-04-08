@@ -6,7 +6,14 @@
 // import Image from 'next/image'
 // import { Button } from '@/components/common/Button'
 
-// export default function InitPage() {
+export default function InitPage() {
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <p className="text-gray-500">開発中</p>
+    </div>
+  )
+}
+
 //   const [currentIndex, setCurrentIndex] = useState(0)
 
 //   const handleNext = () => {
@@ -57,7 +64,7 @@
 //                   className="mx-auto h-auto mb-5 animate-shrink-and-move-gacha"
 //                 />
 //               }
-//               { currentIndex === 1 && 
+//               { currentIndex === 1 &&
 //                 <a href="/tutorial/collection">
 //                   <Image
 //                     src="/images/effect.png"

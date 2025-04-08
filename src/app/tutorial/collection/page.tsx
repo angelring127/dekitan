@@ -7,7 +7,14 @@
 // import { Button } from '@/components/common/Button'
 // import { relative } from 'path'
 
-// export default function InitPage() {
+export default function InitPage() {
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <p className="text-gray-500">開発中</p>
+    </div>
+  )
+}
+
 //   const [currentIndex, setCurrentIndex] = useState(0)
 
 //   const handleNext = () => {

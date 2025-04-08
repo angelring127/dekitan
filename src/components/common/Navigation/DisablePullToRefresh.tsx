@@ -3,6 +3,11 @@
 import { useEffect } from 'react'
 import { useNavigation } from './NavigationContext'
 
+// 터치 이벤트 타겟에 대한 커스텀 타입 정의
+interface TouchTarget extends EventTarget {
+  touchStartY?: number
+}
+
 export function DisablePullToRefresh() {
   const { showNav } = useNavigation()
 
@@ -16,7 +21,7 @@ export function DisablePullToRefresh() {
       // 페이지 최상단에서 아래로 당기는 동작일 때만 방지
       if (window.scrollY === 0 && e.touches[0].clientY > 10) {
         // 첫 번째 터치 포인트의 Y 위치가 시작점보다 30px 이상 아래일 때만 방지
-        const touchDelta = e.touches[0].clientY - (e.target as any).touchStartY || 0
+        const touchDelta = e.touches[0].clientY - ((e.target as TouchTarget).touchStartY || 0)
 
         if (touchDelta > 30) {
           e.preventDefault()
@@ -27,7 +32,7 @@ export function DisablePullToRefresh() {
 
     // 터치 시작 위치 기록
     const handleTouchStart = (e: TouchEvent) => {
-      ;(e.target as any).touchStartY = e.touches[0].clientY
+      ;(e.target as TouchTarget).touchStartY = e.touches[0].clientY
     }
 
     // 터치 이벤트에 핸들러 등록

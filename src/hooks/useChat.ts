@@ -1,12 +1,18 @@
 import { useState, useCallback, useEffect } from 'react'
 import { ChatMessage } from '@/types/chat'
 import { useGlobalStore } from '@/store/info'
-
+import type { GlobalState } from '@/types/info'
 export const useChat = () => {
-  const { name } = useGlobalStore()
+  const { name } = useGlobalStore() as GlobalState
   const [step, setStep] = useState(0)
   const [displayedMessages, setDisplayedMessages] = useState<number[]>([0])
   const [messages, setMessages] = useState<ChatMessage[]>([])
+  const [error] = useState<string | null>(null)
+
+  const handleSelection = useCallback((messageIndex: number) => {
+    setStep(messageIndex)
+    setDisplayedMessages((prev) => [...prev, messageIndex])
+  }, [])
 
   useEffect(() => {
     const baseMessages: ChatMessage[] = [
@@ -121,7 +127,7 @@ export const useChat = () => {
     ]
 
     setMessages(baseMessages)
-  }, [name])
+  }, [name, handleSelection])
 
   const handleNextStep = useCallback(
     (targetStep?: number) => {
@@ -134,15 +140,11 @@ export const useChat = () => {
     [step, messages.length]
   )
 
-  const handleSelection = useCallback((messageIndex: number) => {
-    setStep(messageIndex)
-    setDisplayedMessages((prev) => [...prev, messageIndex])
-  }, [])
-
   return {
     step,
     displayedMessages,
     messages,
+    error,
     handleNextStep,
     handleSelection,
   }

@@ -1,3 +1,11 @@
+export default function MyCollections() {
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <p className="text-gray-500">開発中</p>
+    </div>
+  )
+}
+
 // 'use client'
 // import React, { useState, useEffect, useRef } from 'react'
 // import { InformationPanel } from '@/components/common/InformationPanel'
@@ -11,7 +19,6 @@
 // export default function MyCollections() {
 //   const { mycollection, addToCollection, setSingleCollectionItem, singleCollectionItem } = useGlobalStore();
 //   const router = useRouter();
-
 
 //   const handleNext = (item: CollectionItem) => {
 //     setSingleCollectionItem(item);

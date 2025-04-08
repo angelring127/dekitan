@@ -1,46 +1,8 @@
 import { create } from 'zustand'
+import { GlobalState } from '../types/info'
 
-export interface CollectionItem {
-  id: number
-  title: string
-  description: string
-  image?: string
-  parent_id: string
-}
-
-interface ChildInfo {
-  parent_id: string
-  suffix: string
-  name: string
-  schoolYear: string
-}
-
-interface ParentInfo {
-  parent_id: string
-  name: string
-}
-
-interface GlobalState {
-  name: string
-  points: number
-  mycollection: CollectionItem[]
-  singleCollectionItem: CollectionItem | null
-  parentinfo: ParentInfo
-  childinfo: ChildInfo
-
-  setName: (newName: string) => void
-  setParentInfo: (key: keyof ParentInfo, value: string) => void
-  setChildInfo: (key: keyof ChildInfo, value: string) => void
-  increasePoints: (value: number) => void
-  decreasePoints: (value: number) => void
-  addToCollection: (item: CollectionItem) => void
-  removeFromCollection: (id: number) => void
-  setSingleCollectionItem: (item: CollectionItem) => void
-  clearCollection: () => void
-}
-
-export const useGlobalStore = create((set, get) => ({
-  name: 'こうき',
+export const useGlobalStore = create<GlobalState>((set, get) => ({
+  name: 'test',
   points: 120,
   mycollection: [],
   singleCollectionItem: null,
@@ -81,12 +43,19 @@ export const useGlobalStore = create((set, get) => ({
     }))
   },
 
+  syncParentToChild: () => {
+    const parent_id = get().parentinfo.parent_id
+    localStorage.setItem('child_parent_id', parent_id)
+    set((state) => ({
+      childinfo: { ...state.childinfo, parent_id },
+    }))
+  },
+
   increasePoints: (value) => {
     const newPoints = get().points + value
     localStorage.setItem('points', newPoints.toString())
     set({ points: newPoints })
   },
-
   decreasePoints: (value) => {
     const newPoints = Math.max(0, get().points - value)
     localStorage.setItem('points', newPoints.toString())

@@ -189,3 +189,11 @@
 // CardDemo.displayName = 'CardDemo'
 
 // export default CardDemo
+
+export default function CardDemo() {
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <p className="text-gray-500">開発中</p>
+    </div>
+  )
+}

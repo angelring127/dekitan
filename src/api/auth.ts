@@ -2,6 +2,7 @@ import axiosInstance from './axios'
 import { useGlobalStore } from '@/store/info'
 import { useAuthStore } from '@/store/auth'
 import { AxiosHeaders, AxiosRequestConfig } from 'axios'
+import type { GlobalState } from '@/types/info'
 
 const LOGIN_URL = '/account/auth/login'
 const VERIFY_URL = '/account/auth/verify'
@@ -71,7 +72,7 @@ export const login = async (credentials: LoginRequest): Promise<boolean> => {
       useAuthStore.getState().setToken(volatile_token)
 
       // 유저 정보를 스토어에 저장
-      const { setName } = useGlobalStore.getState()
+      const { setName } = useGlobalStore.getState() as GlobalState
 
       // 기본 이름 설정 (API에서 이름을 제공하지 않는 경우)
       setName(`Player ${player_id}`)

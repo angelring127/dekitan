@@ -1,5 +1,31 @@
-import { create } from 'zustand'
-import { GlobalState } from '../types/info'
+import { create } from "zustand";
+
+export interface CollectionItem {
+  // id: number;
+  title: string;
+  description: string;
+  image?: string;
+  count: number;
+  // parent_id: string;
+}
+
+
+interface GlobalState {
+  name: string;
+  points: number;
+  mycollection: CollectionItem[];
+  singleCollectionItem: CollectionItem | null;
+
+
+
+  setName: (newName: string) => void;
+  increasePoints: (value: number) => void;
+  decreasePoints: (value: number) => void;
+  addToCollection: (item: CollectionItem) => void;
+  removeFromCollection: (id: number) => void;
+  setSingleCollectionItem: (item: CollectionItem) => void;
+  clearCollection: () => void;
+}
 
 // 로컬 스토리지에서 초기값을 가져오는 함수
 const getInitialState = (): Pick<

@@ -24,6 +24,38 @@ export default function MyCollections() {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const hasApiBeenCalled = useRef(false);
   useEffect(() => {
+    addToCollection([
+      {
+        "title": "宇宙のスケール",
+        "description": "星までの長さと時間を<br>はかることができる<br>じょうぎ！<br>夜は空を見上げて<br>星をながめてみよう",
+        "image": "/images/items/1/xxxxxx.webp",
+        "count": 1
+      },
+      {
+        "title": "景品2",
+        "description": "ああああああああああああああああああああ",
+        "image": "",
+        "count": 2
+      },
+      {
+        "title": "景品2",
+        "description": "ああああああああああああああああああああ",
+        "image": "",
+        "count": 2
+      },
+      {
+        "title": "景品2",
+        "description": "ああああああああああああああああああああ",
+        "image": "/images/items/2/xxxxxx.webp",
+        "count": 2
+      },
+      {
+        "title": "景品2",
+        "description": "ああああああああああああああああああああ",
+        "image": "/images/items/2/xxxxxx.webp",
+        "count": 2
+      },
+    ]);
     if (mycollection.length === 0 && !hasApiBeenCalled.current) {
       hasApiBeenCalled.current = true;
       apiClient
@@ -32,7 +64,7 @@ export default function MyCollections() {
           player_id: localStorage.getItem('player_id'),
         })
         .then((response) => {
-          addToCollection(response.data.data.list);
+          // addToCollection(response.data.data.list);
         })
         .catch((error) => {
           console.error('Error:', error);

@@ -22,14 +22,12 @@ export default function GetAward() {
     if (currentIndex < items.length - 1) {
       setCurrentIndex((prev) => prev + 1)
     } else {
-      decreasePoints(points - 100)
+      decreasePoints(points - 100);
       router.push('./collect')
-      apiClient
-        .post('award/item/collect', {
-          volatile_token: 'xxxxxxxxxxxxxxxxxxxxxxxxx',
-          player_id: 123,
-          item_id: singleCollectionItem?.id,
-        })
+      apiClient.post('award/item/collect', { 
+        volatile_token: "xxxxxxxxxxxxxxxxxxxxxxxxx",
+        player_id: 123,
+        item_id: singleCollectionItem?.id })
         .then((res) => {
           console.log('res', res)
         })

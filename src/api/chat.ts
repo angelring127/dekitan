@@ -1,5 +1,5 @@
 import axiosInstance from './axios'
-import { ChatResponse, ChatRequestParams, ChatMessage } from '@/types/chat'
+import { ChatResponse, ChatRequestParams } from '@/types/chat'
 import { API_ENDPOINTS } from '@/constants'
 import { TASK_CHAT_SEQUENCE } from '@/constants/hanasu'
 

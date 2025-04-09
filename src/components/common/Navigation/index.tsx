@@ -8,7 +8,7 @@ import Image from 'next/image'
 import { useGlobalStore } from '@/store/info'
 import { useAuthStore } from '@/store/auth'
 import { useProfileStore } from '@/store/profile'
-import { Profile } from '@/api/profile'
+import { Profile } from '@/types/profile'
 
 interface NavigationProps {
   onMenuClick?: () => void

@@ -5,12 +5,20 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/common/Button'
 import Card from '@/components/common/Card'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
+import { logout } from '@/api/auth'
 
 const RoomPage = () => {
   const router = useRouter()
 
   const handleHanasuClick = () => {
     router.push('/hanasu')
+  }
+
+  const handleLogout = async () => {
+    const success = await logout()
+    if (success) {
+      router.push('/login')
+    }
   }
 
   return (
@@ -58,12 +66,12 @@ const RoomPage = () => {
         </div>
         <button
           className="w-[75px] h-[75px] transition-transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-lg"
-          onClick={() => {}}
-          aria-label="発明する"
+          onClick={handleLogout}
+          aria-label="ログアウト"
         >
           <Image
             src="/images/room/invent_icon_shadow.png"
-            alt="発明アイコン"
+            alt="ログアウトアイコン"
             width={85}
             height={85}
             className="w-full h-auto"

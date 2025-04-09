@@ -1,18 +1,10 @@
 import axios from 'axios'
 
-// CSRF 토큰을 가져오는 함수
-const getCsrfToken = () => {
-  // Laravel의 CSRF 토큰은 meta 태그에 저장되어 있음
-  const metaTag = document.querySelector('meta[name="csrf-token"]')
-  return metaTag ? metaTag.getAttribute('content') : null
-}
-
 // 세션 토큰을 가져오는 함수
 const getSessionToken = () => {
   try {
     // localStorage에서 토큰 가져오기
     const token = localStorage.getItem('volatile_token')
-    console.log('가져온 세션 토큰:', token)
 
     // 토큰이 없으면 콘솔에 경고 출력
     if (!token) {
@@ -23,30 +15,6 @@ const getSessionToken = () => {
   } catch (error) {
     console.error('세션 토큰을 가져오는 중 오류가 발생했습니다:', error)
     return null
-  }
-}
-
-// 쿠키 확인 함수
-const checkCookies = () => {
-  try {
-    const cookies = document.cookie.split(';')
-    console.log('현재 모든 쿠키:', cookies)
-
-    // 세션 쿠키 확인 (karenainsworth_session 또는 session)
-    const sessionCookie = cookies.find(
-      (cookie) =>
-        cookie.trim().startsWith('karenainsworth_session=') || cookie.trim().startsWith('session=')
-    )
-
-    if (sessionCookie) {
-      console.log('세션 쿠키가 발견되었습니다:', sessionCookie)
-      return true
-    }
-
-    return false
-  } catch (error) {
-    console.error('쿠키 확인 중 오류가 발생했습니다:', error)
-    return false
   }
 }
 
@@ -64,19 +32,6 @@ const axiosInstance = axios.create({
 // 요청 인터셉터 설정
 axiosInstance.interceptors.request.use(
   (config) => {
-    // 디버깅: 요청 정보 출력
-    console.log('요청 URL:', config.url)
-    console.log('요청 메서드:', config.method)
-
-    // 쿠키 확인
-    checkCookies()
-
-    // CSRF 토큰이 있으면 헤더에 추가
-    const csrfToken = getCsrfToken()
-    if (csrfToken) {
-      config.headers['X-CSRF-TOKEN'] = csrfToken
-    }
-
     // 세션 토큰이 있으면 헤더와 본문에 추가
     const sessionToken = getSessionToken()
     if (sessionToken) {
@@ -91,10 +46,6 @@ axiosInstance.interceptors.request.use(
       // 세션 토큰이 없는 경우 경고 출력
       console.warn('세션 토큰이 없어 API 요청이 실패할 수 있습니다.')
     }
-
-    // 디버깅: 최종 요청 정보 출력
-    console.log('최종 요청 헤더:', config.headers)
-    console.log('최종 요청 본문:', config.data)
 
     return config
   },
@@ -112,9 +63,6 @@ axiosInstance.interceptors.response.use(
     if (setCookieHeader) {
       console.log('서버가 설정한 쿠키:', setCookieHeader)
     }
-
-    // 쿠키 확인
-    checkCookies()
 
     return response
   },

@@ -1,5 +1,5 @@
 export interface ChatResponse {
-  status_code: number
+  status: number
   message: string
   data: {
     messages: string[]
@@ -12,7 +12,7 @@ export interface ChatRequestParams {
   player_id: number
   sequence: number
   category?: number
-  volatile_token?: string
+  volatile_token: string
 }
 
 export interface ChatMessage {

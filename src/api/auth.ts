@@ -150,3 +150,50 @@ export const verifyToken = async (): Promise<boolean> => {
     return false
   }
 }
+
+export const logout = async (): Promise<boolean> => {
+  try {
+    const volatile_token = localStorage.getItem('volatile_token')
+
+    if (!volatile_token) {
+      console.error('인증 토큰이 없습니다.')
+      return false
+    }
+
+    // 로그아웃 요청
+    const response = await axiosInstance.post('/account/auth/logout', {
+      volatile_token,
+    })
+
+    console.log('로그아웃 응답:', response.data)
+
+    // 로그아웃 성공 시 로컬 스토리지 정리
+    if (response.data.status === 2000) {
+      localStorage.removeItem('volatile_token')
+      localStorage.removeItem('player_id')
+
+      // 인증 스토어 업데이트
+      useAuthStore.getState().logout()
+
+      return true
+    }
+
+    // 오류 처리
+    if ([4003, 4004, 4008].includes(response.data.status)) {
+      console.error('로그아웃 중 인증 오류:', response.data.message)
+      localStorage.removeItem('volatile_token')
+      localStorage.removeItem('player_id')
+
+      // 인증 스토어 업데이트
+      useAuthStore.getState().logout()
+
+      return true
+    }
+
+    console.error('로그아웃 실패:', response.data)
+    return false
+  } catch (err) {
+    console.error('로그아웃 중 오류가 발생했습니다:', err)
+    return false
+  }
+}

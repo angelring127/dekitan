@@ -1,14 +1,6 @@
 import { create } from 'zustand'
-import { Profile, getProfileList } from '@/api/profile'
-
-interface ProfileState {
-  profiles: Profile[]
-  currentProfile: Profile | null
-  isLoading: boolean
-  error: string | null
-  fetchProfiles: () => Promise<void>
-  setCurrentProfile: (profile: Profile) => void
-}
+import { getProfileList } from '@/api/profile'
+import { Profile, ProfileState } from '@/types/profile'
 
 export const useProfileStore = create<ProfileState>((set, get) => ({
   profiles: [],

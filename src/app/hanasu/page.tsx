@@ -2,13 +2,16 @@
 
 import React, { useEffect, useRef } from 'react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { MessageCloud } from '@/components/common/MessageCloud'
 import { useChat } from '@/hooks/useChat'
 import { STAMP_IMAGE_PATH_LIST } from '@/constants/hanasu'
 import { messageEndButton } from '@/components/common/MessageCloud'
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 
-export default function Hanasu() {
+function HanasuContent() {
   const { step, displayedMessages, messages, error, handleNextStep } = useChat()
+  const router = useRouter()
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const messageContainerRef = useRef<HTMLDivElement>(null)
@@ -18,6 +21,11 @@ export default function Hanasu() {
     if (currentMessage?.type !== 'selection' && currentMessage?.type !== 'input') {
       handleNextStep(currentMessage?.nextStep)
     }
+  }
+
+  const handleEndButtonClick = () => {
+    // room 페이지로 replace 방식으로 이동 (뒤로가기 방지)
+    router.replace('/room')
   }
 
   useEffect(() => {
@@ -65,15 +73,14 @@ export default function Hanasu() {
             onKeyDown={(e) => e.key === 'Enter' && handleScreenClick()}
           >
             <div className="min-h-full flex flex-col justify-end space-y-4 pb-4">
-              {displayedMessages.map((messageIndex, index) => {
-                const msg = messages[messageIndex]
+              {displayedMessages.map((msg, index) => {
                 const isLatestMessage = index === displayedMessages.length - 1
 
                 if (!msg) return null
 
                 if (msg.type === 'intro') {
                   return (
-                    <div key={`${messageIndex}-${index}`} className="relative">
+                    <div key={`msg-${index}`} className="relative">
                       <div className="absolute -top-1 -left-1 w-16 h-16 z-10">
                         <Image
                           src="/images/hanasu/dekitan_kaiwa_icon.png"
@@ -101,7 +108,7 @@ export default function Hanasu() {
 
                 if (msg.type === 'selection') {
                   return (
-                    <div key={`${messageIndex}-${index}`} className="relative mt-4">
+                    <div key={`msg-${index}`} className="relative mt-4">
                       {msg.direction === 'left' && (
                         <div className="absolute -top-1 -left-1 w-16 h-16 z-10">
                           <Image
@@ -134,7 +141,7 @@ export default function Hanasu() {
 
                 if (msg.type === 'stamp') {
                   return (
-                    <div key={`${messageIndex}-${index}`} className="relative mt-4">
+                    <div key={`msg-${index}`} className="relative mt-4">
                       <div className="absolute -top-1 -left-1 w-16 h-16 z-10">
                         <Image
                           src="/images/hanasu/dekitan_kaiwa_icon.png"
@@ -169,7 +176,7 @@ export default function Hanasu() {
 
                 if (msg.type === 'end') {
                   return (
-                    <div key={`${messageIndex}-${index}`} className="relative mt-4">
+                    <div key={`msg-${index}`} className="relative mt-4">
                       <MessageCloud
                         message={msg.message || ''}
                         direction="left"
@@ -184,7 +191,7 @@ export default function Hanasu() {
                         <button
                           className={`${messageEndButton({ type: 'default' })} bg-gray-300 text-black py-4 px-8 rounded`}
                           aria-label="おわりボタン"
-                          onClick={handleScreenClick}
+                          onClick={handleEndButtonClick}
                         >
                           おわり
                         </button>
@@ -201,5 +208,13 @@ export default function Hanasu() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function Hanasu() {
+  return (
+    <ProtectedRoute>
+      <HanasuContent />
+    </ProtectedRoute>
   )
 }

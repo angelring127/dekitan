@@ -138,7 +138,7 @@ export const MessageCloud: React.FC<MessageCloudProps> = ({
           </div>
         </div>
       ) : (
-        <p>{message}</p>
+        <p dangerouslySetInnerHTML={{ __html: message?.replace(/<br\s*\/?>/gi, '<br />') || '' }} />
       )}
     </div>
   )

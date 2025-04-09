@@ -159,7 +159,7 @@ export function Navigation({ onMenuClick }: NavigationProps) {
                     <div className="p-4 text-center text-gray-500">読み込み中...</div>
                   ) : profiles.length > 0 ? (
                     profiles.map((profile, index) => (
-                      <div key={profile.id}>
+                      <div key={`profile-${index}-${profile.id}`}>
                         <button
                           className={`w-full text-left px-6 py-3 text-sm font-bold ${
                             currentProfile?.id === profile.id
@@ -174,7 +174,10 @@ export function Navigation({ onMenuClick }: NavigationProps) {
                           {profile.role === 3 && ' (子ユーザー)'}
                         </button>
                         {index < profiles.length - 1 && (
-                          <div className="border-b border-dashed border-[#b3b3b3] mx-4" />
+                          <div
+                            key={`divider-${index}-${profile.id}`}
+                            className="border-b border-dashed border-[#b3b3b3] mx-4"
+                          />
                         )}
                       </div>
                     ))

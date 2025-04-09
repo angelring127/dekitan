@@ -11,11 +11,7 @@ import { apiClient } from '@/services/api'
 import { PLAYER_HONORIFIC_TITLE } from '@/constants'
 // import { useLocation } from 'react-router-dom';
 
-export default function InitPage({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined }
-}) {
+export default function InitPage() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [player_id, setPlayerId] = useState(0)
   const [volatile_token, setVolatileToken] = useState('')
@@ -116,9 +112,13 @@ export default function InitPage({
   }
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const token = params.get('t')
+    if (!token) return
+
     apiClient
       .post('/account/regist/verificate', {
-        token: searchParams.t,
+        token: token,
       })
       .then((res) => {
         if (res.data?.data?.player_id && res.data?.data?.volatile_token) {

@@ -87,7 +87,7 @@ const RegisterForm: React.FC = () => {
         formData.birth_day = gradeToBirthdate(childinfo.schoolYear)
 
         await apiClient
-          .post('/api/account/regist/entry', formData)
+          .post('/account/regist/entry', formData)
           .then((response) => {
             if (response.status == 200) {
               setParentInfo('name', formData.nickname)

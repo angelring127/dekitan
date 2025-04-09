@@ -1,7 +1,7 @@
-import { ReactNode, useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { useAuthStore } from '@/store/auth'
-import { useAuthVerification } from '@/hooks/useAuthVerification'
+import { ReactNode} from 'react'
+// import { useRouter } from 'next/navigation'
+// import { useAuthStore } from '@/store/auth'
+// import { useAuthVerification } from '@/hooks/useAuthVerification'
 
 interface ProtectedRouteProps {
   children: ReactNode
@@ -13,7 +13,11 @@ interface ProtectedRouteProps {
  * @param children 보호할 컴포넌트
  * @param redirectPath 인증 실패 시 리다이렉트할 경로
  */
-export const ProtectedRoute = ({ children, redirectPath = '/' }: ProtectedRouteProps) => {
+export const ProtectedRoute = ({ children}: ProtectedRouteProps) => {
+  // 목업 버전: 항상 인증된 상태로 처리
+  return <>{children}</>
+
+  /* 실제 인증 로직 (현재 비활성화)
   const { isAuthenticated } = useAuthStore()
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(true)
@@ -45,4 +49,5 @@ export const ProtectedRoute = ({ children, redirectPath = '/' }: ProtectedRouteP
 
   // 인증된 경우 자식 컴포넌트 렌더링
   return <>{children}</>
+  */
 }

@@ -1,5 +1,31 @@
-import { create } from 'zustand'
-import { GlobalState } from '../types/info'
+import { create } from "zustand";
+
+export interface CollectionItem {
+  // id: number;
+  title: string;
+  description: string;
+  image?: string;
+  count: number;
+  // parent_id: string;
+}
+
+
+interface GlobalState {
+  name: string;
+  points: number;
+  mycollection: CollectionItem[];
+  singleCollectionItem: CollectionItem | null;
+
+
+
+  setName: (newName: string) => void;
+  increasePoints: (value: number) => void;
+  decreasePoints: (value: number) => void;
+  addToCollection: (item: CollectionItem) => void;
+  removeFromCollection: (id: number) => void;
+  setSingleCollectionItem: (item: CollectionItem) => void;
+  clearCollection: () => void;
+}
 
 export const useGlobalStore = create<GlobalState>((set, get) => ({
   name: 'test',

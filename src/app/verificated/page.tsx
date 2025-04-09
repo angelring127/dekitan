@@ -26,7 +26,7 @@ export default function InitPage() {
       await updateChild()
       setCurrentIndex((prev) => prev + 1)
     } else {
-      router.push('/room')
+      router.push('/login')
     }
   }
 

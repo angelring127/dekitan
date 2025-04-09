@@ -20,8 +20,8 @@ export default function GetAward() {
       setCurrentIndex((prev) => prev + 1)
     } else {
       decreasePoints(points - 100);
-       router.push('./collect')
-       apiClient.post('award/item/collect', { 
+      router.push('./collect')
+      apiClient.post('award/item/collect', { 
         volatile_token: "xxxxxxxxxxxxxxxxxxxxxxxxx",
         player_id: 123,
         item_id: singleCollectionItem?.id })

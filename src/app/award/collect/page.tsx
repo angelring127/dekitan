@@ -25,6 +25,38 @@ export default function MyCollections() {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const hasApiBeenCalled = useRef(false);
   useEffect(() => {
+    addToCollection([
+      {
+        "title": "宇宙のスケール",
+        "description": "星までの長さと時間を<br>はかることができる<br>じょうぎ！<br>夜は空を見上げて<br>星をながめてみよう",
+        "image": "/images/items/1/xxxxxx.webp",
+        "count": 1
+      },
+      {
+        "title": "景品2",
+        "description": "ああああああああああああああああああああ",
+        "image": "",
+        "count": 2
+      },
+      {
+        "title": "景品2",
+        "description": "ああああああああああああああああああああ",
+        "image": "",
+        "count": 2
+      },
+      {
+        "title": "景品2",
+        "description": "ああああああああああああああああああああ",
+        "image": "/images/items/2/xxxxxx.webp",
+        "count": 2
+      },
+      {
+        "title": "景品2",
+        "description": "ああああああああああああああああああああ",
+        "image": "/images/items/2/xxxxxx.webp",
+        "count": 2
+      },
+    ]);
     if (mycollection.length === 0 && !hasApiBeenCalled.current) {
       hasApiBeenCalled.current = true;
       apiClient
@@ -33,7 +65,7 @@ export default function MyCollections() {
           player_id: 1,
         })
         .then((response) => {
-          addToCollection(response.data.data.list);
+          // addToCollection(response.data.data.list);
         })
         .catch((error) => {
           console.error('Error:', error);
@@ -76,14 +108,15 @@ export default function MyCollections() {
         {currentIndex === 0 && (
           <>
             {mycollection && mycollection.length > 0 && (
-              <div className="grid grid-cols-3 gap-4 mt-10">
+              // <div className="grid grid-cols-3 gap-4 mt-10">
+              <div className="flex flex-wrap justify-center gap-4 mt-10">
                 {mycollection.map((item) => (
                   <div key={item?.id} className="relative cursor-pointer">
                     <Image
-                      src={item?.image ?? '/images/default-image.png'}
+                      src={item?.image ?? './images/default-image.png'}
                       alt="award"
                       width={150}
-                      height={150}
+                      height={100}
                       onClick={() => handleNext(item)}
                       className="collection_self"
                       style={{ bottom: '-50%', left: '10%' }}
@@ -112,7 +145,7 @@ export default function MyCollections() {
               width={150}
               height={150}
               className="gem_points absolute animate-fade-in-up"
-              style={{ top: '-20%' }}
+              style={{ top: '-25%' }}
             />
           )}
           <InformationPanel
@@ -120,7 +153,7 @@ export default function MyCollections() {
             currentIndex={currentIndex}
             background="transparent"
             withShadow
-            className="my-4 w-[350]   mb-120 flex flex-col items-center justify-center common_panel_style"
+            className="my-4 w-[350] w-[80%] mb-120 flex flex-col items-center justify-center common_panel_style"
           >
             {currentIndex === 1 && (
               <Button

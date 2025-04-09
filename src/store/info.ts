@@ -1,11 +1,12 @@
 import { create } from "zustand";
 
 export interface CollectionItem {
-  id: number;
+  // id: number;
   title: string;
   description: string;
   image?: string;
-  parent_id: string;
+  count: number;
+  // parent_id: string;
 }
 
 

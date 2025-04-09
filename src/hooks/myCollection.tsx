@@ -8,7 +8,7 @@ export const myCollection = (singleCollectionItem: CollectionItem | null) => {
             content: (
                 <div className="flex flex-col items-center gap-4">
                     <span className="whitespace-pre-line text-center text-1xl font-bold">
-                        ひとつのコレクションが<br></br>ふえた!
+                        ひとつのコレクションが<br></br>ふえたね!
                     </span>
                 </div>
             ),
@@ -16,7 +16,7 @@ export const myCollection = (singleCollectionItem: CollectionItem | null) => {
         {
             id: '1',
             content: (
-                <div className="flex flex-col items-center gap-4">
+                <div className="flex flex-col items-center gap-4 w-[80%]" style={{marginTop: "50px"}}>
                     <span className="whitespace-pre-line text-center text-2xl font-bold">
                         {singleCollectionItem?.title}
                     </span>

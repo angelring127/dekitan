@@ -1,19 +1,28 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { InformationPanel } from '@/components/common/InformationPanel'
 import { Button } from '@/components/common/Button'
 import { login } from '@/api/auth'
+import { useAuthStore } from '@/store/auth'
 
 export default function LoginPage() {
   const router = useRouter()
+  const { isAuthenticated } = useAuthStore()
   const [currentIndex] = useState(0)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+
+  // 既にログイン済みのユーザーを確認し、リダイレクト
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.replace('/room')
+    }
+  }, [isAuthenticated, router])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -26,11 +35,11 @@ export default function LoginPage() {
       if (success) {
         router.replace('/room')
       } else {
-        setError('로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.')
+        setError('ログインに失敗しました。メールアドレスとパスワードを確認してください。')
       }
     } catch (err) {
-      console.error('Failed to login:', err)
-      setError('로그인 중 오류가 발생했습니다. 다시 시도해주세요.')
+      console.error('ログインに失敗しました:', err)
+      setError('ログイン中にエラーが発生しました。再度お試しください。')
     } finally {
       setIsLoading(false)
     }

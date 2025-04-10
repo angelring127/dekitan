@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
 
 interface Option {
@@ -64,10 +65,11 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
             alignItems: 'center',
           }}
         >
-          <img 
+          <Image
             src="/images/down-arrow.png" 
-            alt="arrow" 
-            style={{ width: '12px', height: '12px' }} 
+            alt="arrow"  
+            width={8}
+            height={8}
           />
         </div>
       </div>
@@ -75,7 +77,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
       {isOpen && (
   <div
     className="absolute left-0 right-0 mt-2 bg-white border-2 rounded-lg shadow-lg overflow-auto"
-    style={{ maxHeight: '150px'}}
+    style={{ maxHeight: '150px', zIndex:10}}
   >
     {options.map((option) => (
       <div

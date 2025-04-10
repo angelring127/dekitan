@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Button } from '@/components/common/Button'
 import { apiClient } from '@/services/api'
 import { useGlobalStore } from '@/store/info'
 import type { GlobalState } from '@/types/info'
@@ -9,6 +8,7 @@ import type { InformationItem } from '@/components/common/InformationPanel/types
 import { InformationPanel } from '@/components/common/InformationPanel'
 import { useRouter } from 'next/navigation'
 import { PLAYER_HONORIFIC_TITLE } from '@/constants'
+import Image from 'next/image'
 
 interface FormValues {
   nickname: string
@@ -187,16 +187,20 @@ const RegisterForm: React.FC = () => {
                 className="absolute right-2 top-1/2 transform -translate-y-1/2"
               >
                 {showPassword ? (
-                  <img
+                  <Image
                     src="/images/pw_eye_02.png"
                     alt="Hide Password"
                     className="w-6 h-6"
+                    width={8}
+                    height={8}
                   />
                 ) : (
-                  <img
+                  <Image
                     src="/images/pw_eye_01.png"
                     alt="Show Password"
                     className="w-6 h-6"
+                    width={8}
+                    height={8}
                   />
                 )}
               </button>

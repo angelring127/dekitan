@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { InformationPanel } from '@/components/common/InformationPanel'
 import { ChildRegist } from '@/hooks/childRegist'
-import { Button } from '@/components/common/Button'
 import { useGlobalStore } from '@/store/info'
 import type { GlobalState } from '@/types/info'
 import { useRouter } from 'next/navigation'
@@ -32,11 +31,6 @@ export default function InitPage() {
 
   const { items } = ChildRegist({ childinfo, setChildInfo })
 
-  const commonPanelStyle = {
-    borderRadius: 20,
-    position: 'relative' as const,
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-  }
 
   function gradeToBirthdate(grade: string): string {
     const date = new Date()

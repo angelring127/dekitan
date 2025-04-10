@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { InformationPanel } from '@/components/common/InformationPanel'
 import { useInitialItems } from '@/hooks/useInitialItems'
 import Image from 'next/image'
-import { Button } from '@/components/common/Button'
 import { useRouter } from 'next/navigation'
 export default function InitPage() {
   const [currentIndex, setCurrentIndex] = useState(0)

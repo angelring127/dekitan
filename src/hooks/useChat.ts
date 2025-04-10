@@ -302,12 +302,12 @@ export const useChat = () => {
             {
               // 6
               type: 'intro',
-              message: 'にがてなのにがんばるね！',
+              message: 'にがてなのにがんばってえらいね！',
             },
             {
               // 7
               type: 'intro',
-              message: 'じゃあ、こんなことできるか？（やること）',
+              message: 'じゃあ、こんなことできるかな？（やること）',
             },
             {
               // 8

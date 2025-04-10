@@ -18,8 +18,8 @@ export default function InitPage() {
     if (hasFetched.current) return;
     hasFetched.current = true;
     apiClient.post('event/task/gets', { 
-      volatile_token: "xxxxxxxxxxxxxxxxxxxxxxxxx",
-      player_id: 1,
+      volatile_token: localStorage.getItem('volatile_token'),
+      player_id: localStorage.getItem('player_id'),
       status: 2
     })
       .then((res) => {

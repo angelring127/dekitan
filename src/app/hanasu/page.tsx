@@ -177,6 +177,15 @@ function HanasuContent() {
                 if (msg.type === 'end') {
                   return (
                     <div key={`msg-${index}`} className="relative mt-4">
+                      <div className="absolute -top-10 -left-1 w-16 h-16 z-10">
+                        <Image
+                          src="/images/hanasu/dekitan_kaiwa_icon.png"
+                          alt=""
+                          width={64}
+                          height={64}
+                          className="rounded-full"
+                        />
+                      </div>
                       <MessageCloud
                         message={msg.message || ''}
                         direction="left"

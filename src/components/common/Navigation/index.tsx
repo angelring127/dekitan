@@ -22,7 +22,7 @@ export function Navigation({ onMenuClick }: NavigationProps) {
   const [isClient, setIsClient] = useState(false)
 
   // 스토어에서 유저 정보 가져오기
-  const { name, setName, childinfo, parentinfo } = useGlobalStore()
+  const { name, setName } = useGlobalStore()
   const { isAuthenticated } = useAuthStore()
   const { profiles, currentProfile, fetchProfiles, setCurrentProfile, isLoading } =
     useProfileStore()
@@ -35,7 +35,7 @@ export function Navigation({ onMenuClick }: NavigationProps) {
   // 인증 상태가 변경되면 프로필 목록 가져오기
   useEffect(() => {
     if (isAuthenticated) {
-      fetchProfiles()
+      fetchProfiles(false)
     }
   }, [isAuthenticated, fetchProfiles])
 
@@ -81,9 +81,7 @@ export function Navigation({ onMenuClick }: NavigationProps) {
   }
 
   // 현재 선택된 프로필의 이름 또는 기본 이름
-  const userName = isAuthenticated
-    ? currentProfile?.nickname || childinfo.name || parentinfo.name || name || 'ゲスト'
-    : 'ゲスト'
+  const userName = isAuthenticated ? name || 'ゲスト' : 'ゲスト'
 
   // 서버 사이드 렌더링 시에는 아무것도 렌더링하지 않음
   if (!isClient) {

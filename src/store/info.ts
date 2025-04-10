@@ -1,14 +1,53 @@
 import { create } from 'zustand'
 import { GlobalState } from '../types/info'
 
-export const useGlobalStore = create<GlobalState>((set, get) => ({
-  name: 'test',
-  points: 120,
-  mycollection: [],
-  singleCollectionItem: null,
+// 로컬 스토리지에서 초기값을 가져오는 함수
+const getInitialState = (): Pick<
+  GlobalState,
+  | 'name'
+  | 'points'
+  | 'mycollection'
+  | 'singleCollectionItem'
+  | 'parentinfo'
+  | 'childinfo'
+  | 'volatileToken'
+  | 'playerId'
+> => {
+  if (typeof window === 'undefined') {
+    return {
+      name: 'test',
+      points: 120,
+      mycollection: [],
+      singleCollectionItem: null,
+      parentinfo: { parent_id: '', name: '' },
+      childinfo: { parent_id: '', suffix: '', name: '', schoolYear: '' },
+      volatileToken: null,
+      playerId: null,
+    }
+  }
 
-  parentinfo: { parent_id: '', name: '' },
-  childinfo: { parent_id: '', suffix: '', name: '', schoolYear: '' },
+  return {
+    name: localStorage.getItem('name') || 'test',
+    points: Number(localStorage.getItem('points')) || 120,
+    mycollection: JSON.parse(localStorage.getItem('mycollection') || '[]'),
+    singleCollectionItem: JSON.parse(localStorage.getItem('singleCollectionItem') || 'null'),
+    parentinfo: {
+      parent_id: localStorage.getItem('parent_id') || '',
+      name: localStorage.getItem('name') || '',
+    },
+    childinfo: {
+      parent_id: localStorage.getItem('child_parent_id') || '',
+      suffix: localStorage.getItem('child_suffix') || '',
+      name: localStorage.getItem('child_name') || '',
+      schoolYear: localStorage.getItem('child_schoolYear') || '',
+    },
+    volatileToken: localStorage.getItem('volatileToken') || null,
+    playerId: Number(localStorage.getItem('playerId')) || null,
+  }
+}
+
+export const useGlobalStore = create<GlobalState>((set, get) => ({
+  ...getInitialState(),
 
   setAllData: (data: Partial<GlobalState>) => {
     if (typeof window !== 'undefined') {
@@ -83,5 +122,19 @@ export const useGlobalStore = create<GlobalState>((set, get) => ({
     localStorage.removeItem('mycollection')
     localStorage.removeItem('singleCollectionItem')
     set({ mycollection: [], singleCollectionItem: null })
+  },
+
+  setVolatileToken: (token: string | null) => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('volatileToken', token || '')
+    }
+    set({ volatileToken: token })
+  },
+
+  setPlayerId: (id: number | null) => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('playerId', id?.toString() || '')
+    }
+    set({ playerId: id })
   },
 }))

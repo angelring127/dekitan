@@ -23,4 +23,14 @@ export const PLAYER_HONORIFIC_TITLE = [
   { honorific: '', label: 'なし', value: 4 },
 ]
 
+export const OWNER = 'owner'
+export const SUB_OWNER = 'sub_owner'
+export const PLAYER = 'player'
+
+export const USER_ROLE = {
+  OWNER: 1,
+  SUB_OWNER: 2,
+  PLAYER: 3,
+}
+
 export * from './hanasu'

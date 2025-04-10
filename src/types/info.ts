@@ -23,9 +23,10 @@ export interface GlobalState {
   points: number
   mycollection: CollectionItem[]
   singleCollectionItem: CollectionItem | null
-
   parentinfo: ParentInfo
   childinfo: ChildInfo
+  volatileToken: string | null
+  playerId: number | null
 
   setName: (newName: string) => void
   setParentInfo: (key: keyof ParentInfo, value: string) => void
@@ -38,4 +39,6 @@ export interface GlobalState {
   removeFromCollection: (id: number) => void
   setSingleCollectionItem: (item: CollectionItem) => void
   clearCollection: () => void
+  setVolatileToken: (token: string | null) => void
+  setPlayerId: (id: number | null) => void
 }

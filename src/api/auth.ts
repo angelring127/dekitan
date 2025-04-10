@@ -3,6 +3,8 @@ import { useGlobalStore } from '@/store/info'
 import { useAuthStore } from '@/store/auth'
 import { AxiosHeaders, AxiosRequestConfig } from 'axios'
 import type { GlobalState } from '@/types/info'
+import { getProfileList } from './profile'
+import { USER_ROLE } from '@/constants'
 
 const LOGIN_URL = '/account/auth/login'
 const VERIFY_URL = '/account/auth/verify'
@@ -27,63 +29,91 @@ export interface LoginRequest {
 
 export const login = async (credentials: LoginRequest): Promise<boolean> => {
   try {
-    console.log('로그인 시도:', credentials)
+    console.log('ログイン試行:', credentials)
 
-    // 로그인 요청
+    // ログインリクエスト
     const response = await axiosInstance.post<LoginResponse>(LOGIN_URL, credentials)
 
-    console.log('로그인 응답:', response.data)
-    console.log('로그인 응답 헤더:', response.headers)
+    console.log('ログイン応答:', response.data)
+    console.log('ログイン応答ヘッダー:', response.headers)
 
-    // 응답 헤더에서 쿠키 확인
+    // 応答ヘッダーからクッキー確認
     const setCookieHeader = response.headers['set-cookie']
     if (setCookieHeader) {
-      console.log('로그인 후 서버가 설정한 쿠키:', setCookieHeader)
+      console.log('ログイン後サーバーが設定したクッキー:', setCookieHeader)
     }
 
-    // 쿠키 확인
+    // クッキー確認
     const cookies = document.cookie.split(';')
-    console.log('로그인 후 모든 쿠키:', cookies)
+    console.log('ログイン後の全てのクッキー:', cookies)
 
-    // 세션 쿠키 확인 (karenainsworth_session 또는 session)
+    // セッションクッキー確認 (karenainsworth_session または session)
     const sessionCookie = cookies.find(
       (cookie) =>
         cookie.trim().startsWith('karenainsworth_session=') || cookie.trim().startsWith('session=')
     )
 
     if (sessionCookie) {
-      console.log('로그인 후 세션 쿠키가 발견되었습니다:', sessionCookie)
+      console.log('ログイン後セッションクッキーが発見されました:', sessionCookie)
     }
 
     if (response.data.status === 2000) {
       const { volatile_token, player_id } = response.data.data
-      console.log('받은 토큰:', volatile_token)
-      console.log('받은 플레이어 ID:', player_id)
+      console.log('受け取ったトークン:', volatile_token)
+      console.log('受け取ったプレイヤーID:', player_id)
 
-      // 로컬 스토리지에 토큰과 플레이어 ID 저장
+      // ローカルストレージにトークンを保存
       localStorage.setItem('volatile_token', volatile_token)
-      localStorage.setItem('player_id', player_id.toString())
 
-      // 저장 후 확인
-      console.log('저장된 토큰:', localStorage.getItem('volatile_token'))
-      console.log('저장된 플레이어 ID:', localStorage.getItem('player_id'))
+      // 保存後確認
+      console.log('保存されたトークン:', localStorage.getItem('volatile_token'))
 
-      // 인증 스토어 업데이트
+      // 認証ストアを更新
       useAuthStore.getState().setToken(volatile_token)
 
-      // 유저 정보를 스토어에 저장
+      // プレイヤーIDをグローバルストアに保存
+      useGlobalStore.getState().setPlayerId(player_id)
+
+      // ユーザー情報をストアに保存
       const { setName } = useGlobalStore.getState() as GlobalState
 
-      // 기본 이름 설정 (API에서 이름을 제공하지 않는 경우)
-      setName(`Player ${player_id}`)
+      // プロフィールリストを取得
+      try {
+        const profiles = await getProfileList()
+        console.log('プロフィールリスト:', profiles)
+
+        // USER_ROLE.PLAYERの項目の中でidが最小の項目を探す
+        const playerProfiles = profiles.filter((profile) => profile.role === USER_ROLE.PLAYER)
+
+        if (playerProfiles.length > 0) {
+          // idが最小の項目を探す
+          const smallestIdProfile = playerProfiles.reduce((prev, current) =>
+            prev.id < current.id ? prev : current
+          )
+
+          console.log('最小IDのプレイヤープロフィール:', smallestIdProfile)
+
+          // player_idを更新
+          useGlobalStore.getState().setPlayerId(smallestIdProfile.id)
+          console.log('更新されたプレイヤーID:', smallestIdProfile.id)
+
+          // nicknameを設定
+          setName(smallestIdProfile.nickname)
+          console.log('設定されたニックネーム:', smallestIdProfile.nickname)
+        } else {
+          console.log('プレイヤーロールのプロフィールがありません。')
+        }
+      } catch (profileError) {
+        console.error('プロフィールリストの取得中にエラーが発生しました:', profileError)
+      }
 
       return true
     }
 
-    console.error('로그인 실패:', response.data)
+    console.error('ログイン失敗:', response.data)
     return false
   } catch (err) {
-    console.error('로그인 중 오류가 발생했습니다:', err)
+    console.error('ログイン中にエラーが発生しました:', err)
     return false
   }
 }
@@ -94,51 +124,51 @@ export const verifyToken = async (): Promise<boolean> => {
     const player_id = localStorage.getItem('player_id')
 
     if (!volatile_token || !player_id) {
-      console.error('인증 토큰 또는 플레이어 ID가 없습니다.')
+      console.error('認証トークンまたはプレイヤーIDがありません。')
       return false
     }
 
-    // 토큰 검증 요청 - 토큰은 인터셉터에서 자동으로 헤더와 본문에 추가됨
+    // トークン検証リクエスト - トークンはインターセプターで自動的にヘッダーと本文に追加される
     const response = await axiosInstance.post(VERIFY_URL, {
       player_id: Number(player_id),
-      // volatile_token은 인터셉터에서 자동으로 추가됨
+      // volatile_tokenはインターセプターで自動的に追加される
     })
 
-    console.log('토큰 검증 응답:', response.data)
-    console.log('토큰 검증 응답 헤더:', response.headers)
+    console.log('トークン検証応答:', response.data)
+    console.log('トークン検証応答ヘッダー:', response.headers)
 
-    // 응답 헤더에서 쿠키 확인
+    // 応答ヘッダーからクッキー確認
     const setCookieHeader = response.headers['set-cookie']
     if (setCookieHeader) {
-      console.log('토큰 검증 후 서버가 설정한 쿠키:', setCookieHeader)
+      console.log('トークン検証後サーバーが設定したクッキー:', setCookieHeader)
     }
 
-    // 쿠키 확인
+    // クッキー確認
     const cookies = document.cookie.split(';')
-    console.log('토큰 검증 후 모든 쿠키:', cookies)
+    console.log('トークン検証後の全てのクッキー:', cookies)
 
-    // 세션 쿠키 확인 (karenainsworth_session 또는 session)
+    // セッションクッキー確認 (karenainsworth_session または session)
     const sessionCookie = cookies.find(
       (cookie) =>
         cookie.trim().startsWith('karenainsworth_session=') || cookie.trim().startsWith('session=')
     )
 
     if (sessionCookie) {
-      console.log('토큰 검증 후 세션 쿠키가 발견되었습니다:', sessionCookie)
+      console.log('トークン検証後セッションクッキーが発見されました:', sessionCookie)
     }
 
-    // 응답 상태 코드에 따라 유효성 판단
+    // 応答ステータスコードに基づいて有効性を判断
     if (response.data.status === 2000) {
       return true
     }
 
-    // 인증 토큰 관련 오류 처리
+    // 認証トークン関連のエラー処理
     if (response.data.status === 4003 || response.data.status_code === 4004) {
-      console.error('인증 토큰 오류:', response.data.message)
+      console.error('認証トークンエラー:', response.data.message)
       localStorage.removeItem('volatile_token')
       localStorage.removeItem('player_id')
 
-      // 로그인 페이지로 리다이렉트
+      // ログインページにリダイレクト
       if (typeof window !== 'undefined') {
         window.location.href = '/login'
       }
@@ -146,7 +176,7 @@ export const verifyToken = async (): Promise<boolean> => {
 
     return false
   } catch (err) {
-    console.error('토큰 검증 중 오류가 발생했습니다:', err)
+    console.error('トークン検証中にエラーが発生しました:', err)
     return false
   }
 }
@@ -156,44 +186,44 @@ export const logout = async (): Promise<boolean> => {
     const volatile_token = localStorage.getItem('volatile_token')
 
     if (!volatile_token) {
-      console.error('인증 토큰이 없습니다.')
+      console.error('認証トークンがありません。')
       return false
     }
 
-    // 로그아웃 요청
+    // ログアウトリクエスト
     const response = await axiosInstance.post('/account/auth/logout', {
       volatile_token,
     })
 
-    console.log('로그아웃 응답:', response.data)
+    console.log('ログアウト応答:', response.data)
 
-    // 로그아웃 성공 시 로컬 스토리지 정리
+    // ログアウト成功時はローカルストレージを整理
     if (response.data.status === 2000) {
       localStorage.removeItem('volatile_token')
       localStorage.removeItem('player_id')
 
-      // 인증 스토어 업데이트
+      // 認証ストアを更新
       useAuthStore.getState().logout()
 
       return true
     }
 
-    // 오류 처리
+    // エラー処理
     if ([4003, 4004, 4008].includes(response.data.status)) {
-      console.error('로그아웃 중 인증 오류:', response.data.message)
+      console.error('ログアウト中に認証エラーが発生しました:', response.data.message)
       localStorage.removeItem('volatile_token')
       localStorage.removeItem('player_id')
 
-      // 인증 스토어 업데이트
+      // 認証ストアを更新
       useAuthStore.getState().logout()
 
       return true
     }
 
-    console.error('로그아웃 실패:', response.data)
+    console.error('ログアウト失敗:', response.data)
     return false
   } catch (err) {
-    console.error('로그아웃 중 오류가 발생했습니다:', err)
+    console.error('ログアウト中にエラーが発生しました:', err)
     return false
   }
 }

@@ -18,6 +18,7 @@ export interface ProfileState {
   currentProfile: Profile | null
   isLoading: boolean
   error: string | null
-  fetchProfiles: () => Promise<void>
+  lastFetchTime: number
+  fetchProfiles: (force?: boolean) => Promise<void>
   setCurrentProfile: (profile: Profile) => void
 }

@@ -29,10 +29,15 @@ export const ChildRegist = ({
         {
             id: "verificate",
             content: (
-                <div className='gap-6'>
-                    <p>アクセスいただいたURLを検証しています。。。。</p>
-                    <div className='w-full flex justify-center'>OK</div>
-                    <div className='w-full flex justify-center'>登録が完了しました。</div>
+
+                <div className='flex justify-center gap-6 mb-20'>
+                    <div className='text-center font-semibold mb-20'>
+                        <h1 className='text-m text-green-800 mb-3'>ユーザー登録</h1>
+                        <div className="border mx-auto mb-4" style={{ borderColor: '#2f855a', width: '95%' }}></div>
+                        <p className='w-full flex text-left'>アクセスいただいたURLを検証しています。。。。</p>
+                        <div className='w-full flex justify-start'>OK !</div>
+                        <div className='w-full flex justify-start'>登録が完了しました。</div>
+                    </div>
                 </div>
             )
         },

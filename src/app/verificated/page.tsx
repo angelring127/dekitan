@@ -130,24 +130,23 @@ export default function InitPage() {
   }, [])
 
   return (
-    <div className="mx-auto flex h-[844px] w-[390px] items-center justify-center bg-[url('/images/messages/bg_message.png')] bg-cover bg-center bg-no-repeat">
+    <div className="mx-auto flex h-[844px] w-[390px] items-center justify-center bg-[url('/images/bg_landscape.png')] bg-cover bg-center bg-no-repeat">
       <div className="flex flex-col items-center justify-center w-full max-w-[320px]">
         <InformationPanel
           items={items}
           currentIndex={currentIndex}
           onNext={handleNext}
-          background="transparent"
+          background="white"
           withShadow
-          style={commonPanelStyle}
           className="w-full flex flex-col h-[75%]"
         />
 
-        <Button
-          className="text-lg font-bold mt-4 bg-red-500 px-6 py-2 rounded-full"
+        <button
+          className="text-lg font-bold mt-4 bg-[#00803a] text-white px-6 py-2 rounded-full w-[200px]"
           onClick={handleNext}
         >
           つぎへ
-        </Button>
+        </button>
       </div>
     </div>
   )

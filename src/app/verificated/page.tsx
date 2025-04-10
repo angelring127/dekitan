@@ -9,6 +9,7 @@ import type { GlobalState } from '@/types/info'
 import { useRouter } from 'next/navigation'
 import { apiClient } from '@/services/api'
 import { PLAYER_HONORIFIC_TITLE } from '@/constants'
+import { useAuthStore } from '@/store/auth'
 // import { useLocation } from 'react-router-dom';
 
 export default function InitPage() {
@@ -16,6 +17,7 @@ export default function InitPage() {
   const [player_id, setPlayerId] = useState(0)
   const [volatile_token, setVolatileToken] = useState('')
   const { childinfo, setChildInfo } = useGlobalStore() as GlobalState
+  const { setName } = useGlobalStore() as GlobalState
   const router = useRouter()
 
   const handleNext = async () => {
@@ -26,7 +28,7 @@ export default function InitPage() {
       await updateChild()
       setCurrentIndex((prev) => prev + 1)
     } else {
-      router.push('/login')
+      router.push('/room')
     }
   }
 
@@ -94,6 +96,7 @@ export default function InitPage() {
             ?.label || ''
         )
         setChildInfo('schoolYear', birthdateToGrade(res.data.data.profile.birth_day))
+        setName(res.data.data.nickname)
       })
   }
 
@@ -124,6 +127,8 @@ export default function InitPage() {
         if (res.data?.data?.player_id && res.data?.data?.volatile_token) {
           setPlayerId(res.data.data.player_id)
           setVolatileToken(res.data.data.volatile_token)
+          useAuthStore.getState().setToken(res.data.data.volatile_token)
+          useGlobalStore.getState().setPlayerId(res.data.data.player_id)
         }
       })
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -8,11 +8,14 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useGlobalStore } from '@/store/info'
 import type { GlobalState } from '@/types/info'
+import { useAuthStore } from '@/store/auth'
 
 export default function GetAward() {
   const { name, points, singleCollectionItem, decreasePoints, setSingleCollectionItem } =
     useGlobalStore()
   const router = useRouter()
+  const volatileToken = useAuthStore.getState().token
+  const playerId = useGlobalStore.getState().playerId
 
   const handleNext = () => {
     if (currentIndex === 0) {
@@ -26,8 +29,8 @@ export default function GetAward() {
       router.push('./collect')
       apiClient
         .post('award/item/collect', {
-          volatile_token: localStorage.getItem("volatile_token"),
-          player_id: localStorage.getItem("player_id"),
+          volatile_token: volatileToken,
+          player_id: playerId,
           item_id: singleCollectionItem?.id,
         })
         .then((res) => {
@@ -50,8 +53,8 @@ export default function GetAward() {
   const getAward = () => {
     apiClient
       .post('/award/exchange/ordinary', {
-        volatile_token: localStorage.getItem("volatile_token"),
-        player_id: localStorage.getItem("player_id"),
+        volatile_token: volatileToken,
+        player_id: playerId,
       })
       .then((response) => {
         setSingleCollectionItem(response.data.data)

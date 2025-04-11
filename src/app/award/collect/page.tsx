@@ -2,6 +2,7 @@ import { Button } from "@/components/common/Button";
 import { InformationPanel } from "@/components/common/InformationPanel";
 import { myCollection } from "@/hooks/myCollection";
 import { apiClient } from "@/services/api";
+import { useAuthStore } from "@/store/auth";
 import { CollectionItem, useGlobalStore } from "@/store/info";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -10,7 +11,8 @@ import { useEffect, useRef, useState } from "react";
 export default function MyCollections() {
   const { mycollection, addToCollection, setSingleCollectionItem, singleCollectionItem } = useGlobalStore();
   const router = useRouter();
-
+  const volatileToken = useAuthStore.getState().token
+  const playerId = useGlobalStore.getState().playerId
 
   const handleNext = (item: CollectionItem) => {
     setSingleCollectionItem(item);
@@ -28,8 +30,8 @@ export default function MyCollections() {
       hasApiBeenCalled.current = true;
       apiClient
         .post('/award/item/gets', {
-          volatile_token: localStorage.getItem('volatile_token'),
-          player_id: localStorage.getItem('player_id'),
+          volatile_token: volatileToken,
+          player_id: playerId,
         })
         .then((response) => {
           addToCollection(response.data.data.list);

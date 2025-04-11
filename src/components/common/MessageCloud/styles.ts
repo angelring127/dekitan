@@ -31,7 +31,7 @@ export const messageName = tv({
 })
 
 export const messageTitle = tv({
-  base: 'absolute top-0 left-0 right-0 text-center font-db-title py-2',
+  base: 'w-full text-center font-db-title py-2 mb-2',
 })
 
 export const messageTail = tv({

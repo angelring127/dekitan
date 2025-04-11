@@ -4,6 +4,8 @@ import { Button } from '@/components/common/Button'
 import { useEffect, useState, useRef } from 'react'
 import { apiClient } from '@/services/api'
 import {TaskStatus} from '@/constants/index'
+import { useAuthStore } from "@/store/auth";
+import { useGlobalStore } from "@/store/info";
 type Task = {
   id: number;
   title: string;
@@ -14,12 +16,15 @@ export default function InitPage() {
   const router = useRouter();
   const [tasks, setTasks] = useState<Task[]>([]);
   const hasFetched = useRef(false);
+  const volatileToken = useAuthStore.getState().token
+  const playerId = useGlobalStore.getState().playerId
+
   useEffect(() => {
     if (hasFetched.current) return;
     hasFetched.current = true;
     apiClient.post('event/task/gets', { 
-      volatile_token: localStorage.getItem("volatile_token"),
-      player_id: localStorage.getItem("player_id"),
+      volatile_token: volatileToken,
+      player_id: playerId,
       status: 2
     })
       .then((res) => {

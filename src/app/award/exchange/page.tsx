@@ -11,7 +11,7 @@ import type { GlobalState } from '@/types/info'
 
 export default function GetAward() {
   const { name, points, singleCollectionItem, decreasePoints, setSingleCollectionItem } =
-    useGlobalStore() as GlobalState
+    useGlobalStore()
   const router = useRouter()
 
   const handleNext = () => {
@@ -24,10 +24,12 @@ export default function GetAward() {
     } else {
       decreasePoints(points - 100);
       router.push('./collect')
-      apiClient.post('award/item/collect', { 
-        volatile_token: "xxxxxxxxxxxxxxxxxxxxxxxxx",
-        player_id: 123,
-        item_id: singleCollectionItem?.id })
+      apiClient
+        .post('award/item/collect', {
+          volatile_token: localStorage.getItem("volatile_token"),
+          player_id: localStorage.getItem("player_id"),
+          item_id: singleCollectionItem?.id,
+        })
         .then((res) => {
           console.log('res', res)
         })
@@ -48,8 +50,8 @@ export default function GetAward() {
   const getAward = () => {
     apiClient
       .post('/award/exchange/ordinary', {
-        volatile_token: 'xxxxx',
-        player_id: 1,
+        volatile_token: localStorage.getItem("volatile_token"),
+        player_id: localStorage.getItem("player_id"),
       })
       .then((response) => {
         setSingleCollectionItem(response.data.data)

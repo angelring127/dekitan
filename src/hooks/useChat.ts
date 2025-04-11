@@ -143,7 +143,7 @@ export const useChat = () => {
       }
 
       // 태스크 메시지 업데이트 (인덱스 7, 9, 12, 14)
-      if (messageIndex === 7 || messageIndex === 9 || messageIndex === 12 || messageIndex === 14) {
+      if (messageIndex === 7 || messageIndex === 9 || messageIndex === 12) {
         try {
           const taskMessage = await fetchTaskData()
           if (taskMessage) {
@@ -156,6 +156,10 @@ export const useChat = () => {
             }
             if (messagesRef.current[10]) {
               messagesRef.current[10].title = taskMessage
+            }
+
+            if (messagesRef.current[14]) {
+              updatedMessage.message = updatedMessage.message.replace('（やること）', taskMessage)
             }
 
             setDisplayedMessages((prev) => [...prev, deepCopyChatMessage(updatedMessage)])

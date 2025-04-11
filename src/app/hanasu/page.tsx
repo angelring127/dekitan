@@ -15,7 +15,6 @@ function HanasuContent() {
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const messageContainerRef = useRef<HTMLDivElement>(null)
-  // const stampImageRefs = useRef<{ [key: number]: HTMLImageElement | null }>({})
 
   const handleScreenClick = () => {
     const currentMessage = messages[step]
@@ -35,12 +34,6 @@ function HanasuContent() {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' })
     }
   }
-
-  // // 스탬프 이미지 로드 완료 핸들러
-  // const handleStampImageLoad = () => {
-  //   // 이미지 로드 후 약간의 지연을 두고 스크롤 위치 업데이트
-  //   setTimeout(scrollToBottom, 100)
-  // }
 
   // 탭 키 이벤트 핸들러
   const handleKeyDown = (e: React.KeyboardEvent) => {

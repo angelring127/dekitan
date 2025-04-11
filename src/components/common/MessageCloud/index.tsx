@@ -101,7 +101,12 @@ export const MessageCloud: React.FC<MessageCloudProps> = ({
       aria-disabled={disabled}
     >
       {name && <div className={messageName()}>{name}</div>}
-      {title && <div className={messageTitle()}>{title}</div>}
+      {title && (
+        <div
+          className={messageTitle()}
+          dangerouslySetInnerHTML={{ __html: title.replace(/<br\s*\/?>/gi, '<br />') }}
+        />
+      )}
 
       {type === 'input' ? (
         <form onSubmit={handleInputSubmit}>

@@ -40,6 +40,7 @@ export const useChat = () => {
   // category와 taskId 값을 ref로 관리
   const categoryRef = useRef<number | null>(null)
   const taskIdRef = useRef<number | undefined>(undefined)
+  const taskMessageRef = useRef<string | undefined>(undefined)
 
   // API에서 카테고리 메시지를 가져오는 함수
   const fetchCategoryData = useCallback(async () => {
@@ -93,6 +94,7 @@ export const useChat = () => {
         console.log('タスクメッセージを返します:', response.data.messages[0])
         if (response.data.task_id) {
           taskIdRef.current = response.data.task_id
+          taskMessageRef.current = response.data.messages[0]
         } else {
           console.log('タスクIDがありません。')
         }
@@ -142,7 +144,7 @@ export const useChat = () => {
         }
       }
 
-      // 태스크 메시지 업데이트 (인덱스 7, 9, 12, 14)
+      // 태스크 메시지 업데이트 (인덱스 7, 9, 12)
       if (messageIndex === 7 || messageIndex === 9 || messageIndex === 12) {
         try {
           const taskMessage = await fetchTaskData()
@@ -158,10 +160,6 @@ export const useChat = () => {
               messagesRef.current[10].title = taskMessage
             }
 
-            if (messagesRef.current[14]) {
-              updatedMessage.message = updatedMessage.message.replace('（やること）', taskMessage)
-            }
-
             setDisplayedMessages((prev) => [...prev, deepCopyChatMessage(updatedMessage)])
             return true
           }
@@ -174,6 +172,21 @@ export const useChat = () => {
           return true
         }
       }
+
+      if (messageIndex === 14) {
+        const taskMessage = taskMessageRef.current
+        if (!taskMessage) {
+          console.error('タスクメッセージが未定義です。先に取得されていない可能性があります。')
+          return false
+        }
+      
+        const originalMessage = messagesRef.current[messageIndex]
+        const updatedMessage = { ...originalMessage }
+        updatedMessage.message = updatedMessage.message.replace('（やること）', taskMessage)
+      
+        setDisplayedMessages((prev) => [...prev, deepCopyChatMessage(updatedMessage)])
+        return true
+      }    
 
       // 태스크 등록 (인덱스 13)
       if (messageIndex === 13) {
@@ -382,7 +395,7 @@ export const useChat = () => {
               // 14
               type: 'end',
               message:
-                '（やること）なにごともやってみることがだいじ！がんばっているようすをこんどおしえてね！',
+                '（やること）<br>なにごともやってみることがだいじ！<br>がんばっているようすをこんどおしえてね！',
             },
           ]
 

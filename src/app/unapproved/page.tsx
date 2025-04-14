@@ -61,7 +61,11 @@ export default function InitPage() {
         </div>
 
         <div className="w-full flex justify-center p-4">
-          <Button variant="quinary" className="w-[120px] shadow-md shadow-gray-400 bg-white text-cyan-200 text-lg font-bold rounded-l-full rounded-r-full">
+          <Button
+            variant="quinary"
+            className="w-[120px] shadow-md shadow-gray-400 bg-white text-cyan-200 text-lg font-bold rounded-l-full rounded-r-full"
+            onClick={() => router.push('/room')}
+          >
             もどる
           </Button>
         </div>

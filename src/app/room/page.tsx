@@ -121,7 +121,7 @@ const RoomPage = () => {
             <Button
               variant="secondary"
               className="w-full h-12 text-xl font-bold rounded-full bg-[#e40075] text-white hover:bg-[#e40075]/90 shadow-[4px_4px_0_0_rgba(0,0,0,0.25)]"
-              onClick={() => {}}
+              onClick={() => {router.push('/unapproved')}}
             >
               未承認リスト
             </Button>

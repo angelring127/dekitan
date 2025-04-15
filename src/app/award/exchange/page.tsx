@@ -65,6 +65,9 @@ export default function GetAward() {
   }
 
   useEffect(() => {
+    if(!(volatileToken && playerId)) {
+      router.push('/login')
+    }
     apiClient.post('account/profile/player/get', {
       volatile_token: volatileToken,
       player_id: playerId,

@@ -15,7 +15,7 @@ const getInitialState = (): Pick<
 > => {
   if (typeof window === 'undefined') {
     return {
-      name: localStorage.getItem('name') || 'test',
+      name: 'test',
       points: 0,
       mycollection: [],
       singleCollectionItem: null,

@@ -1,230 +1,178 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import ImageViewer from '@/components/common/ImageViewer'
-import { memo, useState } from 'react'
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 import { InformationPanel } from '@/components/common/InformationPanel'
-import { Button } from '@/components/common/Button'
-import { EmphasisConfig } from '@/components/common/ImageViewer/types'
+import type { InformationItem } from '@/components/common/InformationPanel/types'
 
-const textItems = [
-  {
-    id: 'text',
-    content: (
-      <div className="flex flex-col items-center w-full px-4">
-        こうきくん、できたんだね！
-        <br />
-        やったー！
-        <br />
-        すごい、すごーい！
-      </div>
-    ),
-  },
-  {
-    id: 'text2',
-    content: (
-      <div className="flex flex-col items-center w-full px-4">
-        「︎できた」の原石が
-        <br />
-        みつかったよ！
-        <br />
-        おうちの人にみてもらおうよ！
-      </div>
-    ),
-  },
-  {
-    id: 'text3',
-    content: 'ねぇ、ねぇ！こうきくん、\n「はなうた」ができたんだよ！\nすごいよね！',
-  },
-  {
-    id: 'text4',
-    content: 'こうきくん、やったね！\n原石ゲットだよ！\nぼくもうれしい！',
-  },
-  {
-    id: 'text5',
-    content: '原石のパワーが\n100ポイントたまると、すてきなアイテムを発明できるんだ！',
-  },
-]
+function DekitaContent() {
+  const [imagesLoaded, setImagesLoaded] = useState(false)
+  const [showStamp, setShowStamp] = useState(false)
+  const [showEffect, setShowEffect] = useState(false)
+  const [showMessage, setShowMessage] = useState(false)
+  const [currentMessageIndex, setCurrentMessageIndex] = useState(0)
+  const [animationComplete, setAnimationComplete] = useState(false)
+  const [effectPosition, setEffectPosition] = useState('translate-y-[40%]')
 
-const CardDemo = memo(() => {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [isStamp, setIsStamp] = useState(false)
-  const [isScore, setIsScore] = useState(0)
-  const handleNext = () => {
-    setCurrentIndex(currentIndex != 2 && currentIndex != 4 ? currentIndex + 1 : currentIndex)
-  }
+  const messages: InformationItem[] = [
+    {
+      id: 'message1',
+      content: 'こうきくん、できたんだね！',
+    },
+    {
+      id: 'message2',
+      content: 'やったー！',
+    },
+    {
+      id: 'message3',
+      content: 'すごい、すごーい！',
+    },
+  ]
 
-  const stampEmphasis: EmphasisConfig = {
-    type: 'shine',
-    duration: 1500,
-    repeat: 0,
-  }
+  useEffect(() => {
+    const imageUrls = [
+      '/images/dekita/bg_landscape.png',
+      '/images/dekita/GJ_stamp_mono.png',
+      '/images/dekita/animC2_dekitan.png',
+      '/images/dekita/animC2eff_stamp.png',
+    ]
 
-  const gensekiEmphasis: EmphasisConfig = {
-    type: 'shine',
-    duration: 1500,
-    repeat: 0,
-  }
+    let loadedCount = 0
+    const totalImages = imageUrls.length
 
-  const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
-
-  const selectScore = async (score: number) => {
-    setIsScore(score)
-    await sleep(1000)
-    try {
-      const response = await fetch('http://localhost:8000/award/point/add', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          volatile_token: 'xxxx',
-          player_id: '1',
-          task_id: '1',
-          point: score,
-        }),
-      })
-
-      if (!response.ok) {
-        throw new Error('スコアの送信に失敗しました')
+    imageUrls.forEach((url) => {
+      const img = new window.Image()
+      img.src = url
+      img.onload = () => {
+        loadedCount++
+        if (loadedCount === totalImages) {
+          setImagesLoaded(true)
+        }
       }
-    } catch (error) {
-      console.error('エラー:', error)
+    })
+  }, [])
+
+  useEffect(() => {
+    if (imagesLoaded && !animationComplete) {
+      const timer1 = setTimeout(() => setShowStamp(true), 500)
+      const timer2 = setTimeout(() => setShowEffect(true), 2000)
+      const timer3 = setTimeout(() => {
+        setShowMessage(true)
+        setAnimationComplete(true)
+      }, 4500)
+
+      return () => {
+        clearTimeout(timer1)
+        clearTimeout(timer2)
+        clearTimeout(timer3)
+      }
     }
-    setCurrentIndex(currentIndex + 1)
+  }, [imagesLoaded, animationComplete])
+
+  useEffect(() => {
+    if (showEffect && !animationComplete) {
+      const timer = setTimeout(() => {
+        setEffectPosition('translate-y-[25%]')
+      }, 1000)
+      return () => clearTimeout(timer)
+    }
+  }, [showEffect, animationComplete])
+
+  const handleNextMessage = () => {
+    if (currentMessageIndex < messages.length - 1) {
+      setCurrentMessageIndex((prev) => prev + 1)
+    }
+  }
+
+  if (!imagesLoaded) {
+    return (
+      <div className="w-full h-[100dvh] flex items-center justify-center bg-black">
+        <div className="text-white text-xl">로딩중...</div>
+      </div>
+    )
   }
 
   return (
-    <div
-      style={{
-        backgroundImage: `url('/images/messages/bg_message.png')`,
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}
-    >
-      <div className="mx-auto min-h-screen">
-        <main className="p-4">
-          <section className="mb-8" aria-labelledby="point-card-section">
-            <div className="mx-auto h-auto">
-              {!isStamp && (
-                <Image
-                  src="/images/circle.png"
-                  alt="Stamp"
-                  width={400}
-                  height={400}
-                  className="mx-auto h-auto mb-5"
-                  onClick={() => setIsStamp(true)}
-                />
-              )}
-              {isStamp && currentIndex == 0 && (
-                <ImageViewer
-                  src="/images/circle_stamp.png"
-                  alt="Stamp"
-                  width={400}
-                  height={400}
-                  // className="mx-auto h-auto mb-5 animate-stamp"
-                  className={`${
-                    currentIndex == 0
-                      ? 'mx-auto h-auto mb-5 animate-stamp'
-                      : 'mx-auto h-auto mb-5 animate-stamp'
-                  }`}
-                  emphasisAnimation={stampEmphasis}
-                />
-              )}
-              {currentIndex != 0 && (
-                <ImageViewer
-                  src="/images/gensekiok.png"
-                  alt="Stamp"
-                  width={400}
-                  height={400}
-                  className="mx-auto h-auto mb-5 animate-fade-in-up"
-                  emphasisAnimation={gensekiEmphasis}
-                />
-              )}
-            </div>
-            <div className="mx-auto h-auto">
-              {isStamp && (
-                <InformationPanel
-                  items={textItems}
-                  sequential
-                  currentIndex={currentIndex}
-                  onNext={handleNext}
-                  useTypingEffect
-                  className="block mb-5"
-                />
-              )}
-              {currentIndex == 1 && (
-                <div className="mx-auto max-w-[320px] text-center flex flex-col gap-3">
-                  <Button className="rounded-full" onClick={handleNext}>
-                    みてもらう
-                  </Button>
-                  <Button className="rounded-full" onClick={handleNext}>
-                    あとでみてもらう
-                  </Button>
-                </div>
-              )}
-              {currentIndex == 2 && (
-                <div className="mx-auto flex flex-col gap-3 max-w-[320px] text-center">
-                  <Button className="rounded-full" onClick={() => selectScore(3)}>
-                    めちゃすごい！ 3pt
-                    {isScore == 3 && (
-                      <Image
-                        src="/images/ic_great_job_circle.png"
-                        alt="Stamp"
-                        width={85}
-                        height={85}
-                        style={{ position: 'absolute', right: 0, left: 250, margin: 'auto' }}
-                        className="animate-stamp"
-                      />
-                    )}
-                  </Button>
-                  <Button className="rounded-full" onClick={() => selectScore(2)}>
-                    グッド！ 2pt
-                    {isScore == 2 && (
-                      <Image
-                        src="/images/ic_great_job_circle.png"
-                        alt="Stamp"
-                        width={85}
-                        height={85}
-                        style={{ position: 'absolute', right: 0, left: 250, margin: 'auto' }}
-                        className="animate-stamp"
-                      />
-                    )}
-                  </Button>
-                  <Button className="rounded-full" onClick={() => selectScore(1)}>
-                    がんばったね！ 1pt
-                    {isScore == 1 && (
-                      <Image
-                        src="/images/ic_great_job_circle.png"
-                        alt="Stamp"
-                        width={85}
-                        height={85}
-                        style={{ position: 'absolute', right: 0, left: 250, margin: 'auto' }}
-                        className="animate-stamp"
-                      />
-                    )}
-                  </Button>
-                </div>
-              )}
-              {currentIndex == 3 && (
-                <div className="mx-auto flex flex-col gap-3 max-w-[320px] text-center">
-                  <Button
-                    className="rounded-full"
-                    onClick={() => setCurrentIndex(currentIndex + 1)}
-                  >
-                    次へ
-                  </Button>
-                </div>
-              )}
-            </div>
-          </section>
-        </main>
+    <div className="relative w-full h-[100dvh] flex justify-center bg-black overflow-hidden">
+      <div className="w-full h-full relative">
+        {/* 타이틀 */}
+        <div className="absolute top-0 left-0 right-0 w-full h-20 flex items-center justify-center bg-white z-[11]">
+          <h1 className="font-title">できたほうこく</h1>
+        </div>
+
+        {/* 배경 이미지 */}
+        <div className="absolute inset-0">
+          <Image
+            src="/images/dekita/bg_landscape.png"
+            alt="メッセージ背景"
+            width={100}
+            height={200}
+            className="w-full h-full object-cover"
+            priority
+          />
+        </div>
+
+        {/* 스탬프 이미지 */}
+        {showStamp && !showEffect && (
+          <div className="absolute top-[10%] left-[10%] transform -translate-x-[5%] translate-y-[50%] z-10 scale-150">
+            <Image
+              src="/images/dekita/GJ_stamp_mono.png"
+              alt="スタンプ"
+              width={2000}
+              height={2000}
+            />
+          </div>
+        )}
+
+        {/* 캐릭터 이미지 */}
+        {showStamp && (
+          <div className="absolute top-[45%] left-[45%] transform -translate-x-[40%] -translate-y-[70%] z-30 scale-150">
+            <Image
+              src="/images/dekita/animC2_dekitan.png"
+              alt="キャラクター"
+              width={500}
+              height={500}
+              className="transition-all duration-300"
+            />
+          </div>
+        )}
+
+        {/* 이펙트 이미지 */}
+        {showEffect && (
+          <div
+            className={`absolute transform z-20 transition-transform duration-500 ${effectPosition} scale-150`}
+          >
+            <Image
+              src="/images/dekita/animC2eff_stamp.png"
+              alt="エフェクト"
+              width={2000}
+              height={2000}
+            />
+          </div>
+        )}
+
+        {/* 메시지 패널 */}
+        {showMessage && (
+          <div className="absolute bottom-20 left-0 right-0 px-4 z-40">
+            <InformationPanel
+              items={messages}
+              currentIndex={currentMessageIndex}
+              onNext={handleNextMessage}
+              background="white"
+              withShadow={true}
+            />
+          </div>
+        )}
       </div>
     </div>
   )
-})
+}
 
-CardDemo.displayName = 'CardDemo'
-
-export default CardDemo
+export default function Dekita() {
+  return (
+    <ProtectedRoute>
+      <DekitaContent />
+    </ProtectedRoute>
+  )
+}

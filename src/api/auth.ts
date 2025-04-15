@@ -8,6 +8,7 @@ import { USER_ROLE } from '@/constants'
 
 const LOGIN_URL = '/account/auth/login'
 const VERIFY_URL = '/account/auth/verify'
+const RESET_PASSWORD_URL = '/account/auth/reset/password'
 
 export interface LoginResponse {
   data: {
@@ -57,7 +58,8 @@ export const login = async (credentials: LoginRequest): Promise<boolean> => {
       console.log('ログイン後セッションクッキーが発見されました:', sessionCookie)
     }
 
-    if (response.data.status === 2000) {
+    // セッションクッキーが発見された場合のみ、ログイン成功と判断
+    if (sessionCookie) {
       const { volatile_token, player_id } = response.data.data
       console.log('受け取ったトークン:', volatile_token)
       console.log('受け取ったプレイヤーID:', player_id)
@@ -225,5 +227,33 @@ export const logout = async (): Promise<boolean> => {
   } catch (err) {
     console.error('ログアウト中にエラーが発生しました:', err)
     return false
+  }
+}
+
+// 비밀번호 재설정 요청 타입
+export interface ResetPasswordRequest {
+  email: string
+  nickname: string
+}
+
+// 비밀번호 재설정 응답 타입
+export interface ResetPasswordResponse {
+  status: number
+  message: string
+  data: Record<string, unknown>
+}
+
+// 비밀번호 재설정 API 호출 함수
+export const requestPasswordReset = async (
+  params: ResetPasswordRequest
+): Promise<ResetPasswordResponse> => {
+  try {
+    console.log('비밀번호 재설정 요청:', params)
+    const response = await axiosInstance.post<ResetPasswordResponse>(RESET_PASSWORD_URL, params)
+    console.log('비밀번호 재설정 응답:', response.data)
+    return response.data
+  } catch (error) {
+    console.error('비밀번호 재설정 중 오류가 발생했습니다:', error)
+    throw error
   }
 }

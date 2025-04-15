@@ -4,18 +4,54 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { InformationPanel } from '@/components/common/InformationPanel'
 import { Button } from '@/components/common/Button'
+import { requestPasswordReset } from '@/api/auth'
 
 export default function LoginPage() {
   const router = useRouter()
   const [currentIndex] = useState(0)
   const [email, setEmail] = useState('')
+  const [nickname, setNickname] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    // TODO: 로그인 로직 구현
-    setIsLoading(false)
+    setError(null)
+
+    try {
+      const response = await requestPasswordReset({ email, nickname })
+
+      if (response.status === 2000) {
+        // 성공 시 로그인 페이지로 이동
+        router.replace('/login')
+        return
+      }
+
+      // 에러 메시지 설정
+      switch (response.status) {
+        case 4008:
+          setError('メールアドレスまたはニックネームが正しくありません。')
+          break
+        case 4016:
+          setError('メールアドレスの形式が正しくありません。')
+          break
+        case 4023:
+          setError('ニックネームの形式が正しくありません。')
+          break
+        case 5011:
+        case 5037:
+          router.push('/error')
+          return
+        default:
+          setError('予期せぬエラーが発生しました。')
+      }
+    } catch (error) {
+      setError('システムエラーが発生しました。')
+      console.error('Password reset error:', error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleBack = () => {
@@ -33,6 +69,8 @@ export default function LoginPage() {
         </p>
       </div>
 
+      {error && <div className="p-3 bg-red-100 text-red-700 rounded-lg text-sm">{error}</div>}
+
       <div className="space-y-2">
         <label htmlFor="email" className="block text-sm font-medium text-gray-700">
           メールアドレス
@@ -47,6 +85,19 @@ export default function LoginPage() {
         />
       </div>
 
+      <div className="space-y-2">
+        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+          ニックネーム
+        </label>
+        <input
+          id="nickname"
+          type="text"
+          value={nickname}
+          onChange={(e) => setNickname(e.target.value)}
+          className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
+          required
+        />
+      </div>
       <Button type="submit" variant="primary" fullWidth loading={isLoading}>
         送信する
       </Button>

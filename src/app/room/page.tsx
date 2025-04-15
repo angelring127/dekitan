@@ -188,7 +188,7 @@ const RoomPage = () => {
         <div className="w-[85%] mx-auto">
           <div className="grid grid-cols-4 gap-2">
             {/* はつめいする */}
-            <button className="flex flex-col items-center gap-1">
+            <button className="flex flex-col items-center gap-1" onClick={() => {router.push('/award/exchange')}}>
               <div className="w-[75px] h-[75px] transition-transform hover:scale-105 active:scale-95">
                 <Image
                   src="/images/icons/invent_maru_icon.png"

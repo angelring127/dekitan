@@ -12,6 +12,7 @@ const getInitialState = (): Pick<
   | 'childinfo'
   | 'volatileToken'
   | 'playerId'
+  | 'tasks'
 > => {
   if (typeof window === 'undefined') {
     return {
@@ -23,6 +24,7 @@ const getInitialState = (): Pick<
       childinfo: { parent_id: '', suffix: '', name: '', schoolYear: '' },
       volatileToken: null,
       playerId: null,
+      tasks: [],
     }
   }
 
@@ -43,6 +45,7 @@ const getInitialState = (): Pick<
     },
     volatileToken: localStorage.getItem('volatileToken') || null,
     playerId: Number(localStorage.getItem('playerId')) || null,
+    tasks: JSON.parse(localStorage.getItem('tasks') || '[]'),
   }
 }
 
@@ -136,5 +139,16 @@ export const useGlobalStore = create<GlobalState>((set, get) => ({
       localStorage.setItem('playerId', id?.toString() || '')
     }
     set({ playerId: id })
+  },
+
+  setTasks: (tasks) => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('tasks', JSON.stringify(tasks))
+    }
+    set({ tasks })
+  },
+
+  getTaskById: (id) => {
+    return get().tasks.find((task) => task.id === id)
   },
 }))

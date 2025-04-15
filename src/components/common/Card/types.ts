@@ -3,6 +3,7 @@ export type CardVariant = 'point' | 'text'
 export interface BaseCardProps {
   className?: string
   children?: React.ReactNode
+  onClick?: () => void
 }
 
 export interface PointCardProps extends BaseCardProps {

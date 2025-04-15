@@ -1,22 +1,5 @@
 import axios from 'axios'
 import { useAuthStore } from '@/store/auth'
-// 세션 토큰을 가져오는 함수
-const getSessionToken = () => {
-  try {
-    // localStorage에서 토큰 가져오기
-    const token = localStorage.getItem('volatile_token')
-
-    // 토큰이 없으면 콘솔에 경고 출력
-    if (!token) {
-      console.warn('세션 토큰이 없습니다. 로그인이 필요합니다.')
-    }
-
-    return token
-  } catch (error) {
-    console.error('세션 토큰을 가져오는 중 오류가 발생했습니다:', error)
-    return null
-  }
-}
 
 // axios 인스턴스 생성
 const axiosInstance = axios.create({
@@ -71,8 +54,7 @@ axiosInstance.interceptors.response.use(
     // 401 Unauthorized 또는 403 Forbidden 오류 처리
     if (error.response && (error.response.status === 401 || error.response.status === 403)) {
       // 세션 만료 또는 인증 오류 처리
-      localStorage.removeItem('volatile_token')
-      localStorage.removeItem('player_id')
+      useAuthStore.getState().logout()
 
       // 로그인 페이지로 리다이렉트
       if (typeof window !== 'undefined') {

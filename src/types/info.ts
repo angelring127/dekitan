@@ -6,6 +6,13 @@ export interface CollectionItem {
   parent_id: string
 }
 
+export interface Task {
+  id: number
+  title: string
+  status?: string
+  updated_at?: string
+}
+
 export interface ChildInfo {
   parent_id: string
   suffix: string
@@ -30,6 +37,7 @@ export interface GlobalState {
   volatileToken: string | null
   playerId: number | null
   honorific_title: number
+  tasks: Task[]
 
   setName: (newName: string) => void
   setParentInfo: (key: keyof ParentInfo, value: string) => void
@@ -47,4 +55,6 @@ export interface GlobalState {
   setHonorificTitle: (value: number) => void
   getHonorific: () => string
   setPoints: (totalPoint: number, currentPoint: number) => void
+  setTasks: (tasks: Task[]) => void
+  getTaskById: (id: number) => Task | undefined
 }

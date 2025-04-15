@@ -16,6 +16,7 @@ const getInitialState = (): Pick<
   | 'volatileToken'
   | 'playerId'
   | 'honorific_title'
+  | 'tasks'
 > => {
   if (typeof window === 'undefined') {
     return {
@@ -30,6 +31,7 @@ const getInitialState = (): Pick<
       volatileToken: null,
       playerId: null,
       honorific_title: 4, // 기본값: 'なし'
+      tasks: [],
     }
   }
 
@@ -53,6 +55,7 @@ const getInitialState = (): Pick<
     volatileToken: localStorage.getItem('volatileToken') || null,
     playerId: Number(localStorage.getItem('playerId')) || null,
     honorific_title: Number(localStorage.getItem('honorific_title')) || 4, // 기본값: 'なし'
+    tasks: JSON.parse(localStorage.getItem('tasks') || '[]'),
   }
 }
 
@@ -167,5 +170,16 @@ export const useGlobalStore = create<GlobalState>((set, get) => ({
       localStorage.setItem('current_point', currentPoint.toString())
     }
     set({ total_point: totalPoint, current_point: currentPoint })
+  },
+
+  setTasks: (tasks) => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('tasks', JSON.stringify(tasks))
+    }
+    set({ tasks })
+  },
+
+  getTaskById: (id) => {
+    return get().tasks.find((task) => task.id === id)
   },
 }))

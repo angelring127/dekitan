@@ -6,7 +6,7 @@ import type { CardProps } from './types'
 import { cn } from '@/lib/utils'
 
 const Card = memo((props: CardProps) => {
-  const { variant, className = '' } = props
+  const { variant, className = '', onClick } = props
 
   if (variant === 'point') {
     const { title, point } = props
@@ -15,6 +15,7 @@ const Card = memo((props: CardProps) => {
         className={`w-[47%] rounded-2xl shadow-md overflow-hidden ${className}`}
         role="article"
         aria-label={`${title} カード: ${point} ポイント`}
+        onClick={onClick}
       >
         <div className="bg-[#FF9F1C] p-2 text-center text-black">
           <h3 className="text-lg font-bold">{title}</h3>
@@ -50,6 +51,7 @@ const Card = memo((props: CardProps) => {
       className={cn('rounded-xl shadow-md overflow-hidden', className)}
       role="article"
       aria-label={`${headerText} カード: ${bodyText}`}
+      onClick={onClick}
     >
       <div className={cn(headerColorMap[headerColor], 'py-2 px-4')}>
         <h3 className={cn('font-bold', headerClassName)}>{headerText}</h3>

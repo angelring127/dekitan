@@ -2,13 +2,14 @@
 
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/common/Button'
 import Card from '@/components/common/Card'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 import { logout } from '@/api/auth'
 import { getPointsInfo } from '@/api/profile'
 import { useGlobalStore } from '@/store/info'
-import { useEffect } from 'react'
+import { getTasks, Task } from '@/api/task'
 
 const RoomPage = () => {
   const router = useRouter()
@@ -25,6 +26,41 @@ const RoomPage = () => {
     fetchPointsInfo()
   }, [setPoints])
 
+  const [tasks, setTasks] = useState<Task[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const playerId = useGlobalStore((state) => state.playerId)
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        setIsLoading(true)
+
+        if (!playerId) {
+          console.error('プレイヤーIDが見つかりません')
+          return
+        }
+
+        const response = await getTasks({
+          player_id: playerId,
+        })
+
+        console.log(response)
+        if (response.status === 2000) {
+          setTasks(response.data.list)
+          useGlobalStore.getState().setTasks(response.data.list)
+        } else {
+          console.error(`エラーが発生しました: ${response.message}`)
+        }
+      } catch (err) {
+        console.error('タスクの取得に失敗しました:', err)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchTasks()
+  }, [playerId])
+
   const handleHanasuClick = () => {
     router.push('/hanasu')
   }
@@ -34,6 +70,10 @@ const RoomPage = () => {
     if (success) {
       router.push('/login')
     }
+  }
+
+  const handleTaskClick = (taskId: number) => {
+    router.push(`/dekitakakunin?id=${taskId}`)
   }
 
   return (
@@ -173,30 +213,37 @@ const RoomPage = () => {
               </button>
             </div>
           </Card>
-          <Card
-            variant="text"
-            headerText="できた？"
-            headerColor="green"
-            bodyText="おさらあらい"
-            className="w-full shadow-[0_4px_0_0_rgba(0,0,0,0.25)]"
-            headerClassName="text-xl font-bold text-white text-center"
-          >
-            <div className="bg-white py-4 px-4">
-              <p className="text-3xl font-bold text-center">おさらあらい</p>
+
+          {/* できたリスト 표시 */}
+          {isLoading ? (
+            <div className="text-center py-4">
+              <p className="text-lg">読み込み中...</p>
             </div>
-          </Card>
-          <Card
-            variant="text"
-            headerText="できた？"
-            headerColor="green"
-            bodyText="じてんしゃにのる"
-            className="w-full shadow-[0_4px_0_0_rgba(0,0,0,0.25)]"
-            headerClassName="text-xl font-bold text-white text-center"
-          >
-            <div className="bg-white py-4 px-4">
-              <p className="text-3xl font-bold text-center">じてんしゃにのる</p>
+          ) : tasks.length === 0 ? (
+            <div className="text-center py-4">
+              <p className="text-lg">タスクがありません</p>
             </div>
-          </Card>
+          ) : (
+            tasks.map((task) => (
+              <Card
+                key={task.id}
+                variant="text"
+                headerText="できた？"
+                headerColor="green"
+                bodyText={task.title}
+                className="w-full shadow-[0_4px_0_0_rgba(0,0,0,0.25)] cursor-pointer hover:shadow-lg transition-shadow"
+                headerClassName="text-xl font-bold text-white text-center"
+                onClick={() => handleTaskClick(task.id)}
+              >
+                <div className="bg-white py-4 px-4">
+                  <p className="text-3xl font-bold text-center">{task.title}</p>
+                  <p className="text-sm text-gray-500 text-center mt-2">
+                    {new Date(task.updated_at).toLocaleString('ja-JP')}
+                  </p>
+                </div>
+              </Card>
+            ))
+          )}
         </div>
       </div>
 

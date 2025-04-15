@@ -26,20 +26,20 @@ export default function MyCollections() {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const hasApiBeenCalled = useRef(false);
   useEffect(() => {
-    if (mycollection.length === 0 && !hasApiBeenCalled.current) {
-      hasApiBeenCalled.current = true;
-      apiClient
-        .post('/award/item/gets', {
-          volatile_token: volatileToken,
-          player_id: playerId,
-        })
-        .then((response) => {
-          addToCollection(response.data.data.list);
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
-    }
+    hasApiBeenCalled.current = true;
+    apiClient
+      .post('/award/item/gets', {
+        volatile_token: volatileToken,
+        player_id: playerId,
+      })
+      .then((response) => {
+        console.log("response")
+        console.log(response)
+        addToCollection(response.data.data.list);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
   }, []);
 
   const [initialItems, setInitialItems] = useState(() => myCollection(singleCollectionItem));

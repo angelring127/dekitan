@@ -1,22 +1,22 @@
 import axiosInstance from './axios'
 import { Profile, ProfileListResponse } from '@/types/profile'
+import { useGlobalStore } from '@/store/info'
+export interface PointsInfo {
+  total_point: number
+  current_point: number
+}
+
+export interface PointsResponse {
+  status: number
+  message: string
+  data: {
+    total_point: number
+    current_point: number
+  }
+}
 
 export const getProfileList = async (): Promise<Profile[]> => {
   try {
-    // 세션 토큰 확인
-    const volatile_token = localStorage.getItem('volatile_token')
-
-    if (!volatile_token) {
-      console.error('인증 토큰이 없습니다. 로그인이 필요합니다.')
-
-      // 로그인 페이지로 리다이렉트
-      if (typeof window !== 'undefined') {
-        window.location.href = '/login'
-      }
-
-      return []
-    }
-
     console.log('프로필 목록 요청 시작')
 
     // API 요청 - 토큰은 axios 인스턴스의 인터셉터에서 자동으로 헤더와 본문에 추가됨
@@ -57,5 +57,54 @@ export const getProfileList = async (): Promise<Profile[]> => {
   } catch (error) {
     console.error('프로필 목록을 가져오는 중 오류가 발생했습니다:', error)
     return []
+  }
+}
+
+export const getPointsInfo = async (): Promise<PointsInfo | null> => {
+  try {
+    // API 요청 - 토큰은 axios 인스턴스의 인터셉터에서 자동으로 헤더와 본문에 추가됨
+    const playerId = useGlobalStore.getState().playerId
+    const response = await axiosInstance.post<PointsResponse>(
+      '/account/profile/player/get',
+      {
+        player_id: playerId,
+      } // volatile_token은 인터셉터에서 자동으로 추가됨
+    )
+
+    console.log('포인트 정보 응답:', response.data)
+
+    if (response.data.status === 2000) {
+      return {
+        total_point: response.data.data.total_point,
+        current_point: response.data.data.current_point,
+      }
+    }
+
+    // 특정 상태 코드에 따른 처리
+    if (response.data.status === 4003 || response.data.status === 4004) {
+      // 인증 토큰 관련 오류 - 로그아웃 처리
+      console.error('인증 토큰 오류:', response.data.message)
+      localStorage.removeItem('volatile_token')
+      localStorage.removeItem('player_id')
+
+      // 로그인 페이지로 리다이렉트
+      if (typeof window !== 'undefined') {
+        window.location.href = '/login'
+      }
+
+      return null
+    }
+
+    if (response.data.status === 5007) {
+      // 시스템 오류
+      console.error('시스템 오류가 발생했습니다:', response.data.message)
+      return null
+    }
+
+    console.error('알 수 없는 오류:', response.data)
+    return null
+  } catch (error) {
+    console.error('포인트 정보를 가져오는 중 오류가 발생했습니다:', error)
+    return null
   }
 }

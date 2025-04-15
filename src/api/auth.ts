@@ -5,6 +5,7 @@ import { AxiosHeaders, AxiosRequestConfig } from 'axios'
 import type { GlobalState } from '@/types/info'
 import { getProfileList } from './profile'
 import { USER_ROLE } from '@/constants'
+import { useRouter } from 'next/navigation'
 
 const LOGIN_URL = '/account/auth/login'
 const VERIFY_URL = '/account/auth/verify'
@@ -41,12 +42,12 @@ export const login = async (credentials: LoginRequest): Promise<LoginResult> => 
     // ログインリクエスト
     const response = await axiosInstance.post<LoginResponse>(LOGIN_URL, credentials)
 
-    const { volatile_token, player_id, status, message } = response.data.data
+    const { volatile_token, player_id, message } = response.data.data
     console.log('受け取ったトークン:', volatile_token)
     console.log('受け取ったプレイヤーID:', player_id)
 
     // ステータスコードによる処理
-    if (status === 2000) {
+    if (response.data.status === 2000) {
       // ローカルストレージにトークンを保存
       localStorage.setItem('volatile_token', volatile_token)
       localStorage.setItem('player_id', player_id.toString())
@@ -61,7 +62,7 @@ export const login = async (credentials: LoginRequest): Promise<LoginResult> => 
       useGlobalStore.getState().setPlayerId(player_id)
 
       // ユーザー情報をストアに保存
-      const { setName } = useGlobalStore.getState() as GlobalState
+      const { setName, setHonorificTitle } = useGlobalStore.getState() as GlobalState
 
       // プロフィールリストを取得
       try {
@@ -86,6 +87,8 @@ export const login = async (credentials: LoginRequest): Promise<LoginResult> => 
           // ニックネームを設定
           setName(smallestIdProfile.nickname)
           console.log('設定されたニックネーム:', smallestIdProfile.nickname)
+          setHonorificTitle(smallestIdProfile.honorific_title)
+          console.log('設定されたニックネーム:', smallestIdProfile.nickname)
         } else {
           console.log('プレイヤーロールのプロフィールがありません。')
         }
@@ -96,10 +99,10 @@ export const login = async (credentials: LoginRequest): Promise<LoginResult> => 
       return { success: true }
     } else {
       // ステータスコードによるエラー処理
-      const errorCode = status
+      const errorCode = response.data.status
       let errorMessage = message || 'ログインに失敗しました。'
 
-      switch (status) {
+      switch (response.data.status) {
         case 4001:
           errorMessage = 'IDまたはパスワードが正しくありません。再度お試しください。'
           break
@@ -200,13 +203,13 @@ export const verifyToken = async (): Promise<boolean> => {
 
 export const logout = async (): Promise<boolean> => {
   try {
-    const volatile_token = localStorage.getItem('volatile_token')
+    const volatile_token = useAuthStore.getState().token
 
     if (!volatile_token) {
       console.error('認証トークンがありません。')
-      return false
     }
 
+    console.log('ログアウト 토큰:', volatile_token)
     // ログアウトリクエスト
     const response = await axiosInstance.post('/account/auth/logout', {
       volatile_token,

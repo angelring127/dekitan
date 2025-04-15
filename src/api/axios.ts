@@ -1,5 +1,5 @@
 import axios from 'axios'
-
+import { useAuthStore } from '@/store/auth'
 // 세션 토큰을 가져오는 함수
 const getSessionToken = () => {
   try {
@@ -33,14 +33,15 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     // 세션 토큰이 있으면 헤더와 본문에 추가
-    const sessionToken = getSessionToken()
-    if (sessionToken) {
+    const volatileToken = useAuthStore.getState().token
+    console.log('요청 인터셉터 토큰:', volatileToken)
+    if (volatileToken) {
       // 헤더에는 my_token으로 추가
-      config.headers['my_token'] = sessionToken
+      config.headers['my_token'] = volatileToken
 
       // 요청 본문에는 volatile_token으로 추가
       if (config.data && typeof config.data === 'object') {
-        config.data.volatile_token = sessionToken
+        config.data.volatile_token = volatileToken
       }
     } else {
       // 세션 토큰이 없는 경우 경고 출력

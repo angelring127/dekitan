@@ -6,9 +6,24 @@ import { Button } from '@/components/common/Button'
 import Card from '@/components/common/Card'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 import { logout } from '@/api/auth'
+import { getPointsInfo } from '@/api/profile'
+import { useGlobalStore } from '@/store/info'
+import { useEffect } from 'react'
 
 const RoomPage = () => {
   const router = useRouter()
+  const { setPoints, total_point, current_point } = useGlobalStore()
+
+  useEffect(() => {
+    const fetchPointsInfo = async () => {
+      const pointsInfo = await getPointsInfo()
+      if (pointsInfo) {
+        setPoints(pointsInfo.total_point, pointsInfo.current_point)
+      }
+    }
+
+    fetchPointsInfo()
+  }, [setPoints])
 
   const handleHanasuClick = () => {
     router.push('/hanasu')
@@ -48,7 +63,7 @@ const RoomPage = () => {
               className="w-full h-auto"
             />
             <div className="absolute inset-0 flex items-end justify-center pb-1">
-              <p className="text-lg font-bold text-emerald-600">102 ポイント</p>
+              <p className="text-lg font-bold text-emerald-600">{current_point} ポイント</p>
             </div>
           </div>
           <div className="relative w-[140px]">
@@ -60,7 +75,7 @@ const RoomPage = () => {
               className="w-full h-auto"
             />
             <div className="absolute inset-0 flex items-end justify-center pb-1">
-              <p className="text-lg font-bold text-emerald-600">200 ポイント</p>
+              <p className="text-lg font-bold text-emerald-600">{total_point} ポイント</p>
             </div>
           </div>
         </div>
@@ -121,7 +136,9 @@ const RoomPage = () => {
             <Button
               variant="secondary"
               className="w-full h-12 text-xl font-bold rounded-full bg-[#e40075] text-white hover:bg-[#e40075]/90 shadow-[4px_4px_0_0_rgba(0,0,0,0.25)]"
-              onClick={() => {router.push('/unapproved')}}
+              onClick={() => {
+                router.push('/unapproved')
+              }}
             >
               未承認リスト
             </Button>

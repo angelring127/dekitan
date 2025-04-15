@@ -1,3 +1,4 @@
+'use client'
 import { Button } from "@/components/common/Button";
 import { InformationPanel } from "@/components/common/InformationPanel";
 import { myCollection } from "@/hooks/myCollection";
@@ -5,12 +6,10 @@ import { apiClient } from "@/services/api";
 import { useAuthStore } from "@/store/auth";
 import { CollectionItem, useGlobalStore } from "@/store/info";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 
 export default function MyCollections() {
   const { mycollection, addToCollection, setSingleCollectionItem, singleCollectionItem } = useGlobalStore();
-  const router = useRouter();
   const volatileToken = useAuthStore.getState().token
   const playerId = useGlobalStore.getState().playerId
 
@@ -136,12 +135,13 @@ export default function MyCollections() {
         </div>
       </div>
       {currentIndex === 0 && (
-        <Button
-          className="text-lg font-bold relative mt-4 text-black bg-gray-300 rounded-l-full rounded-r-full"
-          onClick={() => { router.push('/') }}
-        >
-          {buttonText}
-        </Button>
+        <a href="/room">
+          <Button
+            className="text-lg font-bold relative mt-4 text-black bg-gray-300 rounded-l-full rounded-r-full"
+          >
+            {buttonText}
+          </Button>
+        </a>
       )}
     </div>
   )

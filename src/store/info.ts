@@ -19,6 +19,7 @@ interface GlobalState {
 
 
   setName: (newName: string) => void;
+  setPoints: (value: number) => void;
   increasePoints: (value: number) => void;
   decreasePoints: (value: number) => void;
   addToCollection: (item: CollectionItem) => void;
@@ -41,8 +42,8 @@ const getInitialState = (): Pick<
 > => {
   if (typeof window === 'undefined') {
     return {
-      name: 'test',
-      points: 120,
+      name: localStorage.getItem('name') || 'test',
+      points: 0,
       mycollection: [],
       singleCollectionItem: null,
       parentinfo: { parent_id: '', name: '' },
@@ -54,9 +55,10 @@ const getInitialState = (): Pick<
 
   return {
     name: localStorage.getItem('name') || 'test',
-    points: Number(localStorage.getItem('points')) || 120,
+    points: Number(localStorage.getItem('points')) || 0,
     mycollection: JSON.parse(localStorage.getItem('mycollection') || '[]'),
-    singleCollectionItem: JSON.parse(localStorage.getItem('singleCollectionItem') || 'null'),
+    // singleCollectionItem: JSON.parse(localStorage.getItem('singleCollectionItem') || 'null'),
+    singleCollectionItem: localStorage.getItem('singleCollectionItem'),
     parentinfo: {
       parent_id: localStorage.getItem('parent_id') || '',
       name: localStorage.getItem('name') || '',
@@ -116,6 +118,11 @@ export const useGlobalStore = create<GlobalState>((set, get) => ({
     }))
   },
 
+  setPoints: (value) => {
+    const newPoints = value
+    localStorage.setItem('points', newPoints.toString())
+    set({ points: newPoints })
+  },
   increasePoints: (value) => {
     const newPoints = get().points + value
     localStorage.setItem('points', newPoints.toString())

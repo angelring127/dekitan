@@ -1,8 +1,8 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { apiClient } from '@/services/api'
 import { InformationPanel } from '@/components/common/InformationPanel'
-import { getAwards } from '@/hooks/awardＧetting'
+import { getAwards } from '@/hooks/awardGetting'
 import { useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -11,7 +11,7 @@ import type { GlobalState } from '@/types/info'
 import { useAuthStore } from '@/store/auth'
 
 export default function GetAward() {
-  const { name, points, singleCollectionItem, decreasePoints, setSingleCollectionItem } =
+  const { name, points, singleCollectionItem, setPoints, decreasePoints, setSingleCollectionItem } =
     useGlobalStore()
   const router = useRouter()
   const volatileToken = useAuthStore.getState().token
@@ -26,7 +26,7 @@ export default function GetAward() {
       setCurrentIndex((prev) => prev + 1)
     } else {
       decreasePoints(points - 100);
-      router.push('./collect')
+      router.push('/award/collect')
       apiClient
         .post('award/item/collect', {
           volatile_token: volatileToken,
@@ -63,6 +63,16 @@ export default function GetAward() {
         console.error('Error:', error)
       })
   }
+
+  useEffect(() => {
+    apiClient.post('account/profile/player/get', {
+      volatile_token: volatileToken,
+      player_id: playerId,
+    })
+    .then((res) => {
+      setPoints(res.data.data.current_point)
+    })
+  }, [])
 
   return (
     <div className="mx-auto flex h-[844px] w-[390px] flex-col items-center overflow-hidden bg-[url('/images/messages/bg_message.png')] bg-cover bg-center bg-no-repeat">

@@ -182,7 +182,19 @@ function DekitaKakuninContent() {
               <Button
                 variant="primary"
                 className="text-lg w-full bg-white text-black font-bold rounded-l-full rounded-r-full  mb-3"
-                onClick={() => router.replace('/room')}
+                onClick={async () => {
+                  if (!taskId || !playerId) return
+                  try {
+                    await updateTaskStatus({
+                      player_id: playerId,
+                      task_id: taskId,
+                      status: TaskStatus.CLOSED,
+                    })
+                    router.replace('/room')
+                  } catch (error) {
+                    console.error('タスク状態の更新中にエラーが発生しました:', error)
+                  }
+                }}
               >
                 はい
               </Button>

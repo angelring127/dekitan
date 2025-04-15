@@ -13,18 +13,32 @@ import { getTasks, Task } from '@/api/task'
 
 const RoomPage = () => {
   const router = useRouter()
-  const { setPoints, total_point, current_point } = useGlobalStore()
+  const { setAllPoints, total_point, current_point } = useGlobalStore()
+  const [isPointsLoading, setIsPointsLoading] = useState(true)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     const fetchPointsInfo = async () => {
-      const pointsInfo = await getPointsInfo()
-      if (pointsInfo) {
-        setPoints(pointsInfo.total_point, pointsInfo.current_point)
+      try {
+        const pointsInfo = await getPointsInfo()
+        if (pointsInfo) {
+          setAllPoints(pointsInfo.total_point, pointsInfo.current_point)
+        }
+      } catch (error) {
+        console.error('포인트 정보 로딩 실패:', error)
+      } finally {
+        setIsPointsLoading(false)
       }
     }
 
-    fetchPointsInfo()
-  }, [setPoints])
+    if (mounted) {
+      fetchPointsInfo()
+    }
+  }, [setAllPoints, mounted])
 
   const [tasks, setTasks] = useState<Task[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -104,7 +118,11 @@ const RoomPage = () => {
               className="w-full h-auto"
             />
             <div className="absolute inset-0 flex items-end justify-center pb-1">
-              <p className="text-lg font-bold text-emerald-600">{current_point} ポイント</p>
+              {!mounted ? null : isPointsLoading ? (
+                <p className="text-lg font-bold text-emerald-600">読み込み中...</p>
+              ) : (
+                <p className="text-lg font-bold text-emerald-600">{current_point} ポイント</p>
+              )}
             </div>
           </div>
           <div className="relative w-[140px]">
@@ -116,7 +134,11 @@ const RoomPage = () => {
               className="w-full h-auto"
             />
             <div className="absolute inset-0 flex items-end justify-center pb-1">
-              <p className="text-lg font-bold text-emerald-600">{total_point} ポイント</p>
+              {!mounted ? null : isPointsLoading ? (
+                <p className="text-lg font-bold text-emerald-600">読み込み中...</p>
+              ) : (
+                <p className="text-lg font-bold text-emerald-600">{total_point} ポイント</p>
+              )}
             </div>
           </div>
         </div>
@@ -253,7 +275,12 @@ const RoomPage = () => {
         <div className="w-[85%] mx-auto">
           <div className="grid grid-cols-4 gap-2">
             {/* はつめいする */}
-            <button className="flex flex-col items-center gap-1" onClick={() => {router.push('/award/exchange')}}>
+            <button
+              className="flex flex-col items-center gap-1"
+              onClick={() => {
+                router.push('/award/exchange')
+              }}
+            >
               <div className="w-[75px] h-[75px] transition-transform hover:scale-105 active:scale-95">
                 <Image
                   src="/images/icons/invent_maru_icon.png"
@@ -281,7 +308,12 @@ const RoomPage = () => {
             </button>
 
             {/* コレクションをみる */}
-            <button className="flex flex-col items-center gap-1" onClick={() => {router.push('/award/collect')}}>
+            <button
+              className="flex flex-col items-center gap-1"
+              onClick={() => {
+                router.push('/award/collect')
+              }}
+            >
               <div className="w-[75px] h-[75px] transition-transform hover:scale-105 active:scale-95">
                 <Image
                   src="/images/icons/collection_maru_icon.png"

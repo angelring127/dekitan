@@ -55,7 +55,7 @@ export interface GlobalState {
   setPlayerId: (id: number | null) => void
   setHonorificTitle: (value: number) => void
   getHonorific: () => string
-  setPoints: (totalPoint: number, currentPoint: number) => void
+  setAllPoints: (totalPoint: number, currentPoint: number) => void
   setTasks: (tasks: Task[]) => void
   getTaskById: (id: number) => Task | undefined
 }

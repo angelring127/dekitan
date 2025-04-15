@@ -169,7 +169,7 @@ export const useGlobalStore = create<GlobalState>((set, get) => ({
     return honorificItem ? honorificItem.honorific : ''
   },
 
-  setPoints: (totalPoint: number, currentPoint: number) => {
+  setAllPoints: (totalPoint: number, currentPoint: number) => {
     if (typeof window !== 'undefined') {
       localStorage.setItem('total_point', totalPoint.toString())
       localStorage.setItem('current_point', currentPoint.toString())

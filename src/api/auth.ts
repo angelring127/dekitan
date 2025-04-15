@@ -42,7 +42,32 @@ export const login = async (credentials: LoginRequest): Promise<LoginResult> => 
     // ログインリクエスト
     const response = await axiosInstance.post<LoginResponse>(LOGIN_URL, credentials)
 
-    const { volatile_token, player_id, message } = response.data.data
+    console.log('ログイン応答:', response.data)
+    console.log('ログイン応答ヘッダー:', response.headers)
+
+    // 応答ヘッダーからクッキー確認
+    const setCookieHeader = response.headers['set-cookie']
+    if (setCookieHeader) {
+      console.log('ログイン後サーバーが設定したクッキー:', setCookieHeader)
+    }
+
+    // クッキー確認
+    const cookies = document.cookie.split(';')
+    console.log('ログイン後の全てのクッキー:', cookies)
+
+    // セッションクッキー確認 (karenainsworth_session または session)
+    const sessionCookie = cookies.find(
+      (cookie) =>
+        cookie.trim().startsWith('karenainsworth_session=') || cookie.trim().startsWith('session=')
+    )
+
+    if (sessionCookie) {
+      console.log('ログイン後セッションクッキーが発見されました:', sessionCookie)
+    }
+
+    // セッションクッキーが発見された場合のみ、ログイン成功と判断
+    // if (sessionCookie) {
+    const { volatile_token, player_id } = response.data.data
     console.log('受け取ったトークン:', volatile_token)
     console.log('受け取ったプレイヤーID:', player_id)
 

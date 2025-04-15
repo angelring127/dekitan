@@ -9,11 +9,12 @@ export const getAwards = (onNext: () => void, name: string, points: number, myco
         <div className="flex flex-col items-center gap-4">
           <br></br>
           <span className="whitespace-pre-line text-center text-1xl font-bold">
-            {name}くん ポイントが{points}ptたまったよ!<br /><br />1回発明ができるよ!
+            {name}くん ポイントが{points}ptたまったよ!<br /><br />{Math.trunc(points / 100)}回発明ができるよ!
           </span>
 
           <Button  variant="yelloish" className='text-lg font-bold mt-4  rounded-l-full rounded-r-full'
             onClick={() => onNext()}
+            disabled={Math.trunc(points / 100) <= 0}
           >
              発明する
           </Button>

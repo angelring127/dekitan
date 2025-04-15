@@ -21,7 +21,7 @@ const getInitialState = (): Pick<
   if (typeof window === 'undefined') {
     return {
       name: 'test',
-      points: 120,
+      points: 0,
       total_point: 0,
       current_point: 0,
       mycollection: [],
@@ -103,6 +103,11 @@ export const useGlobalStore = create<GlobalState>((set, get) => ({
     }))
   },
 
+  setPoints: (value) => {
+    const newPoints = value
+    localStorage.setItem('points', newPoints.toString())
+    set({ points: newPoints })
+  },
   increasePoints: (value) => {
     const newPoints = get().points + value
     localStorage.setItem('points', newPoints.toString())

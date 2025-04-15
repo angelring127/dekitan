@@ -17,7 +17,7 @@ const getInitialState = (): Pick<
   if (typeof window === 'undefined') {
     return {
       name: 'test',
-      points: 120,
+      points: 0,
       mycollection: [],
       singleCollectionItem: null,
       parentinfo: { parent_id: '', name: '' },
@@ -30,7 +30,7 @@ const getInitialState = (): Pick<
 
   return {
     name: localStorage.getItem('name') || 'test',
-    points: Number(localStorage.getItem('points')) || 120,
+    points: Number(localStorage.getItem('points')) || 0,
     mycollection: JSON.parse(localStorage.getItem('mycollection') || '[]'),
     singleCollectionItem: JSON.parse(localStorage.getItem('singleCollectionItem') || 'null'),
     parentinfo: {
@@ -93,6 +93,11 @@ export const useGlobalStore = create<GlobalState>((set, get) => ({
     }))
   },
 
+  setPoints: (value) => {
+    const newPoints = value
+    localStorage.setItem('points', newPoints.toString())
+    set({ points: newPoints })
+  },
   increasePoints: (value) => {
     const newPoints = get().points + value
     localStorage.setItem('points', newPoints.toString())

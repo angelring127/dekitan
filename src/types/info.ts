@@ -41,6 +41,7 @@ export interface GlobalState {
   setChildInfo: (key: keyof ChildInfo, value: string) => void
   syncParentToChild: () => void
 
+  setPoints: (value: number) => void
   increasePoints: (value: number) => void
   decreasePoints: (value: number) => void
   addToCollection: (item: CollectionItem) => void

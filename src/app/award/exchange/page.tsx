@@ -1,18 +1,20 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { apiClient } from '@/services/api'
 import { InformationPanel } from '@/components/common/InformationPanel'
-import { getAwards } from '@/hooks/awardＧetting'
+import { getAwards } from '@/hooks/awardGetting'
 import { useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useGlobalStore } from '@/store/info'
-import type { GlobalState } from '@/types/info'
+import { useAuthStore } from '@/store/auth'
 
 export default function GetAward() {
-  const { name, points, singleCollectionItem, decreasePoints, setSingleCollectionItem } =
-    useGlobalStore() as GlobalState
+  const { name, points, singleCollectionItem, setPoints, decreasePoints, setSingleCollectionItem } =
+    useGlobalStore()
   const router = useRouter()
+  const volatileToken = useAuthStore.getState().token
+  const playerId = useGlobalStore.getState().playerId
 
   const handleNext = () => {
     if (currentIndex === 0) {
@@ -22,12 +24,12 @@ export default function GetAward() {
     if (currentIndex < items.length - 1) {
       setCurrentIndex((prev) => prev + 1)
     } else {
-      decreasePoints(points - 100)
-      router.push('./collect')
+      decreasePoints(points - 100);
+      router.push('/award/collect')
       apiClient
         .post('award/item/collect', {
-          volatile_token: 'xxxxxxxxxxxxxxxxxxxxxxxxx',
-          player_id: 123,
+          volatile_token: volatileToken,
+          player_id: playerId,
           item_id: singleCollectionItem?.id,
         })
         .then((res) => {
@@ -50,8 +52,8 @@ export default function GetAward() {
   const getAward = () => {
     apiClient
       .post('/award/exchange/ordinary', {
-        volatile_token: 'xxxxx',
-        player_id: 1,
+        volatile_token: volatileToken,
+        player_id: playerId,
       })
       .then((response) => {
         setSingleCollectionItem(response.data.data)
@@ -60,6 +62,19 @@ export default function GetAward() {
         console.error('Error:', error)
       })
   }
+
+  useEffect(() => {
+    if(!(volatileToken && playerId)) {
+      router.push('/login')
+    }
+    apiClient.post('account/profile/player/get', {
+      volatile_token: volatileToken,
+      player_id: playerId,
+    })
+    .then((res) => {
+      setPoints(res.data.data.current_point)
+    })
+  }, [])
 
   return (
     <div className="mx-auto flex h-[844px] w-[390px] flex-col items-center overflow-hidden bg-[url('/images/messages/bg_message.png')] bg-cover bg-center bg-no-repeat">

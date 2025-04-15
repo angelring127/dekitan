@@ -118,7 +118,7 @@ function DekitaContent() {
   if (!imagesLoaded) {
     return (
       <div className="w-full h-[100dvh] flex items-center justify-center bg-black">
-        <div className="text-white text-xl">로딩중...</div>
+        <div className="text-white text-xl">読み込み中...</div>
       </div>
     )
   }

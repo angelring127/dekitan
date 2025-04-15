@@ -4,7 +4,8 @@ import { InformationPanel } from "@/components/common/InformationPanel";
 import { myCollection } from "@/hooks/myCollection";
 import { apiClient } from "@/services/api";
 import { useAuthStore } from "@/store/auth";
-import { CollectionItem, useGlobalStore } from "@/store/info";
+import { useGlobalStore } from "@/store/info";
+import { CollectionItem } from "@/types/info";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 

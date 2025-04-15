@@ -1,32 +1,5 @@
-import { create } from "zustand";
-
-export interface CollectionItem {
-  id: number | null;
-  title: string;
-  description: string;
-  image?: string;
-  count: number;
-  // parent_id: string;
-}
-
-
-interface GlobalState {
-  name: string;
-  points: number;
-  mycollection: CollectionItem[];
-  singleCollectionItem: CollectionItem | null;
-
-
-
-  setName: (newName: string) => void;
-  setPoints: (value: number) => void;
-  increasePoints: (value: number) => void;
-  decreasePoints: (value: number) => void;
-  addToCollection: (item: CollectionItem) => void;
-  removeFromCollection: (id: number) => void;
-  setSingleCollectionItem: (item: CollectionItem) => void;
-  clearCollection: () => void;
-}
+import { create } from 'zustand'
+import { GlobalState } from '../types/info'
 
 // 로컬 스토리지에서 초기값을 가져오는 함수
 const getInitialState = (): Pick<
@@ -57,8 +30,7 @@ const getInitialState = (): Pick<
     name: localStorage.getItem('name') || 'test',
     points: Number(localStorage.getItem('points')) || 0,
     mycollection: JSON.parse(localStorage.getItem('mycollection') || '[]'),
-    // singleCollectionItem: JSON.parse(localStorage.getItem('singleCollectionItem') || 'null'),
-    singleCollectionItem: localStorage.getItem('singleCollectionItem'),
+    singleCollectionItem: JSON.parse(localStorage.getItem('singleCollectionItem') || 'null'),
     parentinfo: {
       parent_id: localStorage.getItem('parent_id') || '',
       name: localStorage.getItem('name') || '',

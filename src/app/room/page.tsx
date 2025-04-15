@@ -216,7 +216,7 @@ const RoomPage = () => {
             </button>
 
             {/* コレクションをみる */}
-            <button className="flex flex-col items-center gap-1">
+            <button className="flex flex-col items-center gap-1" onClick={() => {router.push('/award/collect')}}>
               <div className="w-[75px] h-[75px] transition-transform hover:scale-105 active:scale-95">
                 <Image
                   src="/images/icons/collection_maru_icon.png"

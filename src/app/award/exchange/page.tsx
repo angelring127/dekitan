@@ -7,7 +7,6 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useGlobalStore } from '@/store/info'
-import type { GlobalState } from '@/types/info'
 import { useAuthStore } from '@/store/auth'
 
 export default function GetAward() {

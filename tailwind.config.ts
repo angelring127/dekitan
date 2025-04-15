@@ -16,7 +16,7 @@ const config: Config = {
         foreground: 'var(--foreground)',
       },
       keyframes: {
-        'fade-in': {
+        fadeIn: {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
         },
@@ -57,6 +57,7 @@ const config: Config = {
         },
       },
       animation: {
+        fadeIn: 'fadeIn 1s ease-in forwards',
         'fade-in': 'fade-in 0.3s ease-out',
         'slide-in-up': 'slide-in-up 0.3s ease-out',
         'slide-in-down': 'slide-in-down 0.3s ease-out',

@@ -34,6 +34,14 @@ export function InformationPanel({
   const currentItem = items[currentIndex]
   const currentSize = currentItem?.size || {}
 
+  // content가 문자열인지 확인하는 함수
+  const renderContent = (content: React.ReactNode) => {
+    if (typeof content === 'string') {
+      return <div dangerouslySetInnerHTML={{ __html: content }} />
+    }
+    return content
+  }
+
   return (
     <div
       ref={containerRef}
@@ -94,7 +102,7 @@ export function InformationPanel({
                 maxHeight: size.maxHeight ? `${size.maxHeight}px` : 'none',
               }}
             >
-              {item.content}
+              {renderContent(item.content)}
             </div>
           )
         })}

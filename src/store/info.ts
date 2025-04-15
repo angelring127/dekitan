@@ -1,34 +1,43 @@
 import { create } from 'zustand'
 import { GlobalState } from '../types/info'
+import { PLAYER_HONORIFIC_TITLE } from '../constants'
 
 // 로컬 스토리지에서 초기값을 가져오는 함수
 const getInitialState = (): Pick<
   GlobalState,
   | 'name'
   | 'points'
+  | 'total_point'
+  | 'current_point'
   | 'mycollection'
   | 'singleCollectionItem'
   | 'parentinfo'
   | 'childinfo'
   | 'volatileToken'
   | 'playerId'
+  | 'honorific_title'
 > => {
   if (typeof window === 'undefined') {
     return {
       name: 'test',
       points: 120,
+      total_point: 0,
+      current_point: 0,
       mycollection: [],
       singleCollectionItem: null,
       parentinfo: { parent_id: '', name: '' },
       childinfo: { parent_id: '', suffix: '', name: '', schoolYear: '' },
       volatileToken: null,
       playerId: null,
+      honorific_title: 4, // 기본값: 'なし'
     }
   }
 
   return {
     name: localStorage.getItem('name') || 'test',
     points: Number(localStorage.getItem('points')) || 120,
+    total_point: Number(localStorage.getItem('total_point')) || 0,
+    current_point: Number(localStorage.getItem('current_point')) || 0,
     mycollection: JSON.parse(localStorage.getItem('mycollection') || '[]'),
     singleCollectionItem: JSON.parse(localStorage.getItem('singleCollectionItem') || 'null'),
     parentinfo: {
@@ -43,6 +52,7 @@ const getInitialState = (): Pick<
     },
     volatileToken: localStorage.getItem('volatileToken') || null,
     playerId: Number(localStorage.getItem('playerId')) || null,
+    honorific_title: Number(localStorage.getItem('honorific_title')) || 4, // 기본값: 'なし'
   }
 }
 
@@ -136,5 +146,26 @@ export const useGlobalStore = create<GlobalState>((set, get) => ({
       localStorage.setItem('playerId', id?.toString() || '')
     }
     set({ playerId: id })
+  },
+
+  setHonorificTitle: (value: number) => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('honorific_title', value.toString())
+    }
+    set({ honorific_title: value })
+  },
+
+  getHonorific: () => {
+    const honorificTitle = get().honorific_title
+    const honorificItem = PLAYER_HONORIFIC_TITLE.find((item) => item.value === honorificTitle)
+    return honorificItem ? honorificItem.honorific : ''
+  },
+
+  setPoints: (totalPoint: number, currentPoint: number) => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('total_point', totalPoint.toString())
+      localStorage.setItem('current_point', currentPoint.toString())
+    }
+    set({ total_point: totalPoint, current_point: currentPoint })
   },
 }))

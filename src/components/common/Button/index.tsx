@@ -6,16 +6,7 @@ import type { ButtonProps } from './types'
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    {
-      className,
-      variant,
-      style: buttonStyle,
-      fullWidth,
-      disabled,
-      loading,
-      children,
-      ...props
-    },
+    { className, variant, style: buttonStyle, fullWidth, disabled, loading, children, ...props },
     ref
   ) => {
     return (
@@ -32,9 +23,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={disabled || loading}
         {...props}
       >
-        {loading ? (
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
-        ) : null}
+        {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" /> : null}
         {children}
       </button>
     )

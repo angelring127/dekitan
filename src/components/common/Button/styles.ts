@@ -20,8 +20,10 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
-        secondary: 'bg-orange-500 text-white hover:bg-orange-600 focus:ring-orange-400',
+        primary:
+          'p-3 bg-[#00803a] text-center rounded-full transition-colors text-white border-2 border-[#05803a] font-db-btn shadow-[2px_2px_0px_#cbb199] mb-2',
+        secondary:
+          'bg-gray-300 text-black hover:bg-gray-300/90 p-3 text-center rounded-full transition-colors font-db-btn mb-2 shadow-[4px_4px_8px_rgba(0,0,0,0.3)]',
         tertiary: 'bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-400',
         quaternary: 'bg-teal-500 text-white hover:bg-teal-600 focus:ring-teal-400',
         quinary: 'bg-purple-500 text-white hover:bg-purple-600 focus:ring-purple-400',

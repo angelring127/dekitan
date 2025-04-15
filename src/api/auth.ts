@@ -5,7 +5,6 @@ import { AxiosHeaders, AxiosRequestConfig } from 'axios'
 import type { GlobalState } from '@/types/info'
 import { getProfileList } from './profile'
 import { USER_ROLE } from '@/constants'
-import { useRouter } from 'next/navigation'
 
 const LOGIN_URL = '/account/auth/login'
 const VERIFY_URL = '/account/auth/verify'

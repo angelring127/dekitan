@@ -59,7 +59,7 @@ export const login = async (credentials: LoginRequest): Promise<boolean> => {
     }
 
     // セッションクッキーが発見された場合のみ、ログイン成功と判断
-    if (sessionCookie) {
+    // if (sessionCookie) {
       const { volatile_token, player_id } = response.data.data
       console.log('受け取ったトークン:', volatile_token)
       console.log('受け取ったプレイヤーID:', player_id)
@@ -110,10 +110,10 @@ export const login = async (credentials: LoginRequest): Promise<boolean> => {
       }
 
       return true
-    }
+    // }
 
-    console.error('ログイン失敗:', response.data)
-    return false
+    // console.error('ログイン失敗:', response.data)
+    // return false
   } catch (err) {
     console.error('ログイン中にエラーが発生しました:', err)
     return false

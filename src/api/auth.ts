@@ -28,46 +28,30 @@ export interface LoginRequest {
   password: string
 }
 
-export const login = async (credentials: LoginRequest): Promise<boolean> => {
+export interface LoginResult {
+  success: boolean
+  message?: string
+  errorCode?: number
+}
+
+export const login = async (credentials: LoginRequest): Promise<LoginResult> => {
   try {
     console.log('ログイン試行:', credentials)
 
     // ログインリクエスト
     const response = await axiosInstance.post<LoginResponse>(LOGIN_URL, credentials)
 
-    console.log('ログイン応答:', response.data)
-    console.log('ログイン応答ヘッダー:', response.headers)
+    const { volatile_token, player_id, status, message } = response.data.data
+    console.log('受け取ったトークン:', volatile_token)
+    console.log('受け取ったプレイヤーID:', player_id)
 
-    // 応答ヘッダーからクッキー確認
-    const setCookieHeader = response.headers['set-cookie']
-    if (setCookieHeader) {
-      console.log('ログイン後サーバーが設定したクッキー:', setCookieHeader)
-    }
-
-    // クッキー確認
-    const cookies = document.cookie.split(';')
-    console.log('ログイン後の全てのクッキー:', cookies)
-
-    // セッションクッキー確認 (karenainsworth_session または session)
-    const sessionCookie = cookies.find(
-      (cookie) =>
-        cookie.trim().startsWith('karenainsworth_session=') || cookie.trim().startsWith('session=')
-    )
-
-    if (sessionCookie) {
-      console.log('ログイン後セッションクッキーが発見されました:', sessionCookie)
-    }
-
-    // セッションクッキーが発見された場合のみ、ログイン成功と判断
-    if (sessionCookie) {
-      const { volatile_token, player_id } = response.data.data
-      console.log('受け取ったトークン:', volatile_token)
-      console.log('受け取ったプレイヤーID:', player_id)
-
+    // ステータスコードによる処理
+    if (status === 2000) {
       // ローカルストレージにトークンを保存
       localStorage.setItem('volatile_token', volatile_token)
+      localStorage.setItem('player_id', player_id.toString())
 
-      // 保存後確認
+      // 保存後の確認
       console.log('保存されたトークン:', localStorage.getItem('volatile_token'))
 
       // 認証ストアを更新
@@ -84,7 +68,7 @@ export const login = async (credentials: LoginRequest): Promise<boolean> => {
         const profiles = await getProfileList()
         console.log('プロフィールリスト:', profiles)
 
-        // USER_ROLE.PLAYERの項目の中でidが最小の項目を探す
+        // USER_ROLE.PLAYERの項目からidが最小の項目を探す
         const playerProfiles = profiles.filter((profile) => profile.role === USER_ROLE.PLAYER)
 
         if (playerProfiles.length > 0) {
@@ -99,24 +83,55 @@ export const login = async (credentials: LoginRequest): Promise<boolean> => {
           useGlobalStore.getState().setPlayerId(smallestIdProfile.id)
           console.log('更新されたプレイヤーID:', smallestIdProfile.id)
 
-          // nicknameを設定
+          // ニックネームを設定
           setName(smallestIdProfile.nickname)
           console.log('設定されたニックネーム:', smallestIdProfile.nickname)
         } else {
           console.log('プレイヤーロールのプロフィールがありません。')
         }
       } catch (profileError) {
-        console.error('プロフィールリストの取得中にエラーが発生しました:', profileError)
+        console.error('プロフィールリスト取得中にエラーが発生しました:', profileError)
       }
 
-      return true
-    }
+      return { success: true }
+    } else {
+      // ステータスコードによるエラー処理
+      const errorCode = status
+      let errorMessage = message || 'ログインに失敗しました。'
 
-    console.error('ログイン失敗:', response.data)
-    return false
+      switch (status) {
+        case 4001:
+          errorMessage = 'IDまたはパスワードが正しくありません。再度お試しください。'
+          break
+        case 4002:
+          errorMessage = 'アカウントがロックされています。再度お試しください。'
+          break
+        case 4016:
+          errorMessage = 'メール形式が正しくありません。'
+          break
+        case 4017:
+          errorMessage = 'パスワード形式が正しくありません。'
+          break
+        case 5011:
+          errorMessage = 'データベースの更新に失敗しました。'
+          break
+        default:
+          errorMessage = '不明なエラーが発生しました。'
+      }
+
+      return {
+        success: false,
+        message: errorMessage,
+        errorCode: errorCode,
+      }
+    }
   } catch (err) {
     console.error('ログイン中にエラーが発生しました:', err)
-    return false
+    return {
+      success: false,
+      message: 'サーバー接続に失敗しました。再度お試しください。',
+      errorCode: 5000,
+    }
   }
 }
 

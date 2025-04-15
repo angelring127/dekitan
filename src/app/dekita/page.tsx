@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
@@ -560,10 +560,20 @@ function DekitaContent() {
   )
 }
 
+function Loading() {
+  return (
+    <div className="w-full h-[100dvh] flex items-center justify-center bg-black">
+      <div className="text-white text-xl">読み込み中...</div>
+    </div>
+  )
+}
+
 export default function Dekita() {
   return (
     <ProtectedRoute>
-      <DekitaContent />
+      <Suspense fallback={<Loading />}>
+        <DekitaContent />
+      </Suspense>
     </ProtectedRoute>
   )
 }

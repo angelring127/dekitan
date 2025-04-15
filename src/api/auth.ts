@@ -41,32 +41,7 @@ export const login = async (credentials: LoginRequest): Promise<LoginResult> => 
     // ログインリクエスト
     const response = await axiosInstance.post<LoginResponse>(LOGIN_URL, credentials)
 
-    console.log('ログイン応答:', response.data)
-    console.log('ログイン応答ヘッダー:', response.headers)
-
-    // 応答ヘッダーからクッキー確認
-    const setCookieHeader = response.headers['set-cookie']
-    if (setCookieHeader) {
-      console.log('ログイン後サーバーが設定したクッキー:', setCookieHeader)
-    }
-
-    // クッキー確認
-    const cookies = document.cookie.split(';')
-    console.log('ログイン後の全てのクッキー:', cookies)
-
-    // セッションクッキー確認 (karenainsworth_session または session)
-    const sessionCookie = cookies.find(
-      (cookie) =>
-        cookie.trim().startsWith('karenainsworth_session=') || cookie.trim().startsWith('session=')
-    )
-
-    if (sessionCookie) {
-      console.log('ログイン後セッションクッキーが発見されました:', sessionCookie)
-    }
-
-    // セッションクッキーが発見された場合のみ、ログイン成功と判断
-    // if (sessionCookie) {
-    const { volatile_token, player_id } = response.data.data
+    const { volatile_token, player_id, message } = response.data.data
     console.log('受け取ったトークン:', volatile_token)
     console.log('受け取ったプレイヤーID:', player_id)
 
@@ -164,8 +139,8 @@ export const login = async (credentials: LoginRequest): Promise<LoginResult> => 
 
 export const verifyToken = async (): Promise<boolean> => {
   try {
-    const volatile_token = localStorage.getItem('volatile_token')
-    const player_id = localStorage.getItem('player_id')
+    const volatile_token = useAuthStore.getState().token
+    const player_id = useGlobalStore.getState().playerId
 
     if (!volatile_token || !player_id) {
       console.error('認証トークンまたはプレイヤーIDがありません。')
@@ -233,7 +208,7 @@ export const logout = async (): Promise<boolean> => {
       console.error('認証トークンがありません。')
     }
 
-    console.log('ログアウト 토큰:', volatile_token)
+    console.log('ログアウト トークン:', volatile_token)
     // ログアウトリクエスト
     const response = await axiosInstance.post('/account/auth/logout', {
       volatile_token,
@@ -272,7 +247,7 @@ export const logout = async (): Promise<boolean> => {
   }
 }
 
-// 비밀번호 재설정 요청 타입
+// パスワードリセットリクエストタイプ
 export interface ResetPasswordRequest {
   email: string
   nickname: string

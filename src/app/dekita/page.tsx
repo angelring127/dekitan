@@ -8,8 +8,9 @@ import { InformationPanel } from '@/components/common/InformationPanel'
 import type { InformationItem } from '@/components/common/InformationPanel/types'
 import { useGlobalStore } from '@/store/info'
 import { Button } from '@/components/common/Button'
-import { getTasks } from '@/api/task'
+import { getTasks, addPoint } from '@/api/task'
 import { TaskStatus } from '@/constants'
+import { checkSpecialPoint } from '@/api/task'
 
 function DekitaContent() {
   const router = useRouter()
@@ -27,6 +28,7 @@ function DekitaContent() {
   const [showLight, setShowLight] = useState(false)
   const [showButtons, setShowButtons] = useState(false)
   const [showEvaluationButtons, setShowEvaluationButtons] = useState(false)
+  const [canGiveSpecialPoint, setCanGiveSpecialPoint] = useState(false)
   const [taskData, setTaskData] = useState<{
     title: string
     point: number
@@ -34,6 +36,12 @@ function DekitaContent() {
   } | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [showPointText, setShowPointText] = useState(false)
+  const [showPointCharacter, setShowPointCharacter] = useState(false)
+  const [currentPoint, setCurrentPoint] = useState<number>(0)
+  const [jewelryAnimation, setJewelryAnimation] = useState(false)
+  const [jewelryPosition, setJewelryPosition] = useState({ x: 0, y: 0 })
+  const [jewelryScale, setJewelryScale] = useState(1)
 
   // useGlobalStore에서 name과 getHonorific 함수를 가져옵니다
   const name = useGlobalStore((state) => state.name)
@@ -50,21 +58,27 @@ function DekitaContent() {
       return
     }
 
-    // API 호출하여 task 정보 가져오기
-    const fetchTaskData = async () => {
+    const fetchData = async () => {
       try {
         setIsLoading(true)
-        // TaskStatus가 FINISHED인 항목들의 리스트를 가져옵니다
-        const response = await getTasks({
+        // 태스크 데이터 가져오기
+        const taskResponse = await getTasks({
           player_id: playerId,
           status: TaskStatus.FINISHED,
         })
 
-        console.log(response)
+        // 특별 포인트 부여 가능 여부 확인
+        const specialPointResponse = await checkSpecialPoint({
+          player_id: playerId,
+        })
 
-        if (response.status === 2000) {
+        if (specialPointResponse.status === 2000) {
+          setCanGiveSpecialPoint(specialPointResponse.data.result)
+        }
+
+        if (taskResponse.status === 2000) {
           // taskId와 일치하는 항목을 찾습니다
-          const task = response.data.list.find((task) => task.id === parseInt(taskId, 10))
+          const task = taskResponse.data.list.find((task) => task.id === parseInt(taskId, 10))
 
           if (task) {
             // task 정보를 설정합니다
@@ -87,7 +101,7 @@ function DekitaContent() {
           }, 3000)
         }
       } catch (error) {
-        console.error('タスク詳細の取得中にエラーが発生しました:', error)
+        console.error('데이터 로드 중 에러 발생:', error)
         setError('タスク情報の取得中にエラーが発生しました')
         setTimeout(() => {
           router.replace('/room')
@@ -97,7 +111,7 @@ function DekitaContent() {
       }
     }
 
-    fetchTaskData()
+    fetchData()
   }, [taskId, playerId, router])
 
   // 동적으로 메시지 내용을 생성합니다
@@ -205,9 +219,96 @@ function DekitaContent() {
     setShowEvaluationButtons(true)
   }
 
-  const handleEvaluation = (points: number) => {
-    // TODO: 포인트 처리 로직 추가
-    router.replace('/room')
+  const handleEvaluation = async (points: number) => {
+    try {
+      if (!taskId || !playerId) return
+
+      const response = await addPoint({
+        player_id: playerId,
+        task_id: parseInt(taskId, 10),
+        point: points,
+      })
+
+      // 성공 시 애니메이션 시작
+      if (response.status === 2000) {
+        // 평가 버튼 그룹 비표시
+        setShowEvaluationButtons(false)
+        setCurrentPoint(points)
+
+        // 보석 이미지 변경
+        setTimeout(() => {
+          setShowJewelry(true)
+        }, 100)
+
+        // 포인트 텍스트 표시
+        setShowPointText(true)
+
+        // 캐릭터 이미지 표시
+        setTimeout(() => {
+          setShowPointCharacter(true)
+        }, 200)
+
+        // 보석 애니메이션 시작
+        setTimeout(() => {
+          setJewelryAnimation(true)
+
+          // 0.8초 동안 애니메이션
+          const startTime = Date.now()
+          const animate = () => {
+            const progress = (Date.now() - startTime) / 800 // 0에서 1 사이의 값
+            if (progress < 1) {
+              // 시계 반대 방향으로 회전 (PI에서 시작하여 0으로 이동)
+              const angle = Math.PI - progress * Math.PI // 180도에서 0도로
+              const radius = 1000 * (1 - progress) // 반지름을 더 크게, 천천히 작아지도록
+
+              // x, y 좌표 계산
+              const x = radius * Math.cos(angle)
+              const y = radius * Math.sin(angle) + progress // 위에서 시작해서 아래로 이동
+
+              setJewelryPosition({ x, y })
+              setJewelryScale(1 - progress * 1.5) // 크기 변화를 더 빠르게
+              requestAnimationFrame(animate)
+            } else {
+              // 애니메이션 종료
+              setShowJewelry(false)
+              setTimeout(() => {
+                router.replace('/room')
+              }, 7500)
+            }
+          }
+          animate()
+        }, 2700)
+      } else if (response.status === 4003 || response.status === 4004) {
+        // 인증 관련 에러
+        // router.replace('/login')
+      } else if (
+        response.status === 4008 ||
+        response.status === 4020 ||
+        response.status === 4032 ||
+        response.status === 4034 ||
+        response.status === 4041
+      ) {
+        // 유효성 검사 에러
+        setError('ポイントの付与に失敗しました')
+        setTimeout(() => {
+          router.replace('/room')
+        }, 3000)
+      } else if (
+        response.status === 5007 ||
+        response.status === 5008 ||
+        response.status === 5009 ||
+        response.status === 5011
+      ) {
+        // 시스템 에러
+        router.replace('/error')
+      }
+    } catch (error) {
+      console.error('포인트 부여 중 에러 발생:', error)
+      setError('ポイントの付与中にエラーが発生しました')
+      setTimeout(() => {
+        router.replace('/room')
+      }, 3000)
+    }
   }
 
   const handleLater = () => {
@@ -286,9 +387,18 @@ function DekitaContent() {
 
         {/* 보석 이미지 */}
         {showJewelry && (
-          <div className="absolute top-[10%] left-[10%] transform -translate-x-[15%] -translate-y-[10%] z-20">
+          <div
+            className={`absolute top-[10%] left-[10%] transform -translate-x-[15%] -translate-y-[10%] z-20 transition-all duration-300 ${
+              jewelryAnimation ? 'transition-transform duration-1000' : ''
+            }`}
+            style={{
+              transform: jewelryAnimation
+                ? `translate(${jewelryPosition.x}px, ${jewelryPosition.y}px) scale(${jewelryScale})`
+                : 'translate(-5%, -10%)',
+            }}
+          >
             <Image
-              src="/images/dekita/jewelry/stone_g.png"
+              src={`/images/dekita/jewelry/stone_${jewelryAnimation ? 'b' : 'g'}.png`}
               alt="宝石"
               width={2000}
               height={2000}
@@ -299,7 +409,7 @@ function DekitaContent() {
 
         {/* 빛 효과 */}
         {showLight && (
-          <div className="absolute top-[10%] left-[10%] transform -translate-x-[15%] -translate-y-[10%] z-10">
+          <div className="absolute top-[10%] left-[10%] transform -translate-x-[5%] -translate-y-[10%] z-10">
             <Image
               src="/images/dekita/genseki_light.png"
               alt="光エフェクト"
@@ -375,13 +485,15 @@ function DekitaContent() {
         {/* 평가 버튼 그룹 */}
         {showEvaluationButtons && (
           <div className="absolute left-0 right-0 px-4 z-40 bottom-[1%] flex flex-col items-center gap-2">
-            <Button
-              variant="primary"
-              onClick={() => handleEvaluation(6)}
-              className="w-60 bg-gradient-to-r from-purple-500 to-pink-500"
-            >
-              スペシャルすごい! 6pt
-            </Button>
+            {canGiveSpecialPoint && (
+              <Button
+                variant="primary"
+                onClick={() => handleEvaluation(6)}
+                className="w-60 bg-gradient-to-r from-purple-500 to-pink-500"
+              >
+                スペシャルすごい! 6pt
+              </Button>
+            )}
             <Button
               variant="primary"
               onClick={() => handleEvaluation(3)}
@@ -403,6 +515,32 @@ function DekitaContent() {
             >
               がんばったね! 1pt
             </Button>
+          </div>
+        )}
+
+        {/* 포인트 텍스트 이미지 */}
+        {showPointText && (
+          <div className="absolute bg-white left-0 right-0 px-4 z-40 bottom-[15%] flex justify-center">
+            <Image
+              src={`/images/dekita/points/${currentPoint === 6 ? '6' : currentPoint}pt_txt@2x.png`}
+              alt={`${currentPoint}ポイント`}
+              width={300}
+              height={100}
+              className="object-contain"
+            />
+          </div>
+        )}
+
+        {/* 포인트 캐릭터 이미지 */}
+        {showPointCharacter && (
+          <div className="absolute left-0 right-0 bottom-[30%] z-50 flex justify-center scale-150">
+            <Image
+              src="/images/dekita/animC4_zlib.png"
+              alt="キャラクター"
+              width={300}
+              height={300}
+              className="object-contain"
+            />
           </div>
         )}
 

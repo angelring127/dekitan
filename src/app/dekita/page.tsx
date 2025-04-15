@@ -2,15 +2,18 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 import { InformationPanel } from '@/components/common/InformationPanel'
 import type { InformationItem } from '@/components/common/InformationPanel/types'
 import { useGlobalStore } from '@/store/info'
 import { Button } from '@/components/common/Button'
+import { getTasks } from '@/api/task'
+import { TaskStatus } from '@/constants'
 
 function DekitaContent() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [imagesLoaded, setImagesLoaded] = useState(false)
   const [showStamp, setShowStamp] = useState(false)
   const [showEffect, setShowEffect] = useState(false)
@@ -23,10 +26,79 @@ function DekitaContent() {
   const [showJewelry, setShowJewelry] = useState(false)
   const [showLight, setShowLight] = useState(false)
   const [showButtons, setShowButtons] = useState(false)
+  const [showEvaluationButtons, setShowEvaluationButtons] = useState(false)
+  const [taskData, setTaskData] = useState<{
+    title: string
+    point: number
+    kind: number
+  } | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   // useGlobalStore에서 name과 getHonorific 함수를 가져옵니다
   const name = useGlobalStore((state) => state.name)
   const getHonorific = useGlobalStore((state) => state.getHonorific)
+  const playerId = useGlobalStore((state) => state.playerId)
+
+  // URL에서 task_id를 가져옵니다
+  const taskId = searchParams.get('id')
+
+  // task_id가 없거나 playerId가 없는 경우 room으로 리다이렉트
+  useEffect(() => {
+    if (!taskId || !playerId) {
+      router.replace('/room')
+      return
+    }
+
+    // API 호출하여 task 정보 가져오기
+    const fetchTaskData = async () => {
+      try {
+        setIsLoading(true)
+        // TaskStatus가 FINISHED인 항목들의 리스트를 가져옵니다
+        const response = await getTasks({
+          player_id: playerId,
+          status: TaskStatus.FINISHED,
+        })
+
+        console.log(response)
+
+        if (response.status === 2000) {
+          // taskId와 일치하는 항목을 찾습니다
+          const task = response.data.list.find((task) => task.id === parseInt(taskId, 10))
+
+          if (task) {
+            // task 정보를 설정합니다
+            setTaskData({
+              title: task.title,
+              point: 0, // API에서 point 정보가 없으므로 임시로 0으로 설정
+              kind: 0, // API에서 kind 정보가 없으므로 임시로 0으로 설정
+            })
+          } else {
+            // taskId와 일치하는 항목이 없는 경우 에러 메시지를 표시하고 room으로 리다이렉트
+            setError('タスクが見つかりませんでした')
+            setTimeout(() => {
+              router.replace('/room')
+            }, 3000)
+          }
+        } else {
+          setError('タスク情報の取得に失敗しました')
+          setTimeout(() => {
+            router.replace('/room')
+          }, 3000)
+        }
+      } catch (error) {
+        console.error('タスク詳細の取得中にエラーが発生しました:', error)
+        setError('タスク情報の取得中にエラーが発生しました')
+        setTimeout(() => {
+          router.replace('/room')
+        }, 3000)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchTaskData()
+  }, [taskId, playerId, router])
 
   // 동적으로 메시지 내용을 생성합니다
   const messages: InformationItem[] = [
@@ -37,6 +109,10 @@ function DekitaContent() {
     {
       id: 'message2',
       content: 'できたの原石をみつけたよ。<br>おうちの人にもみせて<br>原石をゲットしよう!',
+    },
+    {
+      id: 'message3',
+      content: `ねぇ、ねぇ! <br> こうきくん「${taskData?.title || ''}」が <br>できたんだよ!すごいよね!`,
     },
   ]
 
@@ -64,7 +140,7 @@ function DekitaContent() {
   }, [])
 
   useEffect(() => {
-    if (imagesLoaded && !animationComplete) {
+    if (imagesLoaded && !animationComplete && !isLoading) {
       const timer1 = setTimeout(() => setShowStamp(true), 500)
       const timer2 = setTimeout(() => setShowEffect(true), 2000)
       const timer3 = setTimeout(() => {
@@ -79,7 +155,7 @@ function DekitaContent() {
         clearTimeout(timer3)
       }
     }
-  }, [imagesLoaded, animationComplete])
+  }, [imagesLoaded, animationComplete, isLoading])
 
   useEffect(() => {
     if (showEffect && !animationComplete) {
@@ -91,28 +167,68 @@ function DekitaContent() {
   }, [showEffect, animationComplete])
 
   const handleNextMessage = () => {
-    if (currentMessageIndex < messages.length - 1) {
-      setCurrentMessageIndex((prev) => prev + 1)
-      if (currentMessageIndex === 0) {
-        setShowEffect(false)
-        setShowStamp(false)
-        setShowNewCharacter(true)
-        setShowSmokeEffect(true)
+    console.log('handleNextMessage called, currentMessageIndex:', currentMessageIndex)
 
-        // 연기 이펙트가 거의 끝나기 직전에 보석 표시
-        setTimeout(() => {
-          setShowJewelry(true)
-          setShowLight(true)
-        }, 200)
-      }
-    } else {
+    // 첫 번째 메시지에서 다음으로 넘어갈 때
+    if (currentMessageIndex === 0) {
+      setCurrentMessageIndex(1)
+      setShowEffect(false)
+      setShowStamp(false)
+      setShowNewCharacter(true)
+      setShowSmokeEffect(true)
+
+      // 연기 이펙트가 거의 끝나기 직전에 보석 표시
+      setTimeout(() => {
+        setShowJewelry(true)
+        setShowLight(true)
+      }, 200)
+    }
+    // 두 번째 메시지에서 다음으로 넘어갈 때
+    else if (currentMessageIndex === 1) {
+      console.log('두 번째 메시지에서 次へ 버튼 클릭')
       setShowMessage(false)
       setShowButtons(true)
     }
   }
 
+  const handleShowMessage = () => {
+    console.log('みてもらう 버튼 클릭')
+    setShowMessage(true)
+    setShowButtons(false)
+    setCurrentMessageIndex(2)
+  }
+
+  const handleNextAfterMessage = () => {
+    console.log('마지막 메시지에서 次へ 버튼 클릭')
+    setShowMessage(false)
+    setShowNewCharacter(false)
+    setShowEvaluationButtons(true)
+  }
+
+  const handleEvaluation = (points: number) => {
+    // TODO: 포인트 처리 로직 추가
+    router.replace('/room')
+  }
+
   const handleLater = () => {
     router.replace('/room')
+  }
+
+  if (isLoading) {
+    return (
+      <div className="w-full h-[100dvh] flex items-center justify-center bg-black">
+        <div className="text-white text-xl">読み込み中...</div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="w-full h-[100dvh] flex items-center justify-center bg-black">
+        <div className="text-white text-xl">{error}</div>
+        <div className="text-white text-sm mt-4">3秒後にルームに戻ります...</div>
+      </div>
+    )
   }
 
   if (!imagesLoaded) {
@@ -240,22 +356,60 @@ function DekitaContent() {
             <InformationPanel
               items={messages}
               currentIndex={currentMessageIndex}
-              onNext={handleNextMessage}
+              onNext={currentMessageIndex === 2 ? handleNextAfterMessage : handleNextMessage}
               background="white"
               withShadow={true}
             />
             <div className="flex justify-center mt-4">
-              <Button variant="primary" onClick={handleNextMessage} className="w-52">
+              <Button
+                variant="primary"
+                onClick={currentMessageIndex === 2 ? handleNextAfterMessage : handleNextMessage}
+                className="w-52"
+              >
                 次へ
               </Button>
             </div>
           </div>
         )}
 
+        {/* 평가 버튼 그룹 */}
+        {showEvaluationButtons && (
+          <div className="absolute left-0 right-0 px-4 z-40 bottom-[1%] flex flex-col items-center gap-2">
+            <Button
+              variant="primary"
+              onClick={() => handleEvaluation(6)}
+              className="w-60 bg-gradient-to-r from-purple-500 to-pink-500"
+            >
+              スペシャルすごい! 6pt
+            </Button>
+            <Button
+              variant="primary"
+              onClick={() => handleEvaluation(3)}
+              className="w-60 bg-gradient-to-r from-blue-500 to-cyan-500"
+            >
+              めちゃすごい! 3pt
+            </Button>
+            <Button
+              variant="primary"
+              onClick={() => handleEvaluation(2)}
+              className="w-60 bg-gradient-to-r from-green-500 to-emerald-500"
+            >
+              グッド! 2pt
+            </Button>
+            <Button
+              variant="primary"
+              onClick={() => handleEvaluation(1)}
+              className="w-60 bg-gradient-to-r from-yellow-500 to-orange-500"
+            >
+              がんばったね! 1pt
+            </Button>
+          </div>
+        )}
+
         {/* 버튼 그룹 */}
         {showButtons && (
           <div className="absolute left-0 right-0 px-4 z-40 bottom-[15%] flex flex-col items-center gap-4">
-            <Button variant="primary" onClick={handleNextMessage} className="w-60">
+            <Button variant="primary" onClick={handleShowMessage} className="w-60">
               みてもらう
             </Button>
             <Button variant="secondary" onClick={handleLater} className="w-60">

@@ -47,6 +47,7 @@ const RoomPage = () => {
         console.log(response)
         if (response.status === 2000) {
           setTasks(response.data.list)
+          console.log(response.data.list)
           useGlobalStore.getState().setTasks(response.data.list)
         } else {
           console.error(`エラーが発生しました: ${response.message}`)

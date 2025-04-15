@@ -31,6 +31,26 @@ export interface UpdateTaskStatusResponse {
   message: string
 }
 
+export interface TaskDetailResponse {
+  status: number
+  message: string
+  data: {
+    title: string
+    point: number
+    kind: number
+    detail?: {
+      answer: number
+      free_text?: string
+      answers: string[]
+    }
+  }
+}
+
+export interface GetTaskDetailParams {
+  player_id: number
+  task_id: number
+}
+
 /**
  * ユーザーが保有するタスク一覧を取得します。
  * @param params リクエストパラメータ
@@ -59,6 +79,21 @@ export const updateTaskStatus = async (
     return response.data
   } catch (error) {
     console.error('タスクステータスの更新中にエラーが発生しました:', error)
+    throw error
+  }
+}
+
+/**
+ * タスクの詳細情報を取得します。
+ * @param params リクエストパラメータ
+ * @returns タスク詳細のレスポンス
+ */
+export const getTaskDetail = async (params: GetTaskDetailParams): Promise<TaskDetailResponse> => {
+  try {
+    const response = await axiosInstance.post<TaskDetailResponse>('/event/task/get', params)
+    return response.data
+  } catch (error) {
+    console.error('タスク詳細の取得中にエラーが発生しました:', error)
     throw error
   }
 }

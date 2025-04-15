@@ -70,7 +70,7 @@ function DekitaKakuninContent() {
       })
 
       // 상태 업데이트 후 dekita 페이지로 이동
-      router.replace('/dekita')
+      router.replace(`/dekita?id=${taskId}`)
     } catch (error) {
       console.error('태스크 상태 업데이트 중 오류가 발생했습니다:', error)
     }

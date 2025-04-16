@@ -252,7 +252,7 @@ const RoomPage = () => {
             </button>
 
             {/* できたカレンダー */}
-            <button className="flex flex-col items-center gap-1">
+            <button className="flex flex-col items-center gap-1" onClick={() => {router.push('/todolist')}}>
               <div className="w-[75px] h-[75px] transition-transform hover:scale-105 active:scale-95">
                 <Image
                   src="/images/icons/calendar_maru_icon.png"
@@ -262,7 +262,7 @@ const RoomPage = () => {
                   className="w-full h-auto"
                 />
               </div>
-              <span className="text-sm font-bold">できたカレンダー</span>
+              <span className="text-sm font-bold">できたリスト</span>
             </button>
 
             {/* コレクションをみる */}
@@ -280,7 +280,7 @@ const RoomPage = () => {
             </button>
 
             {/* まだリスト */}
-            <button className="flex flex-col items-center gap-1">
+            <button className="flex flex-col items-center gap-1"  onClick={() => {router.push('/unapproved')}}>
               <div className="w-[75px] h-[75px] transition-transform hover:scale-105 active:scale-95">
                 <Image
                   src="/images/icons/list_maru_icon.png"

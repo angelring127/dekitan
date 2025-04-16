@@ -19,6 +19,12 @@ export default function InitPage() {
   const playerId = useGlobalStore.getState().playerId
 
   useEffect(() => {
+    if(!(volatileToken && playerId)) {
+      router.push('/login')
+    }
+  }, [])
+
+  useEffect(() => {
     if (hasFetched.current) return
     hasFetched.current = true
     apiClient
@@ -35,6 +41,16 @@ export default function InitPage() {
       })
   }, [playerId, volatileToken])
 
+  const dateFormat = (date: string, type: string) => {
+    const current_date = new Date(date)
+    switch(type) {
+      case 'year':
+        return current_date.getFullYear()
+      case 'month-day':
+        return (current_date.getMonth() + 1) + "/" + current_date.getDate()
+    }
+  }
+
   return (
     <div className="mx-auto flex h-[844px] w-[390px] flex-col items-center overflow-hidden bg-[url('/images/messages/bg_message.png')] bg-cover bg-center bg-no-repeat">
       <div className="flex flex-col w-[350px] h-[844px] bg-cyan-100 overflow-y-auto ">
@@ -50,10 +66,9 @@ export default function InitPage() {
               >
                 <div className="flex flex-row items-center space-x-4 mt-3 mb-3">
                   <h2 className="text-black-800">
-                    {data.updated_at.split(' ')[0].split('-')[0]}
+                    {dateFormat(data.updated_at,'year')}
                     <br />
-                    {data.updated_at.split(' ')[0].split('-')[1]}/
-                    {data.updated_at.split(' ')[0].split('-')[2]}
+                    {dateFormat(data.updated_at,'month-day')}
                   </h2>
                   <h2 className="text-black-600 font-bold">{data.title}</h2>
                 </div>

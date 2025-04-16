@@ -46,7 +46,7 @@ export default function InitPage() {
               <div
                 key={data?.id}
                 className="flex flex-col w-full p-2 bg-white shadow-lg rounded-[20px] border border-gray-600 mb-5 cursor-pointer"
-                onClick={() => router.push('/')}
+                onClick={() => router.replace(`/dekita?id=${data?.id}`)}
               >
                 <div className="flex flex-row items-center space-x-4 mt-3 mb-3">
                   <h2 className="text-black-800">

@@ -45,7 +45,7 @@ export const ChildRegist = ({
                 >
                     <div className="flex w-full flex-col items-center gap-6">
                         <span className="whitespace-pre-line text-xl font-small">
-                            ユーザ登録が完了しました。できたのげんせきを集めるお子様の登録をお願いします。
+                            ユーザ登録が完了しました。<br />お子様の情報はお間違いないでしょうか？
                         </span>
                         <div className="flex w-full flex-col gap-4">
                             <div className="space-y-2">

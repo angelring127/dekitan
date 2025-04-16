@@ -353,7 +353,7 @@ export const useChat = () => {
             {
               // 9
               type: 'intro',
-              message: 'わかった！またにしようね！うーんと、これはどうかな？（やること）',
+              message: 'わかった！<br>またにしようね！<br>うーんと、これはどうかな？<br>（やること）',
             },
             {
               // 10
@@ -382,7 +382,7 @@ export const useChat = () => {
             {
               // 12
               type: 'intro',
-              message: `${name}ちゃん、もうできるの？すごいね！そしたらこんなのはどう？（やること）`,
+              message: `${name}ちゃん、もうできるの？すごいね！<br>そしたらこんなのはどう？<br>（やること）`,
               nextStep: 8,
             },
             {

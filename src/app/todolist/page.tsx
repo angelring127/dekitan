@@ -220,7 +220,7 @@ export default function InitPage() {
             <div className="p-5 gap-3">
               <div className="bg-[#ffebe5] p-3 flex flex-row rounded-2xl mb-3">
                 <Image
-                  src={`/images/todolist/icon_st_lg.png`}
+                  src={`/images/todolist/stone_lg.png`}
                   alt="stone"
                   width={120}
                   height={120}
@@ -235,7 +235,7 @@ export default function InitPage() {
               </div>
               <div className="bg-[#ffebe5] p-3 flex flex-row rounded-2xl mb-3">
                 <Image
-                  src={`/images/todolist/icon_st_b.png`}
+                  src={`/images/todolist/stone_b.png`}
                   alt="stone"
                   width={120}
                   height={120}
@@ -250,7 +250,7 @@ export default function InitPage() {
               </div>
               <div className="bg-[#ffebe5] p-3 flex flex-row rounded-2xl mb-3">
                 <Image
-                  src={`/images/todolist/icon_st_r.png`}
+                  src={`/images/todolist/stone_r.png`}
                   alt="stone"
                   width={120}
                   height={120}
@@ -265,7 +265,7 @@ export default function InitPage() {
               </div>
               <div className="bg-[#ffebe5] p-3 flex flex-row rounded-2xl mb-3">
                 <Image
-                  src={`/images/todolist/icon_st_p.png`}
+                  src={`/images/todolist/stone_p.png`}
                   alt="stone"
                   width={120}
                   height={120}
@@ -280,7 +280,7 @@ export default function InitPage() {
               </div>
               <div className="bg-[#ffebe5] p-3 flex flex-row rounded-2xl mb-3">
                 <Image
-                  src={`/images/todolist/icon_st_e.png`}
+                  src={`/images/todolist/stone_e.png`}
                   alt="stone"
                   width={120}
                   height={120}
@@ -295,7 +295,7 @@ export default function InitPage() {
               </div>
               <div className="bg-[#ffebe5] p-3 flex flex-row rounded-2xl mb-3">
                 <Image
-                  src={`/images/todolist/icon_st_y.png`}
+                  src={`/images/todolist/stone_y.png`}
                   alt="stone"
                   width={120}
                   height={120}

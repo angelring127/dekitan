@@ -1,6 +1,6 @@
 'use client'
 import { useRouter } from "next/navigation";
-import { Button } from '@/components/common/Button'
+// import { Button } from '@/components/common/Button'
 import { useEffect, useState, useRef } from 'react'
 import { apiClient } from '@/services/api'
 import Image from "next/image";
@@ -105,7 +105,7 @@ export default function InitPage() {
     return temp_date.getFullYear() + " " + temp_date.getMonth() + "/" + temp_date.getDate()
   }
 
-  const categoryImage = (category: Number) => {
+  const categoryImage = (category: number) => {
     switch(category) {
       case 1: 
         return "/images/todolist/icon_st_y.png"
@@ -119,10 +119,12 @@ export default function InitPage() {
         return "/images/todolist/icon_st_p.png"
       case 6:
         return "/images/todolist/icon_st_e.png"
+      default:
+        return "/images/todolist/icon_st_y.png";
     }
   }
 
-  const [dialogContent, setDialogContent] = useState('')
+  // const [dialogContent, setDialogContent] = useState('')
   const [isOpen, setIsOpen] = useState(false)
   const dialogRef = useRef<HTMLDialogElement>(null)
 
@@ -154,7 +156,7 @@ export default function InitPage() {
               <div className="w-[50%] text-[10px]">これまでためた<br/>できたポイント</div>
               <div className="w-[50%] flex flex-row text-lg">{points}<p className="text-xs flex items-end">ポイント</p></div>
             </div>
-            <button onClick={() => {setIsOpen(true)}} className="w-[45%] h-[30px] bg-white shadow-lg border border-[#00803a] rounded-full text-xs text-[#00803a]">できたカテゴリーについて ></button>
+            <button onClick={() => {setIsOpen(true)}} className="w-[45%] h-[30px] bg-white shadow-lg border border-[#00803a] rounded-full text-xs text-[#00803a]">できたカテゴリーについて</button>
           </div>
           <div className="flex justify-around text-white text-center text-2xl mb-5 font-bold w-[390px] bg-[#fbb03b] py-[20px]">
             <button onClick={() => selectMonth('sub')} className="text-[#f15a24]">{"<"}</button>

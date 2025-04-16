@@ -40,3 +40,12 @@ export const TaskStatus ={
   REWARDED: 3,
   CLOSED: 4
 }
+
+export const TaskCategory ={
+  SPECIAL: 1,
+  SCHOOL: 2,
+  LIFE: 3,
+  SPORTS: 4,
+  CREATE: 5,
+  FRIENDSHIP: 6,
+}

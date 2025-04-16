@@ -47,7 +47,7 @@ export default function InitPage() {
       case 'year':
         return current_date.getFullYear()
       case 'month-day':
-        return current_date.getMonth() + "/" + current_date.getDate()
+        return (current_date.getMonth() + 1) + "/" + current_date.getDate()
     }
   }
 

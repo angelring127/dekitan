@@ -167,7 +167,6 @@ export default function InitPage() {
             <div
               key={data?.id}
               className="flex flex-col w-[80%] p-2 shadow-lg mb-5 cursor-pointer bg-white mx-auto rounded-2xl"
-              onClick={() => router.push(`/todolist/${data.id}`)}
             >
               <div className="flex flex-row items-center space-x-4 mt-3 mb-3">
                 <h2 className="text-black-800">

@@ -75,11 +75,8 @@ export const ChildRegist = ({
                                             key={suffixItem}
                                             onClick={() => handleSuffixChange(suffixItem)}
                                             className={`flex-shrink-0 rounded-full px-3 py-2 w-20 text-center text-white 
-                        ${childinfo?.suffix === (suffixItem === 'なし' ? '' : suffixItem)
-                                                    ? 'bg-green-700'
-                                                    : 'bg-green-500'
-                                                }`}
-                                            aria-pressed={childinfo?.suffix === (suffixItem === 'なし' ? '' : suffixItem)}
+                                            ${childinfo?.suffix === suffixItem ? 'bg-green-700' : 'bg-green-500'}`}
+                                          aria-pressed={childinfo?.suffix === suffixItem}  
                                         >
                                             {suffixItem}
                                         </button>

@@ -86,7 +86,7 @@ const RegisterForm: React.FC = () => {
       try {
         formData.player_name = childinfo.name
         formData.player_honorific_title = PLAYER_HONORIFIC_TITLE.filter(
-          (item) => item.honorific == childinfo.suffix
+          (item) => item.value == parseInt(childinfo.suffix)
         )[0]['value']
         formData.birth_day = gradeToBirthdate(childinfo.schoolYear)
 
@@ -119,8 +119,7 @@ const RegisterForm: React.FC = () => {
       小学6年生: 11,
     }
 
-    const birthYear = year - ageMap[grade]
-
+    const birthYear = year - parseInt(grade)
     return `${birthYear}-04-02`
   }
 

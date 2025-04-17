@@ -9,7 +9,7 @@ import type { InformationItem } from '@/components/common/InformationPanel/types
 import { useGlobalStore } from '@/store/info'
 import { Button } from '@/components/common/Button'
 import { getTasks, addPoint } from '@/api/task'
-import { TaskStatus } from '@/constants'
+import { TaskStatus, TaskCategoryStone, TaskCategory } from '@/constants'
 import { checkSpecialPoint } from '@/api/task'
 
 function DekitaContent() {
@@ -32,7 +32,7 @@ function DekitaContent() {
   const [taskData, setTaskData] = useState<{
     title: string
     point: number
-    kind: number
+    category: number
   } | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -85,7 +85,7 @@ function DekitaContent() {
             setTaskData({
               title: task.title,
               point: 0, // API에서 point 정보가 없으므로 임시로 0으로 설정
-              kind: 0, // API에서 kind 정보가 없으므로 임시로 0으로 설정
+              category: task.category, // API에서 kind 정보가 없으므로 임시로 0으로 설정
             })
           } else {
             // taskId와 일치하는 항목이 없는 경우 에러 메시지를 표시하고 room으로 리다이렉트
@@ -398,7 +398,7 @@ function DekitaContent() {
             }}
           >
             <Image
-              src={`/images/dekita/jewelry/stone_${jewelryAnimation ? 'b' : 'g'}.png`}
+              src={`/images/dekita/jewelry/stone_${jewelryAnimation ? TaskCategoryStone[(taskData?.category as keyof typeof TaskCategoryStone) || TaskCategory.SPECIAL] : 'g'}.png`}
               alt="宝石"
               width={2000}
               height={2000}

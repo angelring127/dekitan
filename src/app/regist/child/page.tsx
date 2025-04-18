@@ -35,20 +35,8 @@ export default function InitPage() {
   function gradeToBirthdate(grade: string): string {
     const date = new Date()
     const year = date.getFullYear()
-    const ageMap: Record<string, number> = {
-      年少: 3,
-      年中: 4,
-      年長: 5,
-      小学1年生: 6,
-      小学2年生: 7,
-      小学3年生: 8,
-      小学4年生: 9,
-      小学5年生: 10,
-      小学6年生: 11,
-    }
-
     // 4月2日時点の年齢から生まれた年を算出
-    const birthYear = year - ageMap[grade]
+    const birthYear = year - parseInt(grade)
 
     return `${birthYear}-04-02`
   }

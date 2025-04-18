@@ -107,17 +107,6 @@ const RegisterForm: React.FC = () => {
   function gradeToBirthdate(grade: string): string {
     const date = new Date()
     const year = date.getFullYear()
-    const ageMap: Record<string, number> = {
-      年少: 3,
-      年中: 4,
-      年長: 5,
-      小学1年生: 6,
-      小学2年生: 7,
-      小学3年生: 8,
-      小学4年生: 9,
-      小学5年生: 10,
-      小学6年生: 11,
-    }
 
     const birthYear = year - parseInt(grade)
     return `${birthYear}-04-02`
@@ -147,7 +136,7 @@ const RegisterForm: React.FC = () => {
       ) : (
         <>
           <div className=" w-[350px] bg-white p-6 rounded-lg flex flex-col mt-20">
-            <h1 className='font-bold text-xl text-green-800 mb-2'> ユーザー登録</h1>
+            <h1 className='font-bold text-xl text-green-800 mb-2 text-center'> ユーザー登録</h1>
             <div className="border mx-auto mb-5" style={{ borderColor: '#2f855a', width: '95%' }}></div>
             <span className="font-semibold">
               ワクワクワールドで「できた」の原石を集めるには、ユーザー登録が必要です。ぜひ、ご登録ください！

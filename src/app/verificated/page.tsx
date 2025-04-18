@@ -35,20 +35,8 @@ export default function InitPage() {
   function gradeToBirthdate(grade: string): string {
     const date = new Date()
     const year = date.getFullYear()
-    const ageMap: Record<string, number> = {
-      年少: 3,
-      年中: 4,
-      年長: 5,
-      小学1年生: 6,
-      小学2年生: 7,
-      小学3年生: 8,
-      小学4年生: 9,
-      小学5年生: 10,
-      小学6年生: 11,
-    }
-
     // 4月2日時点の年齢から生まれた年を算出
-    const birthYear = year - ageMap[grade]
+    const birthYear = year - parseInt(grade)
 
     return `${birthYear}-04-02`
   }
@@ -59,20 +47,7 @@ export default function InitPage() {
 
     const bd = new Date(birthdate)
     const age = baseDate.getFullYear() - bd.getFullYear()
-
-    const grades: Record<number, string> = {
-      3: '年少',
-      4: '年中',
-      5: '年長',
-      6: '小学1年生',
-      7: '小学2年生',
-      8: '小学3年生',
-      9: '小学4年生',
-      10: '小学5年生',
-      11: '小学6年生',
-    }
-
-    return grades[age] || ''
+    return age.toString();
   }
   const getChild = async () => {
     await apiClient
@@ -82,12 +57,8 @@ export default function InitPage() {
       })
       .then((res) => {
         setChildInfo('name', res.data.data.nickname)
-        setChildInfo(
-          'suffix',
-          PLAYER_HONORIFIC_TITLE.find((e) => e.value === res.data.data.profile.honorific_title)
-            ?.label || ''
-        )
-        setChildInfo('schoolYear', birthdateToGrade(res.data.data.profile.birth_day))
+        setChildInfo('suffix',res.data.data.profile?.honorific_title)
+        setChildInfo('schoolYear', birthdateToGrade(res.data.data?.profile?.birth_day))
       })
   }
 
@@ -98,9 +69,7 @@ export default function InitPage() {
         player_id: player_id,
         nickname: childinfo.name,
         birth_day: gradeToBirthdate(childinfo.schoolYear),
-        honoric_title: PLAYER_HONORIFIC_TITLE.filter((e) => e.label === childinfo.suffix)[0][
-          'value'
-        ],
+        honoric_title: childinfo.suffix
       })
       .then(() => {})
   }

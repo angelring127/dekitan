@@ -10,9 +10,6 @@ export const ChildRegist = ({
     setChildInfo: (key: keyof typeof childinfo, value: string) => void;
 }) => {
 
-    const names = ['くん', 'ちゃん', 'さん', 'なし'];
-    const schoolyear = ['年少', '年中', '年長', '小学1年生', '小学2年生', '小学3年生', '小学4年生', '小学5年生', '小学6年生'];
-
     const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newNickname = e.target.value;
         setChildInfo('name', newNickname);

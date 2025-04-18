@@ -6,12 +6,14 @@ import {
   STAMP_IMAGE_HAI_KEY,
   STAMP_IMAGE_SUGOI_KEY,
   STAMP_IMAGE_WAKATTA_KEY,
+  TASK_CHAT_SEQUENCE,
 } from '@/constants/hanasu'
 import {
   fetchCategoryMessages,
   fetchTaskMessages,
   registerTaskEntry,
   fetchTaskEntryApprove,
+  fetchChatMessages,
 } from '@/api/chat'
 
 // ChatMessage 객체의 깊은 복사를 위한 유틸리티 함수
@@ -28,7 +30,8 @@ const deepCopyChatMessage = (message: ChatMessage): ChatMessage => {
 }
 
 export const useChat = () => {
-  const { name } = useGlobalStore() as GlobalState
+  const { name, total_point, tasks } = useGlobalStore() as GlobalState
+  const getHonorific = useGlobalStore((state) => state.getHonorific)
   const [step, setStep] = useState(0)
   const [displayedMessages, setDisplayedMessages] = useState<ChatMessage[]>([])
   const [messages, setMessages] = useState<ChatMessage[]>([])
@@ -41,6 +44,8 @@ export const useChat = () => {
   const categoryRef = useRef<number | null>(null)
   const taskIdRef = useRef<number | undefined>(undefined)
   const taskMessageRef = useRef<string | undefined>(undefined)
+  // API 호출 상태를 추적하기 위한 ref
+  const isRegisteringRef = useRef<boolean>(false)
 
   // API에서 카테고리 메시지를 가져오는 함수
   const fetchCategoryData = useCallback(async () => {
@@ -179,18 +184,24 @@ export const useChat = () => {
           console.error('タスクメッセージが未定義です。先に取得されていない可能性があります。')
           return false
         }
-      
+
         const originalMessage = messagesRef.current[messageIndex]
         const updatedMessage = { ...originalMessage }
         updatedMessage.message = updatedMessage.message.replace('（やること）', taskMessage)
-      
+
         setDisplayedMessages((prev) => [...prev, deepCopyChatMessage(updatedMessage)])
         return true
-      }    
+      }
 
       // 태스크 등록 (인덱스 13)
       if (messageIndex === 13) {
         try {
+          // 이미 등록 진행 중인 경우 중복 호출 방지
+          if (isRegisteringRef.current) {
+            console.log('タスク登録が既に進行中です')
+            return false
+          }
+
           // category와 taskId 값을 ref에서 가져옵니다.
           const currentCategory = categoryRef.current
           const currentTaskId = taskIdRef.current
@@ -202,6 +213,9 @@ export const useChat = () => {
             console.error('カテゴリーまたはタスクIDが設定されていません')
             return false
           }
+
+          // API 호출 시작 전 상태 설정
+          isRegisteringRef.current = true
 
           const response = await registerTaskEntry(currentCategory, currentTaskId)
 
@@ -215,6 +229,9 @@ export const useChat = () => {
         } catch (error) {
           console.error('タスク登録中にエラーが発生しました:', error)
           return false
+        } finally {
+          // API 호출 완료 후 상태 초기화
+          isRegisteringRef.current = false
         }
       }
 
@@ -268,7 +285,7 @@ export const useChat = () => {
             {
               // 0
               type: 'intro',
-              message: `${name}ちゃん、ねえ！ぼくといっしょにできたのげんせきをさがしにいこう！きょうはどんなことしようか？`,
+              message: `${name}${getHonorific()}、ねえ！ぼくといっしょにできたのげんせきをさがしにいこう！きょうはどんなことしようか？`,
             },
             {
               // 1
@@ -402,6 +419,23 @@ export const useChat = () => {
           console.log('初期メッセージ設定:', baseMessages)
           setMessages(baseMessages)
           messagesRef.current = baseMessages
+
+          // total_point가 0인 경우 FIRST_TIME 시퀀스의 메시지를 가져옵니다
+          if (total_point === 0 && tasks.length === 0) {
+            try {
+              const firstTimeResponse = await fetchChatMessages(TASK_CHAT_SEQUENCE.FIRST_TIME.value)
+              if (firstTimeResponse.status === 2000 && firstTimeResponse.data.messages.length > 0) {
+                // 첫 번째 메시지를 API 응답으로 대체합니다
+                const firstTimeMessage = firstTimeResponse.data.messages[0]
+                baseMessages[0].message = `${name}${getHonorific()}<br>${firstTimeMessage}`
+                console.log('初回メッセージを設定:', firstTimeMessage)
+              }
+            } catch (err) {
+              console.error('初回メッセージの取得中にエラーが発生しました:', err)
+              // 에러가 발생해도 기본 메시지를 사용합니다
+            }
+          }
+
           console.log('初期displayedMessages設定:', [baseMessages[0]])
           setDisplayedMessages([deepCopyChatMessage(baseMessages[0])])
           setIsInitialized(true)
@@ -427,7 +461,7 @@ export const useChat = () => {
     if (!isInitialized) {
       initializeChat()
     }
-  }, [name, isInitialized])
+  }, [name, isInitialized, total_point])
 
   return {
     step,

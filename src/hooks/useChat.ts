@@ -122,6 +122,45 @@ export const useChat = () => {
 
   const updateMessageWithApiData = useCallback(
     async (messageIndex: number) => {
+      if (messageIndex === 12) {
+        try {
+          // 이미 등록 진행 중인 경우 중복 호출 방지
+          if (isRegisteringRef.current) {
+            console.log('タスク登録が既に進行中です')
+          } else {
+            // category와 taskId 값을 ref에서 가져옵니다.
+            const currentCategory = categoryRef.current
+            const currentTaskId = taskIdRef.current
+
+            console.log('현재 category:', currentCategory)
+            console.log('현재 taskId:', currentTaskId)
+
+            if (!currentCategory || !currentTaskId) {
+              console.error('カテゴリーまたはタスクIDが設定されていません')
+              return false
+            }
+
+            // API 호출 시작 전 상태 설정
+            isRegisteringRef.current = true
+
+            const response = await registerTaskEntry(currentCategory, currentTaskId)
+
+            if (response.status === 2000) {
+              console.log('タスク登録が成功しました')
+            } else {
+              console.error('タスク登録に失敗しました:', response.message)
+              return false
+            }
+          }
+        } catch (error) {
+          console.error('タスク登録中にエラーが発生しました:', error)
+          return false
+        } finally {
+          // API 호출 완료 후 상태 초기화
+          isRegisteringRef.current = false
+        }
+      }
+
       // 카테고리 메시지 업데이트 (인덱스 1, 2)
       if (messageIndex === 1 || messageIndex === 2) {
         try {
@@ -149,8 +188,8 @@ export const useChat = () => {
         }
       }
 
-      // 태스크 메시지 업데이트 (인덱스 7, 9, 12)
-      if (messageIndex === 7 || messageIndex === 9 || messageIndex === 12) {
+      // 태스크 메시지 업데이트 (인덱스 6, 9, 13)
+      if (messageIndex === 6 || messageIndex === 9 || messageIndex === 13) {
         try {
           const taskMessage = await fetchTaskData()
           if (taskMessage) {
@@ -158,8 +197,8 @@ export const useChat = () => {
             const updatedMessage = { ...originalMessage }
             updatedMessage.message = updatedMessage.message.replace('（やること）', taskMessage)
 
-            if (messagesRef.current[8]) {
-              messagesRef.current[8].title = taskMessage
+            if (messagesRef.current[7]) {
+              messagesRef.current[7].title = taskMessage
             }
             if (messagesRef.current[10]) {
               messagesRef.current[10].title = taskMessage
@@ -192,49 +231,6 @@ export const useChat = () => {
         setDisplayedMessages((prev) => [...prev, deepCopyChatMessage(updatedMessage)])
         return true
       }
-
-      // 태스크 등록 (인덱스 13)
-      if (messageIndex === 13) {
-        try {
-          // 이미 등록 진행 중인 경우 중복 호출 방지
-          if (isRegisteringRef.current) {
-            console.log('タスク登録が既に進行中です')
-            return false
-          }
-
-          // category와 taskId 값을 ref에서 가져옵니다.
-          const currentCategory = categoryRef.current
-          const currentTaskId = taskIdRef.current
-
-          console.log('현재 category:', currentCategory)
-          console.log('현재 taskId:', currentTaskId)
-
-          if (!currentCategory || !currentTaskId) {
-            console.error('カテゴリーまたはタスクIDが設定されていません')
-            return false
-          }
-
-          // API 호출 시작 전 상태 설정
-          isRegisteringRef.current = true
-
-          const response = await registerTaskEntry(currentCategory, currentTaskId)
-
-          if (response.status === 2000) {
-            console.log('タスク登録が成功しました')
-            return true
-          } else {
-            console.error('タスク登録に失敗しました:', response.message)
-            return false
-          }
-        } catch (error) {
-          console.error('タスク登録中にエラーが発生しました:', error)
-          return false
-        } finally {
-          // API 호출 완료 후 상태 초기화
-          isRegisteringRef.current = false
-        }
-      }
-
       return false
     },
     [fetchCategoryData, fetchTaskData]
@@ -305,14 +301,14 @@ export const useChat = () => {
               direction: 'right',
               options: [
                 {
-                  label: 'はい',
+                  label: 'すき',
                   value: 'like',
-                  onClick: () => handleSelection(4),
+                  onClick: () => handleSelection(6),
                 },
                 {
                   label: 'にがてだけどやってみる',
                   value: 'dontlike_but_try',
-                  onClick: () => handleSelection(6),
+                  onClick: () => handleSelection(5),
                 },
                 {
                   label: 'にがて',
@@ -323,28 +319,22 @@ export const useChat = () => {
             },
             {
               // 4
-              type: 'stamp',
-              message: STAMP_IMAGE_WAKATTA_KEY,
-              nextStep: 7,
+              type: 'intro',
+              message: 'そうなんだ！',
+              nextStep: 5,
             },
             {
               // 5
               type: 'intro',
-              message: 'そうなんだ！',
-              nextStep: 6,
+              message: 'にがてなのにがんばってえらいね！',
             },
             {
               // 6
               type: 'intro',
-              message: 'にがてなのにがんばってえらいね！',
-            },
-            {
-              // 7
-              type: 'intro',
               message: 'じゃあ、こんなことできるかな？（やること）',
             },
             {
-              // 8
+              // 7
               type: 'selection',
               message: '',
               title: 'さかあがり',
@@ -353,12 +343,12 @@ export const useChat = () => {
                 {
                   label: 'やってみる',
                   value: 'try',
-                  onClick: () => handleSelection(13),
+                  onClick: () => handleSelection(12),
                 },
                 {
                   label: 'ちがうことにする',
                   value: 'different',
-                  onClick: () => handleSelection(9),
+                  onClick: () => handleSelection(8),
                 },
                 {
                   label: 'できる',
@@ -366,6 +356,11 @@ export const useChat = () => {
                   onClick: () => handleSelection(11),
                 },
               ],
+            },
+            {
+              // 8
+              type: 'stamp',
+              message: STAMP_IMAGE_WAKATTA_KEY,
             },
             {
               // 9
@@ -381,7 +376,7 @@ export const useChat = () => {
                 {
                   label: 'やってみる',
                   value: 'try',
-                  onClick: () => handleSelection(13),
+                  onClick: () => handleSelection(12),
                 },
                 {
                   label: 'できる',
@@ -394,19 +389,19 @@ export const useChat = () => {
               // 11
               type: 'stamp',
               message: STAMP_IMAGE_SUGOI_KEY,
-              nextStep: 12,
+              nextStep: 13,
             },
             {
               // 12
-              type: 'intro',
-              message: `${name}ちゃん、もうできるの？すごいね！そしたらこんなのはどう？（やること）`,
-              nextStep: 8,
-            },
-            {
-              // 13
               type: 'stamp',
               message: STAMP_IMAGE_HAI_KEY,
               nextStep: 14,
+            },
+            {
+              // 13
+              type: 'intro',
+              message: `${name}ちゃん、もうできるの？すごいね！そしたらこんなのはどう？（やること）`,
+              nextStep: 7,
             },
             {
               // 14

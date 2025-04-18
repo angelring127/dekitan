@@ -23,6 +23,18 @@ export const PLAYER_HONORIFIC_TITLE = [
   { honorific: '', label: 'なし', value: 4 },
 ]
 
+export const PLAYER_SCHOOLING = [
+  { label: '年少', value: 3 },
+  { label: '年中', value: 4 },
+  { label: '年長', value: 5 },
+  { label: '小学1年生', value: 6 },
+  { label: '小学2年生', value: 7 },
+  { label: '小学3年生', value: 8 },
+  { label: '小学4年生', value: 9 },
+  { label: '小学5年生', value: 10 },
+  { label: '小学6年生', value: 11 },
+]
+
 export const OWNER = 'owner'
 export const SUB_OWNER = 'sub_owner'
 export const PLAYER = 'player'

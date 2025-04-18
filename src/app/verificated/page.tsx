@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { InformationPanel } from '@/components/common/InformationPanel'
 import { ChildRegist } from '@/hooks/childRegist'
-import { Button } from '@/components/common/Button'
 import { useGlobalStore } from '@/store/info'
 import type { GlobalState } from '@/types/info'
 import { useRouter } from 'next/navigation'
@@ -34,29 +33,12 @@ export default function InitPage() {
 
   const { items } = ChildRegist({ childinfo, setChildInfo })
 
-  const commonPanelStyle = {
-    borderRadius: 20,
-    position: 'relative' as const,
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-  }
 
   function gradeToBirthdate(grade: string): string {
     const date = new Date()
     const year = date.getFullYear()
-    const ageMap: Record<string, number> = {
-      年少: 3,
-      年中: 4,
-      年長: 5,
-      小学1年生: 6,
-      小学2年生: 7,
-      小学3年生: 8,
-      小学4年生: 9,
-      小学5年生: 10,
-      小学6年生: 11,
-    }
-
     // 4月2日時点の年齢から生まれた年を算出
-    const birthYear = year - ageMap[grade]
+    const birthYear = year - parseInt(grade)
 
     return `${birthYear}-04-02`
   }
@@ -67,20 +49,7 @@ export default function InitPage() {
 
     const bd = new Date(birthdate)
     const age = baseDate.getFullYear() - bd.getFullYear()
-
-    const grades: Record<number, string> = {
-      3: '年少',
-      4: '年中',
-      5: '年長',
-      6: '小学1年生',
-      7: '小学2年生',
-      8: '小学3年生',
-      9: '小学4年生',
-      10: '小学5年生',
-      11: '小学6年生',
-    }
-
-    return grades[age] || ''
+    return age.toString();
   }
   const getChild = async () => {
     await apiClient
@@ -90,13 +59,8 @@ export default function InitPage() {
       })
       .then((res) => {
         setChildInfo('name', res.data.data.nickname)
-        setChildInfo(
-          'suffix',
-          PLAYER_HONORIFIC_TITLE.find((e) => e.value === res.data.data.profile.honorific_title)
-            ?.label || ''
-        )
-        setChildInfo('schoolYear', birthdateToGrade(res.data.data.profile.birth_day))
-        setName(res.data.data.nickname)
+        setChildInfo('suffix',res.data.data.profile?.honorific_title)
+        setChildInfo('schoolYear', birthdateToGrade(res.data.data?.profile?.birth_day))
       })
   }
 
@@ -107,9 +71,7 @@ export default function InitPage() {
         player_id: player_id,
         nickname: childinfo.name,
         birth_day: gradeToBirthdate(childinfo.schoolYear),
-        honoric_title: PLAYER_HONORIFIC_TITLE.filter((e) => e.label === childinfo.suffix)[0][
-          'value'
-        ],
+        honoric_title: childinfo.suffix
       })
       .then(() => {})
   }
@@ -135,24 +97,23 @@ export default function InitPage() {
   }, [])
 
   return (
-    <div className="mx-auto flex h-[844px] w-[390px] items-center justify-center bg-[url('/images/messages/bg_message.png')] bg-cover bg-center bg-no-repeat">
+    <div className="mx-auto flex h-[844px] w-[390px] items-center justify-center bg-[url('/images/bg_landscape.png')] bg-cover bg-center bg-no-repeat">
       <div className="flex flex-col items-center justify-center w-full max-w-[320px]">
         <InformationPanel
           items={items}
           currentIndex={currentIndex}
           onNext={handleNext}
-          background="transparent"
+          background="white"
           withShadow
-          style={commonPanelStyle}
           className="w-full flex flex-col h-[75%]"
         />
 
-        <Button
-          className="text-lg font-bold mt-4 bg-red-500 px-6 py-2 rounded-full"
+        <button
+          className="text-lg font-bold mt-4 bg-[#00803a] text-white px-6 py-2 rounded-full w-[200px]"
           onClick={handleNext}
         >
           つぎへ
-        </Button>
+        </button>
       </div>
     </div>
   )

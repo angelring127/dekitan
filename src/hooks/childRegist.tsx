@@ -1,5 +1,7 @@
 import type { InformationItem } from '@/components/common/InformationPanel/types';
-
+import { TypewriterText } from '@/components/common/TypewriterText'
+import CustomSelect from '@/components/common/Select/Index'
+import { PLAYER_HONORIFIC_TITLE, PLAYER_SCHOOLING } from '@/constants'
 export const ChildRegist = ({
     childinfo,
     setChildInfo,
@@ -16,23 +18,26 @@ export const ChildRegist = ({
         setChildInfo('name', newNickname);
     };
 
-    const handleSuffixChange = (newSuffix: string) => {
-        setChildInfo('suffix', newSuffix === 'なし' ? '' : newSuffix);
-    };
-
-    const handleSchoolYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const newSchoolYear = e.target.value;
-        setChildInfo('schoolYear', newSchoolYear);
-    };
+    const handleSuffix = (value: string) => {
+        setChildInfo('suffix', value)
+      }
+      const handleSchoolYear = (value: string) => {
+        setChildInfo('schoolYear', value)
+      }
 
     const items: InformationItem[] = [
         {
             id: "verificate",
             content: (
-                <div className='gap-6'>
-                    <p>アクセスいただいたURLを検証しています。。。。</p>
-                    <div className='w-full flex justify-center'>OK</div>
-                    <div className='w-full flex justify-center'>登録が完了しました。</div>
+
+                <div className='flex justify-center gap-6 mb-20'>
+                    <div className='text-center font-semibold mb-20'>
+                        <h1 className='text-m text-green-800 mb-3'>ユーザー登録</h1>
+                        <div className="border mx-auto mb-4" style={{ borderColor: '#2f855a', width: '95%' }}></div>
+                        <p className='w-full flex text-left'>アクセスいただいたURLを検証しています。。。。</p>
+                        <div className='w-full flex justify-start'>OK !</div>
+                        <div className='w-full flex justify-start'>登録が完了しました。</div>
+                    </div>
                 </div>
             )
         },
@@ -43,63 +48,63 @@ export const ChildRegist = ({
                     onClick={(e) => e.stopPropagation()}
                     className="flex h-full w-full flex-col items-center justify-between gap-6 p-6"
                 >
-                    <div className="flex w-full flex-col items-center gap-6">
-                        <span className="whitespace-pre-line text-xl font-small">
-                            ユーザ登録が完了しました。<br />お子様の情報はお間違いないでしょうか？
-                        </span>
-                        <div className="flex w-full flex-col gap-4">
-                            <div className="space-y-2">
-                                <label htmlFor="nickname" className="text-sm font-bold text-gray-700">
-                                    【ニックネーム】
-                                </label>
-                                <input
-                                    id="nickname"
-                                    type="text"
-                                    value={childinfo?.name}
-                                    onChange={handleNicknameChange}
-                                    style={{ borderBottom: '2px solid black' }}
-                                    className="w-full px-4 py-2 text-center text-1xl font-bold !text-green-600 focus:border-b-green-500 focus:outline-none focus:ring-0 bg-transparent"
-                                    aria-label="ニックネームを入力"
-                                />
-                            </div>
-                            <div>
-                                <div className="flex flex-wrap gap-4 justify-center">
-                                    {names.map((suffixItem) => (
-                                        <button
-                                            type="button"
-                                            key={suffixItem}
-                                            onClick={() => handleSuffixChange(suffixItem)}
-                                            className={`flex-shrink-0 rounded-full px-3 py-2 w-20 text-center text-white 
-                        ${childinfo?.suffix === (suffixItem === 'なし' ? '' : suffixItem)
-                                                    ? 'bg-green-700'
-                                                    : 'bg-green-500'
-                                                }`}
-                                            aria-pressed={childinfo?.suffix === (suffixItem === 'なし' ? '' : suffixItem)}
-                                        >
-                                            {suffixItem}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-bold text-gray-700">【がくねん】</label>
-                                <div className="flex gap-2">
-                                    <select
-                                        value={childinfo?.schoolYear}
-                                        onChange={handleSchoolYearChange}
-                                        style={{ borderBottom: '2px solid black' }}
-                                        className="w-full py-2 text-center text-1xl !text-green-600"
-                                    >
-                                        {schoolyear.map((year, index) => (
-                                            <option key={index} value={year}>
-                                                {year}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <div className="flex w-full flex-col items-center gap-3">
+            <TypewriterText
+              text="お子様のユーザー登録"
+              className="font-bold text-xl text-green-800"
+            />
+            <div className="border mx-auto mb-4" style={{ borderColor: '#2f855a' ,width:'95%' }}></div>
+            <div className='w-full flex font-semibold justify-start text-sm'>保護者のユーザ登録が完了しました。</div>
+            <div className='w-full flex font-semibold justify-start text-sm'>できたのげんせきを集めるお子様の登録をお願いします。</div>
+            <div className="flex flex-col">
+              <div className="space-y-2 ">
+                <label htmlFor="nickname" style={{ backgroundColor: '#2f855a', borderRadius: '5px',fontSize:'12px', width: '150px' }} className="text-white font-semibold px-6 py-2 text-center mx-auto block">
+                  ニックネーム
+                </label>
+                <div className='flex gap-2'>
+                  <input
+                    id="nickname"
+                    type="text"
+                    value={childinfo?.name}
+                    onChange={handleNicknameChange}
+                    maxLength={8}
+                    className="w-full font-semibold text-center border-2 rounded-md"
+                    style={{ borderColor: '#00803a' ,outline:'none', height:'45px' }}
+                    aria-label="ニックネームを入力"
+                  />
+
+
+                  <CustomSelect
+                    options={PLAYER_HONORIFIC_TITLE}
+                    value={childinfo?.suffix}
+                    onChange={handleSuffix}
+                  />
+
+                </div>
+
+              </div>
+
+              <div className="justify-center mt-10 ">
+                <label style={{ backgroundColor: '#2f855a', borderRadius: '5px', fontSize: '14px', width: '150px' }} className="text-white px-6 py-2 font-semibold text-center  mx-auto block mb-3">
+                  学年
+                </label>
+                <div className="flex flex-col items-center">
+
+                  <CustomSelect
+                    options={PLAYER_SCHOOLING}
+                    value={childinfo?.schoolYear}
+                    width='150px'
+                    onChange={handleSchoolYear}
+                    
+                  />
+
+                  <span className="text-xs p-2 mt-6 bg-gray-300 font-semibold text-center">
+                    ※学年は後からの変更はできませんのでご注意ください。
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
                 </form>
             ),
         },

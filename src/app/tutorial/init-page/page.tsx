@@ -4,13 +4,13 @@ import { useState, useEffect } from 'react'
 import { InformationPanel } from '@/components/common/InformationPanel'
 import { useInitialItems } from '@/hooks/useInitialItems'
 import Image from 'next/image'
-
+import { useRouter } from 'next/navigation'
 export default function InitPage() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [showOmikuji, setShowOmikuji] = useState(false)
   const [showResult, setShowResult] = useState(false)
   const [showFinalPanel, setShowFinalPanel] = useState(false)
-
+  const router = useRouter()
   const handleNext = () => {
     // if (currentIndex < items.length - 1 && currentIndex !== 2) {
     //   if(currentIndex == 1) {
@@ -54,28 +54,26 @@ export default function InitPage() {
       <div className="mx-auto flex h-[844px] flex-col items-center bg-[url('/images/messages/bg_message.png')] bg-cover bg-center bg-no-repeat">
         <div className="relative flex w-full flex-1 flex-col items-center justify-center overflow-y-auto">
           <div
-            className={`${
-              showResult
-              ? 'animate-shrink-and-move z-0'
-              : 'animate-shake-infinite cursor-pointer z-10'
-            }`}
+            className={`${showResult
+                ? 'animate-shrink-and-move z-0'
+                : 'animate-shake-infinite cursor-pointer z-10'
+              }`}
             onClick={handleOmikujiClick}
             role="button"
             tabIndex={0}
             aria-label="おみくじをタップ"
-            >
+          >
             <Image
               src="/images/img_omikuji.png"
               alt="おみくじ"
               width={300}
               height={300}
               className="mx-auto"
-              />
+            />
           </div>
           <div
-            className={`absolute inset-0 flex flex-col items-center justify-center gap-8 overflow-y-auto ${
-              !showResult ? 'pointer-events-none' : 'z-20'
-            }`}
+            className={`absolute inset-0 flex flex-col items-center justify-center gap-8 overflow-y-auto ${!showResult ? 'pointer-events-none' : 'z-20'
+              }`}
           >
             {showResult && (
               <>
@@ -94,7 +92,7 @@ export default function InitPage() {
                   width={80}
                   height={80}
                   className="mx-auto absolute animate-fade-in-up"
-                  style={{ top: '5%', left:'5%' }}
+                  style={{ top: '5%', left: '5%' }}
                 />
                 <Image
                   src="/images/img_little_girl.png"
@@ -102,7 +100,7 @@ export default function InitPage() {
                   width={80}
                   height={80}
                   className="mx-auto absolute animate-fade-in-up"
-                  style={{ top: '25%', right:'5%' }}
+                  style={{ top: '25%', right: '5%' }}
                 />
               </>
             )}
@@ -125,18 +123,28 @@ export default function InitPage() {
   }
 
   return (
-    <div className="mx-auto flex h-[844px] items-center justify-center bg-[url('/images/messages/bg_message.png')] bg-cover bg-center bg-no-repeat">
-      <div className="flex h-full w-full items-center justify-center px-4">
-        <InformationPanel
-          items={items}
-          currentIndex={currentIndex}
-          onNext={handleNext}
-          background="transparent"
-          withShadow
-          style={commonPanelStyle}
-          className="w-full max-w-[320px] flex flex-col h-[75%]"
-        />
+    <>
+      <div className="relative mx-auto flex flex-col  h-[844px] items-center justify-center bg-[url('/images/bg_landscape.png')] bg-cover bg-center bg-no-repeat">
+        <div className="flex h-full w-full items-center justify-center ">
+
+          <InformationPanel
+            items={items}
+            currentIndex={currentIndex}
+            onNext={handleNext}
+            background="white"
+            withShadow
+            className="w-full max-w-[320px] flex flex-col h-[55%] overflow-visible"
+          />
+        </div>
+        <button
+          type="button"
+          className="bg-[#00803a] mb-20 text-white rounded-l-full rounded-r-full w-[170px] py-2  "
+          onClick={() => router.push('/regist/parent')}
+        >
+          つぎへ
+        </button>
       </div>
-    </div>
+
+    </>
   )
 }

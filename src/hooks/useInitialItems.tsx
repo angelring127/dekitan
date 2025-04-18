@@ -4,8 +4,10 @@ import { TypewriterText } from '@/components/common/TypewriterText'
 import Image from 'next/image'
 import { Button } from '@/components/common/Button'
 import { useGlobalStore } from '@/store/info'
+import CustomSelect from '@/components/common/Select/Index'
 // import { BrowserRouter,useNavigate } from "react-router-dom";
-import { useRouter } from 'next/navigation'
+// import { useRouter } from 'next/navigation'
+import { PLAYER_HONORIFIC_TITLE, PLAYER_SCHOOLING } from '@/constants'
 
 export const useInitialItems = (onNext: () => void, onOmikuji?: () => void) => {
   const [nickname, setNickname] = useState('')
@@ -13,7 +15,7 @@ export const useInitialItems = (onNext: () => void, onOmikuji?: () => void) => {
   const [year, setYear] = useState('')
   // const [omikuji, setOmikuji] = useState(0)
   const { childinfo, setChildInfo } = useGlobalStore()
-  const router = useRouter()
+  // const router = useRouter()
   // const omikujiItem = [
   //   {'omikuji':"鼻歌",'theme': 'はなうた', 'comment': (
   //     <div className="text-center">
@@ -117,112 +119,61 @@ export const useInitialItems = (onNext: () => void, onOmikuji?: () => void) => {
           onClick={(e) => e.stopPropagation()}
           className="flex h-full w-full flex-col items-center justify-between gap-6"
         >
-          <div className="flex w-full flex-col items-center gap-6">
+          <div className="flex w-full flex-col items-center gap-3">
             <TypewriterText
-              text="まずはやってみよう！"
-              className="text-2xl font-bold text-gray-800"
+              text="まずはやってみよう"
+              className="font-bold text-xl text-green-800"
             />
-            <div className="flex w-full flex-col gap-4">
-              <div className="space-y-2">
-                <label htmlFor="nickname" className="text-sm font-medium text-gray-700">
-                  【ニックネーム】
+            <div className="border mx-auto mb-4" style={{ borderColor: '#2f855a' ,width:'95%' }}></div>
+
+            <div className="flex flex-col">
+              <div className="space-y-2 ">
+                <label htmlFor="nickname" style={{ backgroundColor: '#2f855a', borderRadius: '5px',fontSize:'12px', width: '150px' }} className="text-white font-semibold px-6 py-2 text-center mx-auto block">
+                  ニックネーム
                 </label>
-                <input
-                  id="nickname"
-                  type="text"
-                  value={nickname}
-                  onChange={(e) => {
-                    handleNickName(e.target.value)
-                  }}
-                  maxLength={8}
-                  style={{ borderBottom: '2px solid black' }}
-                  className="w-full px-4 py-2 text-center text-3xl font-bold !text-green-600 focus:border-b-green-500 focus:outline-none focus:ring-0 bg-transparent"
-                  aria-label="ニックネームを入力"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">呼び方</label>
-                <div className="flex gap-4">
-                  {['くん', 'ちゃん', 'さん'].map((suffixItem) => (
-                    <button
-                      type="button"
-                      key={suffixItem}
-                      onClick={() => {
-                        handleSuffix(suffixItem === 'なし' ? '' : suffixItem)
-                      }}
-                      className={`flex-1 rounded-full py-2 transition-colors max-w-[30%] ${
-                        suffix === (suffixItem === 'なし' ? '' : suffixItem)
-                          ? 'bg-green-100 text-back'
-                          : 'bg-green-500 text-white hover:bg-green-200'
-                      }`}
-                      aria-pressed={suffix === (suffixItem === 'なし' ? '' : suffixItem)}
-                    >
-                      {suffixItem}
-                    </button>
-                  ))}
+                <div className='flex gap-2'>
+                  <input
+                    id="nickname"
+                    type="text"
+                    value={nickname}
+                    onChange={(e) => handleNickName(e.target.value)}
+                    maxLength={8}
+                    className="w-full font-semibold text-center border-2 rounded-md"
+                    style={{ borderColor: '#00803a' ,outline:'none', height:'45px' }}
+                    aria-label="ニックネームを入力"
+                  />
+
+
+                  <CustomSelect
+                    options={PLAYER_HONORIFIC_TITLE}
+                    value={suffix}
+                    onChange={handleSuffix}
+                  />
+
                 </div>
-                <div className="gap-4 text-center">
-                  {['なし'].map((suffixItem) => (
-                    <button
-                      type="button"
-                      key={suffixItem}
-                      onClick={() => {
-                        handleSuffix(suffixItem === 'なし' ? '' : suffixItem)
-                      }}
-                      style={{ width: '30%' }}
-                      className={`flex-1 rounded-full py-2 transition-colors w-[30%] ${
-                        suffix === (suffixItem === 'なし' ? '' : suffixItem)
-                          ? 'bg-green-100 text-black'
-                          : 'bg-green-500 text-white hover:bg-green-200'
-                      }`}
-                      aria-pressed={suffix === (suffixItem === 'なし' ? '' : suffixItem)}
-                    >
-                      {suffixItem}
-                    </button>
-                  ))}
-                </div>
+
               </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">【がくねん】</label>
-                <div className="flex flex-col">
-                  <select
-                    style={{ borderBottom: '2px solid black' }}
-                    className="w-full py-2 text-center text-1xl !text-green-600"
-                    id="year"
-                    onChange={(e) => {
-                      handleSchoolYear(e.target.value)
-                    }}
-                  >
-                    {[
-                      '',
-                      '年少',
-                      '年中',
-                      '年長',
-                      '小学1年生',
-                      '小学2年生',
-                      '小学3年生',
-                      '小学4年生',
-                      '小学5年生',
-                      '小学6年生',
-                    ].map((item) => (
-                      <option value={item} key={item}>
-                        {item}
-                      </option>
-                    ))}
-                  </select>
-                  ※学年は後からの変更はできませんのでご注意ください。
+
+              <div className="justify-center mt-10 ">
+                <label style={{ backgroundColor: '#2f855a', borderRadius: '5px', fontSize: '14px', width: '150px' }} className="text-white px-6 py-2 font-semibold text-center  mx-auto block mb-3">
+                  学年
+                </label>
+                <div className="flex flex-col items-center">
+
+                  <CustomSelect
+                    options={PLAYER_SCHOOLING}
+                    value={year}
+                    width='150px'
+                    onChange={handleSchoolYear}
+                  />
+
+                  <span className="text-xs p-2 mt-6 bg-gray-300 font-semibold text-center">
+                    ※学年は後からの変更はできませんのでご注意ください。
+                  </span>
                 </div>
               </div>
             </div>
           </div>
-          <Button
-            type="button"
-            className="rounded-full w-full"
-            disabled={!(year && nickname)}
-            onClick={() => router.push('/regist/parent')}
-          >
-            つぎへ
-          </Button>
         </form>
       ),
       size: {

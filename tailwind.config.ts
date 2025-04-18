@@ -55,6 +55,13 @@ const config: Config = {
           '50%': { transform: 'scale(0.9)', boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)' },
           '100%': { transform: 'scale(1)', boxShadow: '0 0 0 0 rgba(0, 0, 0, 0.2)' },
         },
+        spin: {
+          "to": {transform: 'rotate(-360deg)'}
+        },
+        drop: {
+          "0%": { transform: 'translateY(0)', opacity: '1' },
+          "100%": { transform: 'translateY(150%)', opacity: '0' }
+        }
       },
       animation: {
         fadeIn: 'fadeIn 1s ease-in forwards',
@@ -67,6 +74,8 @@ const config: Config = {
         shine: 'shine 1.5s ease-in-out infinite',
         shake: 'shake 0.5s ease-in-out infinite',
         stamp: 'stamp 1s ease-in-out',
+        spin: 'spin 1s linear infinite',
+        drop: 'drop 1s linear forwards',
         infinite: 'infinite',
       },
     },

@@ -15,6 +15,10 @@ export default function GetAward() {
   const router = useRouter()
   const volatileToken = useAuthStore.getState().token
   const playerId = useGlobalStore.getState().playerId
+  const [showMachine, setShowMachine] = useState(true);
+  const [showBag, setShowBag] = useState(true);
+  const [showDekitan, setShowDekitan] = useState(true);
+  const [showItem, setShowItem] = useState(false);
 
   const handleNext = () => {
     if (currentIndex === 0) {
@@ -39,7 +43,23 @@ export default function GetAward() {
           console.error('Error:', error)
         })
     }
+
+    if(currentIndex === 1) {
+      const timer = setTimeout(() => {
+        setShowBag(false)
+        setTimeout(() => {
+          setShowMachine(false)
+          setTimeout(() => {
+            setShowDekitan(false)
+            setTimeout(() => {
+              setShowItem(true)
+            }, 7000)
+          }, 6000)
+        }, 8000)
+      }, 5000)
+    }
   }
+
   const [currentIndex, setCurrentIndex] = useState<number>(0)
   const initialItems = getAwards(
     handleNext,
@@ -78,152 +98,186 @@ export default function GetAward() {
 
   return (
     <div className="mx-auto flex h-[844px] w-[390px] flex-col items-center overflow-hidden bg-[url('/images/messages/bg_message.png')] bg-cover bg-center bg-no-repeat">
-      <div className="relative w-[390px] mt-auto mb-4">
-        {currentIndex === 0 && (
-          <div className="relative inline-block" style={{ left: '12%', margin: '0' }}>
-            <Image
-              src="/images/img_gemstone.png"
-              alt="gemStone"
-              width={280}
-              height={280}
-              className="gem_points"
-            />
-            <span
-              className="absolute 
-    inset-0 flex items-center justify-center  text-3xl font-bold"
-            >
-              {points} ポイント
-            </span>
-            <Image
-              src="/images/img_little_rat.png"
-              alt="little_rat"
-              width={130}
-              height={130}
-              className="absolute  z-10"
-              style={{ bottom: '-45%', right: '-15%' }}
-            />
-          </div>
-        )}
-
-        {currentIndex === 1 && (
-          <>
-            <Image
-              className=" mx-auto  absolute  cursor-pointer"
-              src="/images/img_stonecrusher_burst.png"
-              alt="crusher"
-              width={500}
-              height={500}
-              onClick={handleNext}
-              style={{ top: '-28%' }}
-            />
-            <Image
-              className=" mx-auto relative  cursor-pointer"
-              src="/images/img_stonecrusher.png"
-              alt="crusher"
-              width={500}
-              height={500}
-              onClick={handleNext}
-              style={{ top: '12%' }}
-            />
-            <Image
-              src="/images/img_little_rat.png"
-              alt="little_rat"
-              width={120}
-              height={120}
-              className="absolute"
-              style={{ bottom: '32%', right: '8%' }}
-            />
-          </>
-        )}
+      <div className="relative w-[390px] mb-4">
+        {
+          currentIndex === 0 && (
+            <div className="relative inline-block" style={{ left: '12%', margin: '0' }}>
+              <Image
+                src="/images/img_gemstone.png"
+                alt="gemStone"
+                width={280}
+                height={280}
+                className="gem_points"
+              />
+              <span
+                className="absolute 
+      inset-0 flex items-center justify-center  text-3xl font-bold"
+              >
+                {points} ポイント
+              </span>
+              <Image
+                src="/images/img_little_rat.png"
+                alt="little_rat"
+                width={130}
+                height={130}
+                className="absolute  z-10"
+                style={{ bottom: '-45%', right: '-15%' }}
+              />
+            </div>
+          )
+        }
+        {
+          currentIndex === 1 && (
+            <div className="">
+              <div className='relative w-[390px] h-[844px]'>
+                <Image
+                  src="/images/award/machine_BG.png"
+                  alt="bg"
+                  fill
+                  style={{
+                    objectFit: "contain",
+                  }}
+                />
+                <Image
+                  src="/images/award/machine.png"
+                  alt="gemStone"
+                  fill
+                  style={{
+                    objectFit: "contain",
+                  }}
+                />
+                <button type="button" onClick={handleNext}>
+                  <Image
+                    src="/images/award/animD1_dekitan.png"
+                    alt="gemStone"
+                    width={300}
+                    height={300}
+                    style={{
+                      position: "absolute",
+                      top: "30%",
+                      right: "-15%"
+                    }}
+                  />
+                </button>
+              </div>
+            </div>
+          )
+        }
         {currentIndex === 2 && (
-          <>
-            <Image
-              src="/images/img_yellow_star.png"
-              alt="effect"
-              width={80}
-              height={80}
-              className="mx-auto absolute"
-              style={{ top: '-200%', right: '50%' }}
-            />
-            <Image
-              src="/images/img_yellow_star.png"
-              alt="effect"
-              width={80}
-              height={80}
-              className="mx-auto absolute"
-              style={{ top: '-210%', right: '10%' }}
-            />
-            <Image
-              src={singleCollectionItem?.image ?? '/images/default-image.png'}
-              alt="award"
-              width={120}
-              height={120}
-              className="mx-auto absolute gem_points cursor-pointer animate-fade-in-up "
-              style={{ top: '-180%', right: '20%' }}
-              onClick={handleNext}
-            />
-            <Image
-              src="/images/img_stonecrusher_effect.png"
-              alt="effect"
-              width={120}
-              height={120}
-              className="mx-auto absolute rotate-[120deg]"
-              style={{ top: '-130%', right: '10%' }}
-            />
-            <Image
-              src="/images/img_burst_effect2.png"
-              alt="effect"
-              width={120}
-              height={120}
-              className="mx-auto absolute rotate-[-20deg]"
-              style={{ top: '-140%', right: '35%' }}
-            />
-            <Image
-              src="/images/img_stonecrusher.png"
-              alt="stoneCrusher"
-              width={400}
-              height={400}
-              className="mx-auto absolute "
-              style={{ bottom: '60%' }}
-            />
-
-            <Image
-              src="/images/img_little_rat.png"
-              alt="little_rat"
-              width={120}
-              height={120}
-              className="absolute "
-              style={{ bottom: '55%', right: '05%' }}
-            />
-          </>
-        )}
-        {currentIndex === 3 && (
-          <>
-            <Image
-              src="/images/img_little_girl.png"
-              alt="littlegirl"
-              width={80}
-              height={80}
-              className="mx-auto absolute"
-              style={{ top: '-10%', right: '10%' }}
-            />
-            <Image
-              src="/images/img_little_girl_2.png"
-              alt="littlegirl"
-              width={80}
-              height={80}
-              className="mx-auto absolute"
-              style={{ top: '-10%', left: '10%' }}
-            />
-            <Image
-              src={singleCollectionItem?.image ?? '/images/default-image.png'}
-              alt="award"
-              width={150}
-              height={150}
-              className="gem_points relative animate-fade-in-up"
-              style={{ bottom: '-20%', left: '30%' }}
-            />
-          </>
+          <div className="">
+            <div className='relative w-[390px] h-[844px]'>
+              <Image
+                src="/images/award/animD2_BG.png"
+                alt="bg"
+                className='animate-spin'
+                width={1000}
+                height={1000}
+                style={{
+                  maxWidth: "none",
+                  position: "absolute",
+                  top: "-8%",
+                  left: "-80%"
+                }}
+              />
+              {showMachine && <Image
+                src="/images/award/machine.png"
+                alt="gemStone"
+                fill
+                style={{
+                  objectFit: "contain",
+                }}
+              />}
+              {!showMachine && <Image
+                src="/images/award/animD3_machine.png"
+                alt="gemStone"
+                fill
+                style={{
+                  objectFit: "contain",
+                }}
+              />}
+              {showBag && <Image
+                src="/images/award/animD2_bag.png"
+                alt="gemStone"
+                width={150}
+                height={150}
+                style={{
+                  position: "absolute",
+                  top: "0%",
+                  left: "32%",
+                  zIndex: 5
+                }}
+              />}
+              {showBag && (
+                <div className='flex flex-col'>
+                  <Image src="/images/todolist/stone_b.png" alt="gemStone" width={50} height={50} className='animate-drop' style={{position: "absolute", top: "8%", left:"39%", animationDelay: "2s", zIndex: 4}}/>
+                  <Image src="/images/todolist/stone_e.png" alt="gemStone" width={50} height={50} className='animate-drop' style={{position: "absolute", top: "8%", left:"44%", animationDelay: "2s", zIndex: 4}}/>
+                  <Image src="/images/todolist/stone_lg.png" alt="gemStone" width={50} height={50} className='animate-drop' style={{position: "absolute", top: "8%", left:"39%", animationDelay: "2.5s", zIndex: 4}}/>
+                  <Image src="/images/todolist/stone_p.png" alt="gemStone" width={50} height={50} className='animate-drop' style={{position: "absolute", top: "8%", left:"44%", animationDelay: "2.5s", zIndex: 4}}/>
+                  <Image src="/images/todolist/stone_r.png" alt="gemStone" width={50} height={50} className='animate-drop' style={{position: "absolute", top: "8%", left:"39%", animationDelay: "3s", zIndex: 4}}/>
+                  <Image src="/images/todolist/stone_y.png" alt="gemStone" width={50} height={50} className='animate-drop' style={{position: "absolute", top: "8%", left:"44%", animationDelay: "3s", zIndex: 4}}/>
+                </div>
+              )}
+              {(!showBag && showMachine) && <Image
+                src="/images/award/animD2_counter.png"
+                alt="gemStone"
+                width={80}
+                height={80}
+                style={{
+                  position: "absolute",
+                  top: "37%",
+                  left: "41%"
+                }}
+              />}
+              {showDekitan && <Image
+                src="/images/award/animC3_dekitan.png"
+                alt="gemStone"
+                width={300}
+                height={300}
+                style={{
+                  position: "absolute",
+                  top: "30%",
+                  right: "-15%"
+                }}
+              />}
+              {!showDekitan && <Image
+                src="/images/award/animC4_dekitan.png"
+                alt="gemStone"
+                width={300}
+                height={300}
+                style={{
+                  position: "absolute",
+                  top: "30%",
+                  right: "-15%"
+                }}
+              />}
+              {showItem && <Image
+                src="/images/award/hatumei_item_02.png"
+                alt="gemStone"
+                width={200}
+                height={200}
+                className='cursor-pointer'
+                onClick={handleNext}
+                style={{
+                  position: "absolute",
+                  top: "31%",
+                  left: "22%"
+                }}
+              />}
+              {showItem && <Image
+                src="/images/award/animD3_KIRA.png"
+                alt="gemStone"
+                width={300}
+                height={300}
+                className='cursor-pointer'
+                onClick={handleNext}
+                style={{
+                  position: "absolute",
+                  top: "25%",
+                  left: "15%"
+                }}
+              />}
+            </div>
+          </div>
         )}
 
         <div className=" w-full flex flex-col items-center mb-20">

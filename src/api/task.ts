@@ -3,6 +3,7 @@ import axiosInstance from './axios'
 export interface Task {
   id: number
   title: string
+  category: number
   updated_at: string
 }
 

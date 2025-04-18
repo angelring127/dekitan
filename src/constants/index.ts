@@ -46,18 +46,36 @@ export const USER_ROLE = {
 }
 
 export * from './hanasu'
-export const TaskStatus ={
+export const TaskStatus = {
   ACTIVE: 1,
   FINISHED: 2,
   REWARDED: 3,
-  CLOSED: 4
+  CLOSED: 4,
 }
 
-export const TaskCategory ={
-  SPECIAL: 1,
-  SCHOOL: 2,
-  LIFE: 3,
-  SPORTS: 4,
-  CREATE: 5,
-  FRIENDSHIP: 6,
-}
+export const TaskCategory = {
+  SPECIAL: 1, // スペシャル
+  SCHOOL: 2, // 学校
+  LIFE: 3, // 生活
+  SPORTS: 4, // 運動
+  CREATE: 5, // 創造
+  FRIENDSHIP: 6, // 仲良く
+} as const
+
+export const TaskCategoryLabel = {
+  [TaskCategory.SPECIAL]: 'スペシャル',
+  [TaskCategory.SCHOOL]: '学校',
+  [TaskCategory.LIFE]: '生活',
+  [TaskCategory.SPORTS]: '運動',
+  [TaskCategory.CREATE]: '創造',
+  [TaskCategory.FRIENDSHIP]: '仲良く',
+} as const
+
+export const TaskCategoryStone = {
+  [TaskCategory.SPECIAL]: 'y', // イエローの原石
+  [TaskCategory.SCHOOL]: 'b', // ブルーの原石
+  [TaskCategory.LIFE]: 'lg', // ライトグリーンの原石
+  [TaskCategory.SPORTS]: 'r', // レッドの原石
+  [TaskCategory.CREATE]: 'p', // パープルの原石
+  [TaskCategory.FRIENDSHIP]: 'e', // エメラルドの原石
+} as const

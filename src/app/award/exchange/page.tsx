@@ -45,7 +45,7 @@ export default function GetAward() {
     }
 
     if(currentIndex === 1) {
-      const timer = setTimeout(() => {
+      setTimeout(() => {
         setShowBag(false)
         setTimeout(() => {
           setShowMachine(false)

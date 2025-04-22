@@ -26,7 +26,6 @@ export function NavigationProvider({
   const [showUserMenu, setShowUserMenu] = useState(false)
   const [lastScrollY, setLastScrollY] = useState(0)
   const [touchStartY, setTouchStartY] = useState(0)
-  const [touchStartTime, setTouchStartTime] = useState(0)
   const [isPulling, setIsPulling] = useState(false)
   const [pullProgress, setPullProgress] = useState(0)
   const [navShownByPull, setNavShownByPull] = useState(false)
@@ -67,7 +66,6 @@ export function NavigationProvider({
     (e: TouchEvent) => {
       if (isAtTop) {
         setTouchStartY(e.touches[0].clientY)
-        setTouchStartTime(Date.now())
         setPullProgress(0)
         setIsPulling(false)
       }
@@ -84,9 +82,6 @@ export function NavigationProvider({
 
       if (touchStartY === 0) return
 
-      const currentTime = Date.now()
-      const elapsedTime = (currentTime - touchStartTime) / 1000
-
       if (diff > 30) {
         setIsPulling(true)
         const progress = Math.min(diff / 100, 1) * 100 // 진행률을 터치 거리에 기반으로 계산
@@ -101,7 +96,7 @@ export function NavigationProvider({
         setIsPulling(false)
       }
     },
-    [showNav, isAtTop, touchStartY, touchStartTime]
+    [showNav, isAtTop, touchStartY]
   )
 
   const handleTouchEnd = useCallback(() => {

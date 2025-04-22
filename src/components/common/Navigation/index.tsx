@@ -21,28 +21,27 @@ export function Navigation({ onMenuClick }: NavigationProps) {
   const [showMenu, setShowMenu] = useState(false)
   const [isClient, setIsClient] = useState(false)
 
-  // 현재 경로 확인을 위한 로그
+  // 現在のパスを確認するためのログ
   console.log('Current pathname:', pathname)
 
-  // 스토어에서 유저 정보 가져오기
   const { name, setName } = useGlobalStore()
   const { isAuthenticated } = useAuthStore()
   const { profiles, currentProfile, fetchProfiles, setCurrentProfile, isLoading } =
     useProfileStore()
 
-  // 클라이언트 사이드 렌더링 확인
+  // クライアントサイドレンダリングの確認
   useEffect(() => {
     setIsClient(true)
   }, [])
 
-  // 인증 상태가 변경되면 프로필 목록 가져오기
+  // 認証状態が変更されたらプロフィール一覧を取得
   useEffect(() => {
     if (isAuthenticated) {
       fetchProfiles(false)
     }
   }, [isAuthenticated, fetchProfiles])
 
-  // 스크롤 방지 효과
+  // スクロール防止効果
   useEffect(() => {
     if (showUserMenu) {
       document.body.style.overflow = 'hidden'
@@ -83,10 +82,10 @@ export function Navigation({ onMenuClick }: NavigationProps) {
     setShowUserMenu(false)
   }
 
-  // 현재 선택된 프로필의 이름 또는 기본 이름
+  // 現在選択されているプロフィールの名前またはデフォルトの名前
   const userName = isAuthenticated ? name || 'ゲスト' : 'ゲスト'
 
-  // 서버 사이드 렌더링 시에는 아무것도 렌더링하지 않음
+  // サーバーサイドレンダリング時は何もレンダリングしない
   if (!isClient) {
     return null
   }
@@ -133,7 +132,7 @@ export function Navigation({ onMenuClick }: NavigationProps) {
 
               {/* ユーザー ドロップダウン メニュー */}
               <div
-                className={`fixed top-[80px] bg-white shadow-lg z-[9999] transform transition-all duration-200 ease-in-out ${
+                className={`fixed top-[100px] bg-white shadow-lg z-[9999] transform transition-all duration-200 ease-in-out ${
                   showUserMenu
                     ? 'opacity-100 translate-y-0'
                     : 'opacity-0 -translate-y-2 pointer-events-none'
@@ -146,7 +145,7 @@ export function Navigation({ onMenuClick }: NavigationProps) {
                 }}
               >
                 <div className="bg-[#00803a] text-white font-medium flex justify-between items-center">
-                  <span className="flex-1 text-center py-3">ユーザーきりかえ</span>
+                  <span className="flex-1 text-center font-bold py-3">ユーザーきりかえ</span>
                   <button
                     onClick={() => setShowUserMenu(false)}
                     className="text-white hover:text-gray-200 w-12 h-12 flex items-center justify-center"
@@ -277,13 +276,13 @@ export function Navigation({ onMenuClick }: NavigationProps) {
               </div>
             </div>
 
-            {/* 오른쪽 여백을 위한 빈 div */}
+            {/* 右側の余白を確保するための空のdiv */}
             <div className="w-8"></div>
           </>
         ) : (
-          // 비로그인 상태일 때의 UI
+          // 非ログイン状態時のUI
           <>
-            <div className="w-8"></div> {/* 좌측 여백 */}
+            <div className="w-8"></div> {/* 左側の余白 */}
             <h1 className="text-lg font-bold text-center text-blue-600">
               できたんのワクワクワールド
             </h1>
@@ -292,7 +291,7 @@ export function Navigation({ onMenuClick }: NavigationProps) {
               onClick={handleMenuClick}
               onKeyDown={handleKeyDown}
               tabIndex={0}
-              aria-label={showMenu ? '메뉴 닫기' : '메뉴 열기'}
+              aria-label={showMenu ? 'メニューを閉じる' : 'メニューを開く'}
               role="button"
             >
               {showMenu ? (
@@ -330,12 +329,12 @@ export function Navigation({ onMenuClick }: NavigationProps) {
           </>
         )}
       </nav>
-      {/* 네비게이션이 표시될 때만 마진 추가 */}
+      {/* ナビゲーションが表示されるときにのみマージンを追加 */}
       <div className={`transition-all duration-300 ${showNav ? 'mt-20' : 'mt-0'}`}>
-        {/* 햄버거 메뉴 드롭다운 - 중앙 위치 및 애니메이션 적용 */}
+        {/* ハンバーガーメニュー ドロップダウン - 中央位置及びアニメーション適用 */}
         {!isAuthenticated && (
           <div
-            className={`fixed top-20 bg-white shadow-lg z-20 overflow-hidden transition-all duration-300 transform ${
+            className={`fixed top-24 bg-white shadow-lg z-20 overflow-hidden transition-all duration-300 transform ${
               showMenu ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
             }`}
             style={{
@@ -345,11 +344,11 @@ export function Navigation({ onMenuClick }: NavigationProps) {
               transform: 'translateX(-50%)',
             }}
           >
-            <ul className="py-2 max-w-md mx-auto">
+            <ul className="py-4 max-w-md mx-auto">
               <li>
                 <Link
                   href="/"
-                  className="block px-4 py-3 hover:bg-gray-100 transition-colors text-center"
+                  className="block px-6 py-4 hover:bg-gray-100 transition-colors text-center"
                 >
                   HOME
                 </Link>
@@ -357,7 +356,7 @@ export function Navigation({ onMenuClick }: NavigationProps) {
               <li>
                 <Link
                   href="/signup"
-                  className="block px-4 py-3 hover:bg-gray-100 transition-colors text-center"
+                  className="block px-6 py-4 hover:bg-gray-100 transition-colors text-center"
                 >
                   新しく始める
                 </Link>
@@ -365,7 +364,7 @@ export function Navigation({ onMenuClick }: NavigationProps) {
               <li>
                 <Link
                   href="/login"
-                  className="block px-4 py-3 hover:bg-gray-100 transition-colors text-center"
+                  className="block px-6 py-4 hover:bg-gray-100 transition-colors text-center"
                 >
                   ログイン
                 </Link>
@@ -373,7 +372,7 @@ export function Navigation({ onMenuClick }: NavigationProps) {
               <li>
                 <Link
                   href="/about"
-                  className="block px-4 py-3 hover:bg-gray-100 transition-colors text-center"
+                  className="block px-6 py-4 hover:bg-gray-100 transition-colors text-center"
                 >
                   わくわくワールドって？
                 </Link>
@@ -381,7 +380,7 @@ export function Navigation({ onMenuClick }: NavigationProps) {
               <li>
                 <Link
                   href="/notifications"
-                  className="block px-4 py-3 hover:bg-gray-100 transition-colors text-center"
+                  className="block px-6 py-4 hover:bg-gray-100 transition-colors text-center"
                 >
                   お知らせ一覧
                 </Link>

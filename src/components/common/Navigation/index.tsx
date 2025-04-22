@@ -21,6 +21,9 @@ export function Navigation({ onMenuClick }: NavigationProps) {
   const [showMenu, setShowMenu] = useState(false)
   const [isClient, setIsClient] = useState(false)
 
+  // 현재 경로 확인을 위한 로그
+  console.log('Current pathname:', pathname)
+
   // 스토어에서 유저 정보 가져오기
   const { name, setName } = useGlobalStore()
   const { isAuthenticated } = useAuthStore()
@@ -190,18 +193,29 @@ export function Navigation({ onMenuClick }: NavigationProps) {
               {/* アイコン メニューを左に移動 */}
               <div className="grid grid-cols-4 gap-6 ml-10 mt-2">
                 <Link
-                  href="/"
-                  className={`flex items-center justify-center w-14 h-14 ${
-                    pathname === '/' ? 'text-blue-500' : 'text-gray-600'
+                  href="/room"
+                  className={`flex flex-col items-center justify-center w-14 h-14 relative ${
+                    pathname === '/room' || pathname === '/room/'
+                      ? 'text-[#00803a]'
+                      : 'text-gray-600'
                   }`}
                   tabIndex={0}
                 >
                   <Image src="/images/icons/home_icon.png" alt="ホーム" width={48} height={48} />
+                  <div
+                    className={`absolute bottom-0 h-1 w-10 ${
+                      pathname === '/room' || pathname === '/room/'
+                        ? 'bg-[#00803a]'
+                        : 'bg-transparent'
+                    }`}
+                  />
                 </Link>
                 <Link
                   href="/calendar"
-                  className={`flex items-center justify-center w-14 h-14 ${
-                    pathname === '/calendar' ? 'text-blue-500' : 'text-gray-600'
+                  className={`flex flex-col items-center justify-center w-14 h-14 relative ${
+                    pathname === '/calendar' || pathname === '/calendar/'
+                      ? 'text-[#00803a]'
+                      : 'text-gray-600'
                   }`}
                   tabIndex={0}
                 >
@@ -211,11 +225,20 @@ export function Navigation({ onMenuClick }: NavigationProps) {
                     width={48}
                     height={48}
                   />
+                  <div
+                    className={`absolute bottom-0 h-1 w-10 ${
+                      pathname === '/calendar' || pathname === '/calendar/'
+                        ? 'bg-[#00803a]'
+                        : 'bg-transparent'
+                    }`}
+                  />
                 </Link>
                 <Link
                   href="/notes"
-                  className={`flex items-center justify-center w-14 h-14 ${
-                    pathname === '/notes' ? 'text-blue-500' : 'text-gray-600'
+                  className={`flex flex-col items-center justify-center w-14 h-14 relative ${
+                    pathname === '/notes' || pathname === '/notes/'
+                      ? 'text-[#00803a]'
+                      : 'text-gray-600'
                   }`}
                   tabIndex={0}
                 >
@@ -225,15 +248,31 @@ export function Navigation({ onMenuClick }: NavigationProps) {
                     width={48}
                     height={48}
                   />
+                  <div
+                    className={`absolute bottom-0 h-1 w-10 ${
+                      pathname === '/notes' || pathname === '/notes/'
+                        ? 'bg-[#00803a]'
+                        : 'bg-transparent'
+                    }`}
+                  />
                 </Link>
                 <Link
                   href="/memo"
-                  className={`flex items-center justify-center w-14 h-14 ${
-                    pathname === '/memo' ? 'text-blue-500' : 'text-gray-600'
+                  className={`flex flex-col items-center justify-center w-14 h-14 relative ${
+                    pathname === '/memo' || pathname === '/memo/'
+                      ? 'text-[#00803a]'
+                      : 'text-gray-600'
                   }`}
                   tabIndex={0}
                 >
                   <Image src="/images/icons/list_icon.png" alt="メモ" width={48} height={48} />
+                  <div
+                    className={`absolute bottom-0 h-1 w-10 ${
+                      pathname === '/memo' || pathname === '/memo/'
+                        ? 'bg-[#00803a]'
+                        : 'bg-transparent'
+                    }`}
+                  />
                 </Link>
               </div>
             </div>

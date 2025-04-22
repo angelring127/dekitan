@@ -21,6 +21,9 @@ export function Navigation({ onMenuClick }: NavigationProps) {
   const [showMenu, setShowMenu] = useState(false)
   const [isClient, setIsClient] = useState(false)
 
+  // /room 경로에서는 네비게이션을 항상 표시
+  const shouldShowNav = pathname === '/room' || pathname === '/room/' ? true : showNav
+
   // 現在のパスを確認するためのログ
   console.log('Current pathname:', pathname)
 
@@ -95,13 +98,13 @@ export function Navigation({ onMenuClick }: NavigationProps) {
       <nav
         ref={navRef}
         className={`fixed top-0 z-10 flex h-20 items-center justify-between px-4 bg-white transition-all duration-300 ${
-          showNav ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
+          shouldShowNav ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
         }`}
         style={{
           width: '100%',
           maxWidth: '500px',
           left: '50%',
-          transform: showNav ? 'translateX(-50%)' : 'translateX(-50%) translateY(-100%)',
+          transform: shouldShowNav ? 'translateX(-50%)' : 'translateX(-50%) translateY(-100%)',
         }}
       >
         {isAuthenticated ? (
@@ -330,7 +333,7 @@ export function Navigation({ onMenuClick }: NavigationProps) {
         )}
       </nav>
       {/* ナビゲーションが表示されるときにのみマージンを追加 */}
-      <div className={`transition-all duration-300 ${showNav ? 'mt-20' : 'mt-0'}`}>
+      <div className={`transition-all duration-300 ${shouldShowNav ? 'mt-20' : 'mt-0'}`}>
         {/* ハンバーガーメニュー ドロップダウン - 中央位置及びアニメーション適用 */}
         {!isAuthenticated && (
           <div

@@ -27,10 +27,9 @@ export function Navigation({ onMenuClick }: NavigationProps) {
   // 現在のパスを確認するためのログ
   console.log('Current pathname:', pathname)
 
-  const { name, setName } = useGlobalStore()
+  const { playerId, setPlayerId, name, setName } = useGlobalStore()
   const { isAuthenticated } = useAuthStore()
-  const { profiles, currentProfile, fetchProfiles, setCurrentProfile, isLoading } =
-    useProfileStore()
+  const { profiles, fetchProfiles, isLoading } = useProfileStore()
 
   // クライアントサイドレンダリングの確認
   useEffect(() => {
@@ -80,9 +79,10 @@ export function Navigation({ onMenuClick }: NavigationProps) {
   }
 
   const handleUserChange = (profile: Profile) => {
-    setCurrentProfile(profile)
+    setPlayerId(profile.id)
     setName(profile.nickname)
     setShowUserMenu(false)
+    window.location.replace('/room')
   }
 
   // 現在選択されているプロフィールの名前またはデフォルトの名前
@@ -165,7 +165,7 @@ export function Navigation({ onMenuClick }: NavigationProps) {
                       <div key={`profile-${index}-${profile.id}`}>
                         <button
                           className={`w-full text-left px-6 py-3 text-sm font-bold ${
-                            currentProfile?.id === profile.id
+                            playerId === profile.id
                               ? 'bg-gray-100 text-[#00803a]'
                               : 'text-gray-700 hover:bg-gray-100'
                           } transition-colors`}

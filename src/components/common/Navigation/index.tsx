@@ -89,7 +89,7 @@ export function Navigation({ onMenuClick }: NavigationProps) {
   }
 
   return (
-    <>
+    <div className="relative">
       <nav
         ref={navRef}
         className={`fixed top-0 z-10 flex h-20 items-center justify-between px-4 bg-white transition-all duration-300 ${
@@ -291,64 +291,66 @@ export function Navigation({ onMenuClick }: NavigationProps) {
           </>
         )}
       </nav>
-      {showNav && <div className="h-20" />} {/* 네비게이션이 표시될 때만 공간 확보 */}
-      {/* 햄버거 메뉴 드롭다운 - 중앙 위치 및 애니메이션 적용 */}
-      {!isAuthenticated && (
-        <div
-          className={`fixed top-20 bg-white shadow-lg z-20 overflow-hidden transition-all duration-300 transform ${
-            showMenu ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
-          }`}
-          style={{
-            width: '100%',
-            maxWidth: '500px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-          }}
-        >
-          <ul className="py-2 max-w-md mx-auto">
-            <li>
-              <Link
-                href="/"
-                className="block px-4 py-3 hover:bg-gray-100 transition-colors text-center"
-              >
-                HOME
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/signup"
-                className="block px-4 py-3 hover:bg-gray-100 transition-colors text-center"
-              >
-                新しく始める
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/login"
-                className="block px-4 py-3 hover:bg-gray-100 transition-colors text-center"
-              >
-                ログイン
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/about"
-                className="block px-4 py-3 hover:bg-gray-100 transition-colors text-center"
-              >
-                わくわくワールドって？
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/notifications"
-                className="block px-4 py-3 hover:bg-gray-100 transition-colors text-center"
-              >
-                お知らせ一覧
-              </Link>
-            </li>
-          </ul>
-        </div>
-      )}
-    </>
+      {/* 네비게이션이 표시될 때만 마진 추가 */}
+      <div className={`transition-all duration-300 ${showNav ? 'mt-20' : 'mt-0'}`}>
+        {/* 햄버거 메뉴 드롭다운 - 중앙 위치 및 애니메이션 적용 */}
+        {!isAuthenticated && (
+          <div
+            className={`fixed top-20 bg-white shadow-lg z-20 overflow-hidden transition-all duration-300 transform ${
+              showMenu ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
+            }`}
+            style={{
+              width: '100%',
+              maxWidth: '500px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+            }}
+          >
+            <ul className="py-2 max-w-md mx-auto">
+              <li>
+                <Link
+                  href="/"
+                  className="block px-4 py-3 hover:bg-gray-100 transition-colors text-center"
+                >
+                  HOME
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/signup"
+                  className="block px-4 py-3 hover:bg-gray-100 transition-colors text-center"
+                >
+                  新しく始める
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/login"
+                  className="block px-4 py-3 hover:bg-gray-100 transition-colors text-center"
+                >
+                  ログイン
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/about"
+                  className="block px-4 py-3 hover:bg-gray-100 transition-colors text-center"
+                >
+                  わくわくワールドって？
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/notifications"
+                  className="block px-4 py-3 hover:bg-gray-100 transition-colors text-center"
+                >
+                  お知らせ一覧
+                </Link>
+              </li>
+            </ul>
+          </div>
+        )}
+      </div>
+    </div>
   )
 }

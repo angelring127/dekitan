@@ -48,8 +48,11 @@ export function NavigationProvider({
     const currentScrollY = window.scrollY
     setIsAtTop(currentScrollY === 0)
 
+    // pull-to-refresh로 표시된 경우에는 스크롤에 의한 상태 변경을 방지
+    if (navShownByPull) return
+
     if (currentScrollY < lastScrollY) {
-      if (pathname === '/room' || navShownByPull) {
+      if (pathname === '/room') {
         setShowNav(true)
       }
     } else if (currentScrollY > 50 && currentScrollY > lastScrollY) {
@@ -86,12 +89,13 @@ export function NavigationProvider({
 
       if (diff > 30) {
         setIsPulling(true)
-        const progress = Math.min(elapsedTime / 1, 1) * 100
+        const progress = Math.min(diff / 100, 1) * 100 // 진행률을 터치 거리에 기반으로 계산
         setPullProgress(progress)
 
-        if (elapsedTime >= 1) {
+        if (progress >= 100) {
           setShowNav(true)
           setNavShownByPull(true)
+          setIsPulling(false)
         }
       } else {
         setIsPulling(false)
@@ -101,10 +105,12 @@ export function NavigationProvider({
   )
 
   const handleTouchEnd = useCallback(() => {
-    setIsPulling(false)
-    setPullProgress(0)
+    if (!navShownByPull) {
+      setIsPulling(false)
+      setPullProgress(0)
+    }
     setTouchStartY(0)
-  }, [])
+  }, [navShownByPull])
 
   useEffect(() => {
     if (!hideNavOnLoad) {

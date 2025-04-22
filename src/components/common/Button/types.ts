@@ -1,6 +1,6 @@
 import { ButtonHTMLAttributes } from 'react'
 
-export type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'quaternary' | 'quinary' | 'yelloish'
+export type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'quaternary' | 'quinary' | 'yelloish' | 'green'
 export type ButtonStyle = 'solid' | 'outline'
 
 export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'style'> {
